@@ -1,0 +1,85 @@
+generated: '2026-08-12'
+method: probed
+source: https://mcp.workfront.adobe.com/.well-known/oauth-authorization-server
+docs: https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/configure-integrations/create-oauth-application
+note: Neither published Workfront Planning OpenAPI declares an oauth2 securityScheme, so
+  derive-oauth-scopes.py found nothing. The scope list below is read verbatim from the two live OAuth
+  discovery documents the Workfront MCP host serves (RFC 8414 authorization-server metadata and RFC
+  9728 protected-resource metadata), which advertise an identical scopes_supported array. These are
+  Adobe IMS scopes, not Workfront-object scopes — Workfront itself does not publish a per-resource
+  scope reference; object-level authorization is enforced by Workfront access levels and sharing
+  (accessRules), not by OAuth scope.
+schemes:
+- name: Workfront MCP OAuth 2.1
+  source: well-known/workfront-oauth-authorization-server.json
+  issuer: https://mcp.workfront.adobe.com/mcp/v1
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://mcp.workfront.adobe.com/oauth/authorize
+    tokenUrl: https://mcp.workfront.adobe.com/oauth/token
+    pkce: [S256]
+scopes:
+- scope: AdobeID
+  description: Core Adobe IMS identity scope.
+  flows: [authorizationCode]
+- scope: openid
+  description: OpenID Connect — issue an ID token.
+  flows: [authorizationCode]
+- scope: profile
+  description: Access to the signed-in user's Adobe profile.
+  flows: [authorizationCode]
+- scope: email
+  description: Access to the signed-in user's email address.
+  flows: [authorizationCode]
+- scope: additional_info.projectedProductContext
+  description: Adobe IMS product-context claim; resolves which Adobe products and organizations the
+    user is entitled to, including the Workfront instance.
+  flows: [authorizationCode]
+- scope: read_pc.workfront
+  description: Read the user's Workfront product context — the Workfront-specific entitlement scope.
+  flows: [authorizationCode]
+- scope: read_organizations
+  description: Read the Adobe organizations (IMS orgs) the user belongs to.
+  flows: [authorizationCode]
+- scope: org.read
+  description: Read organization metadata.
+  flows: [authorizationCode]
+- scope: accounts.read
+  description: Read account information.
+  flows: [authorizationCode]
+- scope: session
+  description: Session management scope.
+  flows: [authorizationCode]
+- scope: read_pc
+  description: Read product context (generic).
+  flows: [authorizationCode]
+- scope: read_pc.acp
+  description: Read Adobe Cloud Platform product context.
+  flows: [authorizationCode]
+- scope: read_pc.dma_tartan
+  description: Read product context for the Adobe DMA (tartan) service group.
+  flows: [authorizationCode]
+- scope: aem.folders
+  description: Adobe Experience Manager folder access — used by the Workfront/AEM document tools.
+  flows: [authorizationCode]
+- scope: aem.assets.author
+  description: Adobe Experience Manager Assets authoring access.
+  flows: [authorizationCode]
+- scope: aem.assets.delivery
+  description: Adobe Experience Manager Assets delivery access.
+  flows: [authorizationCode]
+- scope: ab.manage
+  description: Adobe App Builder management scope.
+  flows: [authorizationCode]
+- scope: creative_cloud
+  description: Creative Cloud access.
+  flows: [authorizationCode]
+x-evidence:
+  fetched: '2026-08-12'
+  urls:
+  - url: https://mcp.workfront.adobe.com/.well-known/oauth-authorization-server
+    http_status: 200
+  - url: https://mcp.workfront.adobe.com/.well-known/oauth-protected-resource
+    http_status: 200
+  - url: https://mcp.workfront.adobe.com/mcp/v1/workfront/.well-known/oauth-protected-resource
+    http_status: 200

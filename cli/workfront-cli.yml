@@ -1,0 +1,55 @@
+generated: '2026-08-12'
+method: searched
+source: https://github.com/adobe/skills/blob/main/plugins/app-builder/skills/appbuilder-workfront/references/commands.md
+docs:
+- https://developer.adobe.com/app-builder/docs/guides/
+- https://github.com/adobe/aio-cli
+note: 'Workfront ships no CLI of its own — there is no `workfront` binary and no first-party command
+  surface for the /attask or Planning REST APIs. What exists is the Adobe I/O CLI (`aio`), Adobe''s
+  cross-product App Builder CLI, which carries a first-party Workfront extension template
+  (@adobe/workfront-ui-ext-tpl) and a first-party Adobe skill documenting the Workfront flow. This
+  artifact records that surface honestly: it is a CLI for BUILDING Workfront UI extensions and
+  serverless actions, not a CLI for CALLING the Workfront API.'
+cli:
+  name: Adobe I/O CLI (aio)
+  binary: aio
+  scope: Adobe App Builder — used for Workfront UI extensions and Runtime actions
+  first_party: true
+  workfront_specific: false
+  package: '@adobe/aio-cli'
+  version: 11.1.2
+  published: '2026-06-03'
+  repository: https://github.com/adobe/aio-cli
+  license: Apache-2.0
+install:
+- method: npm
+  command: npm install -g @adobe/aio-cli
+workfront_template:
+  package: '@adobe/workfront-ui-ext-tpl'
+  version: 0.0.7
+  published: '2024-12-09'
+  scaffold: aio app init <dir> -o <org> -p <project> -w <workspace> -t @adobe/workfront-ui-ext-tpl
+  note: The template generates a React Spectrum SPA plus Adobe I/O Runtime actions wired to Workfront
+    extension points. Adobe's own skill warns that passing -y also skips the Main Menu prompt, so no
+    menu item is generated.
+command_groups:
+- group: auth and context
+  commands: [aio login, aio logout, aio where, aio config]
+- group: console
+  commands: [aio console org list, aio console project list, aio console project create,
+    aio console project select, aio console workspace list]
+- group: app lifecycle
+  commands: [aio app init, aio app dev, aio app run, aio app deploy, aio app undeploy, aio app logs,
+    aio app test]
+key_flows:
+- flow: scaffold a Workfront UI extension
+  steps: [aio login, aio console project create, aio app init with @adobe/workfront-ui-ext-tpl]
+- flow: run an extension against a live Workfront instance
+  steps: [aio app dev, load the generated developer URL inside Workfront]
+- flow: deploy
+  steps: [aio app deploy, publish the extension from the Adobe Developer Console]
+related_skills:
+- skills/workfront-appbuilder-workfront.md
+- skills/workfront-appbuilder-workfront-ui-extension.md
+- skills/workfront-appbuilder-workfront-actions.md
+- skills/workfront-appbuilder-workfront-local-testing.md

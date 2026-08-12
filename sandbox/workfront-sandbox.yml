@@ -1,0 +1,54 @@
+generated: '2026-08-12'
+method: searched
+source: https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/set-up-wf/testing-environments/wf-preview-sandbox-environment
+docs:
+- https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/set-up-wf/testing-environments/wf-preview-sandbox-environment
+- https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/set-up-wf/testing-environments/wf-custom-refresh-sandbox-environment
+note: 'Workfront''s sandbox model is a replica-of-production model, not a synthetic test-mode model.
+  There are no test keys, no test-vs-live key prefixes, no magic test identifiers and no fixture or
+  time-simulation tooling — the sandbox contains a copy of the customer''s real data, refreshed on a
+  schedule. That has two consequences an integrator has to plan for: there are no publishable test
+  values for this artifact to record, and sandbox data is real customer data with the same handling
+  obligations as production.'
+test_mode:
+  style: separate environment, not a key prefix or mode flag
+  key_prefixes: []
+  magic_values: []
+  time_simulation: false
+  fixture_tooling: false
+environments:
+- name: Preview Sandbox
+  type: replica
+  included_with: all support packages
+  refresh: automatic, every weekend by Workfront. Data added to Production on Friday appears in
+    Preview by the following Monday.
+  data: a copy of the customer's production data, up to one week stale
+  data_flow: uni-directional, Production to Preview only
+  code_version: ahead of Production — new features land in Preview 2-4 weeks before release, which
+    makes Preview the environment for testing against a forthcoming API/UI change
+  api_limits: the same concurrent-API-thread limit as Production, so API behaviour can be tested
+    faithfully before release
+  identification: a blue banner naming the environment and the release version is always shown and
+    cannot be dismissed
+- name: Custom Refresh Sandbox
+  type: replica
+  included_with: Plus, Preferred and Enterprise support packages (additional cost)
+  refresh: manual, initiated by the customer
+  data: a copy of the customer's production data at the time of the last manual refresh
+- name: Test Drive
+  type: demo environment
+  note: referenced in the API basics limits section alongside Production and Preview as an environment
+    routed through the Workfront CDN
+guidance:
+  adobe_statement: 'Adobe states that "any use of the API should be tested in the Workfront beta
+    environment prior to being run in the production environment", and reserves the right to ask a
+    customer to discontinue an API process it believes is burdensome to the on-demand software.'
+  source: https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/api-general-information/api-basics
+public_reference_instance:
+  host: https://api-cl01.my.workfront.com
+  anonymous: true
+  what: The instance backing the public API Explorer. Its object-metadata endpoints
+    (/attask/api/v{n}.0/metadata and /attask/api/v{n}.0/{objCode}/metadata) answer without
+    credentials for API versions 15 through 22, which is the only anonymous machine-readable
+    Workfront surface. It exposes schema, not data.
+  artifact: data-model/workfront-api-v22-object-metadata.json

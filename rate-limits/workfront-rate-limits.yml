@@ -1,0 +1,92 @@
+generated: '2026-08-12'
+method: searched
+source: https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/api-general-information/api-basics
+docs:
+- https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/api-general-information/api-basics
+- https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-general-information/planning-api-basics
+limit_count: 9
+note: 'Workfront publishes hard query and payload limits, but no numeric request-rate quota and no
+  rate-limit response headers. The core API "limits concurrent API threads" without stating the
+  thread count, and the Event Subscription service will sandbox a user producing events too fast
+  without publishing the threshold. The Planning API documents a 429 status but no RateLimit-* or
+  Retry-After header. For an agent this means the runtime signal is missing: exhaustion is only
+  discoverable by hitting it.'
+limits:
+- id: default-page-size
+  api: Adobe Workfront API (/attask/api)
+  scope: per-query
+  limit: 100
+  unit: primary objects
+  description: If no $$LIMIT is supplied, a search returns at most 100 primary objects.
+- id: max-page-size
+  api: Adobe Workfront API (/attask/api)
+  scope: per-query
+  limit: 2000
+  unit: primary objects
+  description: $$LIMIT cannot exceed 2000. A larger value returns an IllegalArgumentException.
+- id: max-objects-per-result
+  api: Adobe Workfront API (/attask/api)
+  scope: per-query
+  limit: 50000
+  unit: primary + secondary objects
+  description: The combined count of primary objects and objects reached through expanded collections
+    cannot exceed 50,000.
+- id: max-fields-per-result
+  api: Adobe Workfront API (/attask/api)
+  scope: per-query
+  limit: 1000000
+  unit: fields
+  description: When a result set is under 50,000 objects it may still include at most 1,000,000 fields.
+- id: max-field-depth
+  api: Adobe Workfront API (/attask/api)
+  scope: per-query
+  limit: 4
+  unit: levels
+  description: Field selection cannot traverse more than four levels from the queried object.
+- id: max-batch-size
+  api: Adobe Workfront API (/attask/api)
+  scope: per-request
+  limit: 100
+  unit: objects
+  description: Maximum batch create or update size.
+- id: max-uri-length
+  api: Adobe Workfront API (/attask/api)
+  scope: per-request
+  limit: 8892
+  unit: bytes
+  description: End-user requests to Production, Preview and Test Drive environments are routed
+    through the Workfront CDN (Akamai) and are capped at an 8,892-byte URI. Applies only to URIs going
+    through the CDN.
+- id: concurrent-api-threads
+  api: Adobe Workfront API (/attask/api)
+  scope: per-tenant
+  limit: null
+  unit: concurrent threads
+  description: 'Workfront states it "limits concurrent API threads" as a guardrail against abusive
+    calls, and that the Sandbox environment applies the same limit so behaviour can be tested before
+    release. The numeric limit is not published.'
+- id: event-subscription-throughput
+  api: Adobe Workfront Event Subscription API
+  scope: per-user
+  limit: null
+  unit: events
+  description: 'A user producing "too many events at a high rate within a short timeframe" may be
+    sandboxed and see delivery delays. Threshold not published.'
+response_headers:
+  documented: []
+  note: No X-RateLimit-*, RateLimit-* or Retry-After headers are documented on any Workfront API
+    surface. This is the single largest agent-readiness gap in the Workfront runtime contract.
+exhaustion:
+  status_codes:
+  - api: Workfront Planning API
+    status: 429
+    meaning: Rate limit exceeded
+    source: openapi/workfront-planning-v2-openapi.json (documented in planning-api-basics status table)
+  - api: Adobe Workfront API (/attask/api)
+    status: null
+    meaning: not documented; thread-limit rejection behaviour is unspecified
+delivery_targets:
+  event_subscriptions:
+    typical_latency: under 1 second from the data change being logged
+    stated_ceiling: generally under 5 seconds
+    source: https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/event-subscriptions/event-subs-api

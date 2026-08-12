@@ -1,0 +1,90 @@
+generated: '2026-08-12'
+method: searched
+source: https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/api-notes/api-version-support-schedule
+versioning:
+  scheme: uri-path
+  current: v22.0
+  cadence: roughly two API versions per year
+  support_window: 3 years from release
+  default_when_unspecified: the instance's configured Default Version
+  docs: https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/api-notes/specify-api-version-integrations
+  note: Adobe publishes a full, dated release-and-retirement table for every API version. That is
+    unusually explicit for this category — most work-management vendors publish neither a support
+    window nor a retirement date.
+api_versions:
+- version: 22
+  released: '2026-05-08'
+  unsupported: during 2029 (with the 29.4 release)
+- version: 21
+  released: '2025-10-23'
+  unsupported: during 2028 (with the 28.10 release)
+- version: 20
+  released: '2025-05-04'
+  unsupported: during 2028 (with the 28.4 release)
+  note: the legacy Workfront connector for Workfront Fusion is pinned to API v20 and will keep working
+    until the 28.4 release (April 2028)
+- version: 19
+  released: '2024-10-10'
+  unsupported: during 2027 (with the 27.10 release)
+- version: 18
+  released: '2024-04-08'
+  unsupported: during 2027 (with the 27.4 release)
+- version: 17
+  released: '2023-10-12'
+  unsupported: during 2026 (with the 26.10 release)
+- version: 16
+  released: '2023-04'
+  unsupported: during 2026 (with the 26.4 release)
+- version: 15
+  released: '2022-H1'
+  unsupported: during 2025
+  deprecated: '2025-12-18'
+- version: 14
+  released: '2021-10'
+  unsupported: '2024-10'
+  deprecated: '2025-09-30'
+- version: 13
+  released: '2021-06'
+  unsupported: '2024-10'
+  deprecated: '2025-09-30'
+- version: 12
+  released: '2020-H2'
+  unsupported: '2023-10'
+  deprecated: '2025-09-30'
+- version: 11
+  released: '2020-H1'
+  unsupported: '2023-04'
+  deprecated: '2025-09-30'
+planning_api_versions:
+- version: 1
+  released: '2024-07'
+  status: supported
+  note: still the version the Workfront Planning connector for Workfront Fusion targets
+- version: 2
+  released: '2026-05'
+  status: current
+  note: 'Adobe states the previous major version stays available until a deprecation date is
+    communicated; no v1 sunset date has been published.'
+deprecation:
+  policy_url: https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/api-notes/api-version-support-schedule
+  policy: API versions are supported for 3 years after release; versions older than 3 years become
+    unsupported and are then deprecated on a published date.
+  sunset_header: false
+  deprecation_header: false
+  note: Workfront publishes retirement dates in documentation but does not advertise RFC 8594
+    Sunset/Deprecation response headers, so an agent cannot detect an approaching retirement at
+    runtime — only by reading the schedule page.
+release_process:
+  models: [quarterly, fast (monthly)]
+  window: Thursday of the second full week of the month, releases run 8-10 PM US Mountain Time the
+    evening before
+  preview_lead_time: features sit in the Preview Sandbox for a minimum of 2-4 weeks before Production
+  maintenance_updates: weekly issue fixes to Production
+  docs: https://experienceleague.adobe.com/en/docs/workfront/using/product-announcements/product-releases/workfront-release-schedule
+status_page: https://status.adobe.com/
+known_issues: https://experienceleague.adobe.com/en/docs/workfront-known-issues/releases/current-updates
+sla:
+  url: null
+  note: no public uptime SLA target published for Workfront; commitments are contractual, via the
+    Adobe product description and support package
+deprecated_operations: []

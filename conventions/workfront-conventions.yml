@@ -1,0 +1,131 @@
+generated: '2026-08-12'
+method: searched
+source: https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/api-general-information/api-basics
+docs:
+- https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/api-general-information/api-basics
+- https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-general-information/planning-api-basics
+note: Workfront ships two REST surfaces with materially different conventions — the long-lived core
+  /attask API and the newer Planning (/maestro) API. They are recorded separately rather than blended,
+  because an agent that assumes one set of rules on the other surface will fail.
+apis:
+- api: Adobe Workfront API (/attask/api)
+  authentication:
+    style: SessionID request header (preferred), cookie session for read-only, OAuth2 bearer
+    artifact: authentication/workfront-authentication.yml
+  addressing:
+    object_uri: /attask/api/v{major}.0/{objCode}/{id}
+    obj_code: case-insensitive; abbreviated ObjCode (proj) or alternate name (project) both accepted
+    id_format: 32-character hex string
+    note: In API terms a Workfront custom form is a Category object and a custom field is a Parameter
+      object.
+  operations:
+    GET: retrieve by ID, search, run reports, execute named queries
+    POST: insert a new object
+    PUT: edit an existing object
+    DELETE: delete an object
+    method_override: any operation can be tunnelled through a different verb with the `method` query
+      parameter (e.g. ?method=put) to work around client or URI-length limits
+  response_envelope:
+    success: '{"data": [...]}'
+    failure: '{"error": {...}}'
+    format: JSON
+  pagination:
+    style: offset
+    params: {limit: $$LIMIT, offset: $$FIRST}
+    default_page_size: 100
+    max_page_size: 2000
+    note: '$$FIRST is the number of results to skip, so $$FIRST=200 returns the 201st record. Adobe
+      warns that pagination is only stable when a sort is supplied (e.g. ID_Sort=asc); without one,
+      pages repeat or skip rows. Exceeding $$LIMIT=2000 returns an IllegalArgumentException.'
+  field_selection:
+    param: fields
+    expansion: colon-delimited traversal, e.g. fields=accessRules:* — collections and referenced
+      objects are expanded inline
+    max_depth: 4
+    custom_data: 'fields=parameterValues (custom fields are addressed as DE:<field name>)'
+    map_param: '`map=true` returns a keyed map instead of an array'
+  filtering:
+    style: query parameters with search modifiers appended to the field name
+    modifiers: [_Mod=eq, _Mod=ne, _Mod=cicontains, _Mod=notnull, _Mod=isnull, _Mod=gte, _Mod=lte,
+      _Mod=between, _Mod=in]
+    or_statements: 'OR:<n>: prefix groups alternate conditions (OR:1:name=...)'
+    named_queries: exposed per object in the object metadata `queries` block
+  bulk:
+    supported: true
+    max_batch: 100
+    note: maximum batch create or update is 100 objects per request
+  idempotency:
+    supported: false
+    note: Workfront documents no idempotency key, request-replay window or safe-retry contract on
+      either API surface. Retrying a POST creates a second object. No Idempotency pointer is emitted.
+  versioning:
+    scheme: uri-path
+    current: v22.0
+    default_when_unspecified: the instance's configured Default Version
+    artifact: lifecycle/workfront-lifecycle.yml
+  request_tracing:
+    request_id_header: null
+    note: no documented correlation/request-id response header on the core API
+  rate_limit_signaling:
+    documented_headers: []
+    note: Workfront limits concurrent API threads but publishes no RateLimit-* / Retry-After contract
+      for the core API; see rate-limits/workfront-rate-limits.yml
+  errors:
+    envelope: '{"error": {...}}'
+    artifact: errors/workfront-problem-types.yml
+- api: Workfront Planning API (/maestro/api)
+  authentication:
+    style: OAuth 2.0 bearer only — sessionID and apiKey are explicitly NOT supported
+    artifact: authentication/workfront-authentication.yml
+  addressing:
+    base: https://{customer-domain}/maestro/api/v{n}/
+    resources: [workspaces, record-types, records, fields, views, permissions]
+  operations:
+    GET: retrieve a single object by ID, or search/list
+    POST: create
+    PUT: replace (full update)
+    PATCH: partial update (v2 only — v1 has no PATCH, use PUT)
+    DELETE: delete
+  response_envelope:
+    format: JSON
+    status_codes: [200, 201, 204, 207, 400, 401, 403, 404, 409, 429]
+    note: 'v1 returns 200 OK for every successful operation including POST and DELETE; v2 introduces
+      201/204/207. 207 Multi-Status is returned for bulk operations with mixed results.'
+  pagination:
+    style: cursor
+    note: record search and list endpoints are cursor-paginated; the MCP planning_get_workspace_list
+      tool documents cursor-based pagination explicitly
+  field_selection:
+    style: field projection — request only the fields you need on search/list operations
+  filtering:
+    style: typed composite filter groups with explicit logical operators
+    transport: JSON body property on POST search; JSON-encoded `filter` query parameter on GET
+  bulk:
+    supported: true
+    operations: [bulkCreateRecords, bulkUpdateRecords, bulkPatchRecords, bulkDeleteRecords]
+    partial_success: 207 Multi-Status; inspect per-item responses
+  concurrency:
+    conflict_status: 409
+    note: 409 Conflict means the resource was modified by another request; Adobe's documented remedy
+      is to retry with the latest version. This is optimistic concurrency, not idempotency.
+  idempotency:
+    supported: false
+  versioning:
+    scheme: uri-path
+    current: v2
+    versions: [{version: 1, released: '2024-07'}, {version: 2, released: '2026-05'}]
+    note: the Workfront Planning connector for Workfront Fusion is still pinned to v1
+  errors:
+    envelope: RFC 9457-shaped — title, status, detail, plus errorCode, requestId and an errors[] array
+    programmatic_key: errorCode (a string in v2; a numeric `type` such as 40001 in v1)
+    correlation: requestId, quoted for support escalation
+    artifact: errors/workfront-problem-types.yml
+  rate_limit_signaling:
+    exhaustion_status: 429
+    documented_headers: []
+cross_links:
+  errors: errors/workfront-problem-types.yml
+  lifecycle: lifecycle/workfront-lifecycle.yml
+  authentication: authentication/workfront-authentication.yml
+  rate_limits: rate-limits/workfront-rate-limits.yml
+  data_model: data-model/workfront-data-model.yml

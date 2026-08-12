@@ -1,0 +1,142 @@
+generated: '2026-08-12'
+method: searched
+source: https://registry.npmjs.org + https://github.com/Workfront
+note: 'Workfront''s first-party client libraries live under the @workfront npm scope and are actively
+  maintained — @workfront/workfront-api 9.1.0 shipped 2026-07-27, three months after API v22 was
+  released, so the SDK is current with the API it wraps. The unscoped legacy names (workfront-api,
+  workfront-api-constants, workfront-cookie) are the same libraries at their pre-scope names and are
+  effectively frozen; workfront-api-constants last published in 2017. There is no first-party Python,
+  Java, Ruby, PHP, Go or .NET SDK — Adobe ships language *code samples* in the Workfront GitHub org
+  (Java, Python, C#, PHP, Ruby, Flex) rather than packaged clients, and every one of those sample
+  repos was last pushed in 2017-2019.'
+packages:
+- language: javascript
+  registry: npm
+  name: '@workfront/workfront-api'
+  url: https://www.npmjs.com/package/@workfront/workfront-api
+  install: npm install @workfront/workfront-api
+  version: 9.1.0
+  published: '2026-07-27'
+  license: Apache-2.0
+  repository: https://github.com/Workfront/workfront-api
+  official: true
+  description: The Workfront API client for Node.js and the browser. The current, maintained package.
+- language: javascript
+  registry: npm
+  name: '@workfront/objcodes'
+  url: https://www.npmjs.com/package/@workfront/objcodes
+  install: npm install @workfront/objcodes
+  version: 2.8.0
+  published: '2026-06-25'
+  license: Apache-2.0
+  repository: https://github.com/Workfront/workfront-objcodes
+  official: true
+  description: Object codes (objCode constants) for addressing Workfront objects in the API.
+- language: javascript
+  registry: npm
+  name: '@workfront/api-constants'
+  url: https://www.npmjs.com/package/@workfront/api-constants
+  install: npm install @workfront/api-constants
+  version: 3.0.0
+  published: '2025-03-23'
+  license: Apache-2.0
+  repository: https://github.com/Workfront/workfront-api-constants
+  official: true
+  description: Constant definitions used when interacting with the Workfront API.
+- language: javascript
+  registry: npm
+  name: '@workfront/cookie'
+  url: https://www.npmjs.com/package/@workfront/cookie
+  install: npm install @workfront/cookie
+  version: 4.0.0
+  published: '2025-03-24'
+  license: Apache-2.0
+  repository: https://github.com/Workfront/workfront-cookie
+  official: true
+  description: Extracts values from Workfront session cookies.
+- language: javascript
+  registry: npm
+  name: '@adobe/workfront-ui-ext-tpl'
+  url: https://www.npmjs.com/package/@adobe/workfront-ui-ext-tpl
+  install: npm install @adobe/workfront-ui-ext-tpl
+  version: 0.0.7
+  published: '2024-12-09'
+  license: Apache-2.0
+  official: true
+  description: Adobe I/O CLI (aio) App Builder template that scaffolds a Workfront UI extension.
+- language: javascript
+  registry: npm
+  name: workfront-api
+  url: https://www.npmjs.com/package/workfront-api
+  install: npm install workfront-api
+  version: 8.1.1
+  published: '2023-06-03'
+  license: Apache-2.0
+  repository: https://github.com/Workfront/workfront-api
+  official: true
+  status: superseded
+  description: Pre-scope name of @workfront/workfront-api. Frozen at 8.1.1; three years behind the
+    scoped package and two API major versions behind the current API.
+- language: javascript
+  registry: npm
+  name: workfront-objcodes
+  url: https://www.npmjs.com/package/workfront-objcodes
+  install: npm install workfront-objcodes
+  version: 1.27.0
+  published: '2025-02-28'
+  license: Apache-2.0
+  official: true
+  status: superseded
+  description: Pre-scope name of @workfront/objcodes.
+- language: javascript
+  registry: npm
+  name: workfront-api-constants
+  url: https://www.npmjs.com/package/workfront-api-constants
+  install: npm install workfront-api-constants
+  version: 2.0.0
+  published: '2017-03-14'
+  license: Apache-2.0
+  official: true
+  status: abandoned
+  description: Pre-scope name of @workfront/api-constants. Last published 2017 — nine years and
+    fourteen API versions stale.
+- language: javascript
+  registry: npm
+  name: workfront-cookie
+  url: https://www.npmjs.com/package/workfront-cookie
+  install: npm install workfront-cookie
+  version: 3.4.5
+  published: '2021-09-20'
+  license: Apache-2.0
+  official: true
+  status: superseded
+- language: javascript
+  registry: npm
+  name: workfront-mcp-server
+  url: https://www.npmjs.com/package/workfront-mcp-server
+  install: npx workfront-mcp-server
+  version: 1.0.1
+  published: '2025-08-25'
+  official: false
+  description: A community-published local MCP bridge for Workfront, predating Adobe's own hosted MCP
+    server. Not first-party — Adobe's MCP server is hosted at mcp.workfront.adobe.com and requires no
+    package install.
+code_samples:
+  note: Published as repositories in the Workfront GitHub org, not as installable packages. All are
+    long dormant.
+  repositories:
+  - {language: python, url: 'https://github.com/Workfront/workfront-api-examples-python', last_push: '2019-08-20'}
+  - {language: java, url: 'https://github.com/Workfront/workfront-api-examples-java', last_push: '2017-06-14'}
+  - {language: csharp, url: 'https://github.com/Workfront/workfront-api-examples-csharp', last_push: '2017-06-14'}
+  - {language: php, url: 'https://github.com/Workfront/workfront-api-examples-php', last_push: '2017-06-14'}
+  - {language: ruby, url: 'https://github.com/Workfront/workfront-api-examples-ruby', last_push: '2017-06-14'}
+  - {language: actionscript, url: 'https://github.com/Workfront/workfront-api-examples-flex', last_push: '2017-06-14'}
+registries_checked:
+- {registry: npm, result: 9 first-party packages found}
+- {registry: pypi, result: none — pypi.org/pypi/workfront and /workfront-api both 404}
+- {registry: maven-central, result: none found}
+- {registry: nuget, result: none found}
+- {registry: rubygems, result: none found}
+- {registry: packagist, result: none found}
+- {registry: crates.io, result: none found}
+- {registry: pkg.go.dev, result: none found}

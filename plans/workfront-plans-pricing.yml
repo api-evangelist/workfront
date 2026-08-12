@@ -1,0 +1,62 @@
+generated: '2026-08-12'
+method: searched
+source: https://helpx.adobe.com/legal/product-descriptions/adobe-workfront.html
+docs:
+- https://helpx.adobe.com/legal/product-descriptions/adobe-workfront.html
+- https://business.adobe.com/products/workfront/pricing.html
+plan_count: 3
+currency: null
+billing_period: null
+pricing_published: false
+note: 'Adobe names three Workfront packages — Select, Prime and Ultimate — in its own legal product
+  description (helpx.adobe.com, fetched HTTP 200), but publishes no price for any of them. The
+  Workfront pricing page is a contact-sales form. There is no per-seat list price, no metered API
+  pricing and no published overage schedule; API access is a function of the package and the licence
+  type, not a separately priced product. Recorded as three named tiers with no price rather than as
+  zero plans.'
+probe:
+  url: https://business.adobe.com/products/workfront/pricing.html
+  http_status: 0
+  result: unreachable
+  detail: business.adobe.com terminated every HTTP/2 request from the probing network with
+    INTERNAL_ERROR (curl exit 92) and timed out over the fetch proxy. DNS resolves and the TLS
+    certificate validates, so this is a transport-level block on our side, not a provider 404. Tier
+    names were therefore taken from Adobe's own product-description page on helpx.adobe.com, which
+    did return 200.
+plans:
+- name: Select
+  price: null
+  currency: null
+  billing_period: null
+  description: The essential features to collaborate, execute and accelerate work.
+  api_access: yes — the Workfront API is available on any package; access is gated by licence type
+    and access level, not by package
+- name: Prime
+  price: null
+  currency: null
+  billing_period: null
+  description: Everything in Select plus advanced work management and security capabilities.
+- name: Ultimate
+  price: null
+  currency: null
+  billing_period: null
+  description: Everything in Prime plus enhanced automation and data management.
+add_ons:
+- name: Custom Refresh Sandbox
+  price: null
+  description: A separately purchased testing environment refreshed on demand by the customer.
+    Available on Plus, Preferred and Enterprise support packages. The weekly-refreshed Preview
+    Sandbox is included with all support packages.
+  source: https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/set-up-wf/testing-environments/wf-preview-sandbox-environment
+- name: Adobe Workfront Planning
+  price: null
+  description: Planning (and therefore the Planning API and the planning_* MCP tools) requires a
+    Workfront package that includes Adobe Workfront Planning.
+- name: Adobe Workfront Fusion
+  price: null
+  description: The workflow-automation product; licensed separately from the core packages.
+support_packages:
+- Standard
+- Plus
+- Preferred
+- Enterprise

@@ -1,0 +1,79 @@
+generated: '2026-08-12'
+method: searched
+source: https://github.com/adobe/skills/tree/main/plugins/workfront
+note: 'Adobe publishes first-party Agent Skills for Workfront in the adobe/skills repository — one
+  under the `workfront` plugin (Planning solution architecture) and four under the `app-builder`
+  plugin (building Workfront UI extensions). All five are saved verbatim below with their original
+  Apache-2.0 licence. Adobe documents installing them into Claude Desktop or Claude Code alongside the
+  hosted Workfront MCP server. The two API Evangelist skills at the end are generated, grounded in
+  operationIds verified against the published Planning OpenAPI, and cover the REST flows Adobe''s own
+  skills do not.'
+upstream:
+  repository: https://github.com/adobe/skills
+  plugin: plugins/workfront
+  docs: https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/direct-skills
+  license: Apache-2.0
+  publisher: Adobe
+skills:
+- file: workfront-wf-planning-solution-architect.md
+  name: wf-planning-solution-architect
+  method: searched
+  source: https://github.com/adobe/skills/tree/main/plugins/workfront/skills/wf-planning-solution-architect
+  publisher: Adobe
+  license: Apache-2.0
+  description: Architecting and troubleshooting Workfront Planning — workspace and record-type design,
+    record connections and hierarchies, formula fields, tier limits across Select/Prime/Ultimate, the
+    Planning API, Fusion, AI Assistant, GenStudio, views, access and request forms.
+  api: openapi/workfront-planning-v2-openapi.json
+  available_for: [Claude]
+- file: workfront-appbuilder-workfront.md
+  name: appbuilder-workfront
+  method: searched
+  source: https://github.com/adobe/skills/tree/main/plugins/app-builder/skills/appbuilder-workfront
+  publisher: Adobe
+  license: Apache-2.0
+  description: Umbrella/orientation skill for building a customized Workfront UI on Adobe App Builder;
+    routes to the SPA, actions and local-testing skills.
+- file: workfront-appbuilder-workfront-ui-extension.md
+  name: workfront-ui-extension
+  method: searched
+  source: https://github.com/adobe/skills/tree/main/plugins/app-builder/skills/appbuilder-workfront/workfront-ui-extension
+  publisher: Adobe
+  license: Apache-2.0
+  description: The React/Spectrum front end — registering Main Menu, secondaryNav and widget
+    extension points, routing, and reading the Workfront shared context.
+- file: workfront-appbuilder-workfront-actions.md
+  name: workfront-actions
+  method: searched
+  source: https://github.com/adobe/skills/tree/main/plugins/app-builder/skills/appbuilder-workfront/workfront-actions
+  publisher: Adobe
+  license: Apache-2.0
+  description: Adobe I/O Runtime serverless actions that hold credentials and call the Workfront
+    Public API and the Planning API on the extension's behalf.
+- file: workfront-appbuilder-workfront-local-testing.md
+  name: workfront-local-testing
+  method: searched
+  source: https://github.com/adobe/skills/tree/main/plugins/app-builder/skills/appbuilder-workfront/workfront-local-testing
+  publisher: Adobe
+  license: Apache-2.0
+  description: Previewing an App Builder extension build inside a live Workfront instance.
+- file: workfront-build-planning-workspace.md
+  name: workfront-build-planning-workspace
+  method: generated
+  source: openapi/workfront-planning-v2-openapi.json
+  publisher: API Evangelist
+  api: openapi/workfront-planning-v2-openapi.json
+  operations: [createWorkspace, createRecordType, getRecordTypesByWorkspace, createField,
+    getFieldsByRecordType, createView, createRecord, bulkCreateRecords, getWorkspace]
+  description: Stand up a Planning workspace end to end over the Planning API v2, with the retry,
+    partial-success and limit-error rules the spec does not state.
+- file: workfront-search-and-bulk-update-records.md
+  name: workfront-search-and-bulk-update-records
+  method: generated
+  source: openapi/workfront-planning-v2-openapi.json
+  publisher: API Evangelist
+  api: openapi/workfront-planning-v2-openapi.json
+  operations: [searchRecordsPost, searchRecordsGet, getRecordsByRecordType, getRecord, patchRecord,
+    bulkPatchRecords, bulkUpdateRecords, bulkDeleteRecords, getHistory, moveRecords]
+  description: Filter, page, bulk-patch and reconcile Planning records, including the 207
+    partial-success and 409 write-conflict paths.

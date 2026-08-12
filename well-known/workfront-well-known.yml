@@ -1,0 +1,120 @@
+generated: '2026-08-12'
+method: probed
+source: live GET of /.well-known/* on every Workfront and Adobe host named in apis.yml
+note: 'Two hosts answer 200 with an HTML single-page-app shell for EVERY /.well-known/* path probed —
+  developer.adobe.com and api-cl01.my.workfront.com. Those are catch-all responses, not documents, and
+  are recorded here as misses. The real hits are the two OAuth discovery documents on the Workfront MCP
+  host (RFC 8414 and RFC 9728) and Adobe''s PGP-signed RFC 9116 security.txt on www.adobe.com.'
+hosts:
+- host: https://mcp.workfront.adobe.com
+  documents:
+  - path: /.well-known/oauth-authorization-server
+    spec: RFC 8414
+    status: 200
+    content_type: application/json
+    file: workfront-oauth-authorization-server.json
+  - path: /.well-known/oauth-protected-resource
+    spec: RFC 9728
+    status: 200
+    content_type: application/json
+    file: workfront-oauth-protected-resource.json
+  - path: /mcp/v1/workfront/.well-known/oauth-protected-resource
+    spec: RFC 9728 (resource-scoped)
+    status: 200
+    content_type: application/json
+    note: identical scope set, resource narrowed to https://mcp.workfront.adobe.com/mcp/v1/workfront
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /.well-known/security.txt
+    status: 404
+- host: https://www.adobe.com
+  documents:
+  - path: /.well-known/security.txt
+    spec: RFC 9116
+    status: 200
+    content_type: text/plain
+    file: workfront-security.txt
+    note: PGP-signed; Contact hackerone.com/adobe and psirt@adobe.com; Expires 2027-07-30
+  - path: /llms.txt
+    status: 200
+    note: Adobe Tools marketing llms.txt, not the Workfront developer surface
+- host: https://experienceleague.adobe.com
+  documents:
+  - path: /llms.txt
+    status: 200
+    file: ../llms/workfront-experienceleague-llms.txt
+    note: real llms.txt for the Adobe documentation host, version 1.8 dated 2026-08-05; carries a
+      dedicated "Documentation - Adobe Workfront" section
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://developer.adobe.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    result: miss
+    note: SPA catch-all — body is an HTML document shell, identical for every /.well-known/* path
+  - path: /.well-known/openid-configuration
+    status: 200
+    result: miss
+    note: SPA catch-all (HTML)
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    result: miss
+    note: SPA catch-all (HTML)
+  - path: /.well-known/api-catalog
+    status: 200
+    result: miss
+    note: SPA catch-all (HTML)
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    result: miss
+    note: SPA catch-all (HTML)
+  - path: /.well-known/agent-card.json
+    status: 200
+    result: miss
+    note: SPA catch-all (HTML) — rejected, not an AgentCard
+  - path: /.well-known/agent.json
+    status: 200
+    result: miss
+    note: SPA catch-all (HTML) — rejected, not an AgentCard
+- host: https://api-cl01.my.workfront.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    result: miss
+    note: Workfront web-app shell (HTML), identical for every /.well-known/* path
+  - path: /.well-known/agent-card.json
+    status: 200
+    result: miss
+    note: web-app shell (HTML) — rejected, not an AgentCard
+  - path: /.well-known/agent.json
+    status: 200
+    result: miss
+    note: web-app shell (HTML) — rejected, not an AgentCard
+  - path: /llms.txt
+    status: 200
+    result: miss
+    note: web-app shell (HTML)
+- host: https://developersupport.workfront.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+  - path: /.well-known/agent-card.json
+    status: 403
+  - path: /openapi.json
+    status: 403
+  - path: /swagger.json
+    status: 403
+agent_card:
+  found: false
+  note: No A2A agent card was found on any host, at either /.well-known/agent-card.json or the legacy
+    /.well-known/agent.json. The 200s on developer.adobe.com and api-cl01.my.workfront.com are HTML
+    SPA catch-alls and were rejected. No a2a/ artifact is written.

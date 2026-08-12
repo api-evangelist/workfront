@@ -1,0 +1,226 @@
+generated: '2026-08-12'
+method: derived
+source: openapi/workfront-planning-v2-openapi.json + https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-general-information/planning-api-basics
+format: rfc9457
+note: 'The Workfront Planning API v2 declares an RFC 7807/9457 problem-details envelope (components.schemas.V2ProblemDetail)
+  on all 233 of its 4xx/5xx responses, with a required errorCode, requestId and title/status/detail. Adobe documents
+  errorCode — not the HTTP status — as the field to branch on. Planning v1 declares NO error responses at all
+  in its OpenAPI, and uses a numeric `type` (e.g. 40001) with a nested `report` object instead. The core Workfront
+  /attask API has no OpenAPI and no problem-details envelope; it returns {"error": {...}} and is recorded separately
+  below.'
+envelopes:
+- api: Workfront Planning API v2
+  shape: RFC 7807 problem details
+  required_fields:
+  - title
+  - status
+  - detail
+  - errorCode
+  - requestId
+  optional_fields:
+  - messageArguments
+  - errors[]
+  field_error_shape:
+  - field
+  - message
+  - code
+  programmatic_key: errorCode
+  correlation_id: requestId
+- api: Workfront Planning API v1
+  shape: legacy
+  note: numeric `type` field (e.g. 40001) with detail wrapped in a `report` object; no error responses declared
+    in the v1 OpenAPI
+- api: Adobe Workfront API (/attask/api)
+  shape: '{"error": {...}}'
+  note: the response carries either a data attribute on success or an error attribute on failure; no RFC 9457
+    media type
+problems:
+- status: 400
+  title: Bad Request
+  variants:
+  - Bad Request
+  - Bad Request (empty ids list)
+  - Bad Request (invalid cursor or limit)
+  - Bad Request (invalid filter / sort / group)
+  - Bad Request (invalid filter parameter)
+  - Bad Request (invalid move request)
+  - Bad Request (validation failure)
+  - Invalid image (THUMBNAIL_EMPTY, THUMBNAIL_INVALID_FORMAT, THUMBNAIL_INVALID_CONTENT, THUMBNAIL_SIZE_EXCEEDED)
+  occurrences: 31
+  media_type: application/json
+  schema: '#/components/schemas/V2ProblemDetail'
+  source_spec: openapi/workfront-planning-v2-openapi.json
+- status: 401
+  title: Unauthorized
+  variants:
+  - Unauthorized
+  occurrences: 49
+  media_type: application/json
+  schema: '#/components/schemas/V2ProblemDetail'
+  source_spec: openapi/workfront-planning-v2-openapi.json
+- status: 403
+  title: Forbidden
+  variants:
+  - Forbidden
+  - Forbidden (FIELD_DISPLAY_NAME_NOT_UNIQUE)
+  - Forbidden (FIELD_LIMIT_EXCEEDED, LONG_TEXT_FIELD_LIMIT_EXCEEDED, FORMULA_FIELD_COUNT_LIMIT_EXCEEDED, REFERENCE_FIELDS_COUNT_LIMIT_EXCEEDED,
+    FIELD_DISPLAY_NAME_NOT_UNIQUE)
+  - Forbidden (RECORD_CONNECTION_LIMIT_EXCEEDED, HIERARCHY_RECORD_CONNECTION_LIMIT_EXCEEDED)
+  - Forbidden (RECORD_TYPE_IN_HIERARCHY)
+  - Forbidden (RECORD_TYPE_LIMIT_EXCEEDED)
+  - Forbidden (RECORD_TYPE_RECORD_LIMIT_EXCEEDED)
+  - Forbidden (VIEW_LIMIT_EXCEEDED)
+  - Forbidden (admin only, or WORKSPACE_LIMIT_EXCEEDED)
+  occurrences: 48
+  media_type: application/json
+  schema: '#/components/schemas/V2ProblemDetail'
+  source_spec: openapi/workfront-planning-v2-openapi.json
+- status: 404
+  title: Not Found
+  variants:
+  - Not Found
+  - Record Not Found
+  - Record Type Not Found
+  - Record Type or anchor record not found
+  - Record not found
+  - Workspace Not Found
+  occurrences: 40
+  media_type: application/json
+  schema: '#/components/schemas/V2ProblemDetail'
+  source_spec: openapi/workfront-planning-v2-openapi.json
+- status: 409
+  title: Conflict
+  variants:
+  - Conflict (write conflict, retry)
+  occurrences: 12
+  media_type: application/json
+  schema: '#/components/schemas/V2ProblemDetail'
+  source_spec: openapi/workfront-planning-v2-openapi.json
+- status: 413
+  title: Upload too large
+  variants:
+  - Upload too large (UPLOAD_SIZE_EXCEEDED)
+  occurrences: 1
+  media_type: application/json
+  schema: '#/components/schemas/V2ProblemDetail'
+  source_spec: openapi/workfront-planning-v2-openapi.json
+- status: 422
+  title: Unprocessable Entity
+  variants:
+  - Unprocessable Entity (back-reference conflict)
+  occurrences: 3
+  media_type: application/json
+  schema: '#/components/schemas/V2ProblemDetail'
+  source_spec: openapi/workfront-planning-v2-openapi.json
+- status: 500
+  title: Internal Server Error
+  variants:
+  - Internal Server Error
+  occurrences: 49
+  media_type: application/json
+  schema: '#/components/schemas/V2ProblemDetail'
+  source_spec: openapi/workfront-planning-v2-openapi.json
+named_error_codes:
+- code: FIELD_DISPLAY_NAME_NOT_UNIQUE
+  statuses:
+  - 403
+  operations:
+  - createField
+  - patchField
+  - updateField
+- code: FIELD_LIMIT_EXCEEDED
+  statuses:
+  - 403
+  operations:
+  - createField
+- code: FORMULA_FIELD_COUNT_LIMIT_EXCEEDED
+  statuses:
+  - 403
+  operations:
+  - createField
+- code: HIERARCHY_RECORD_CONNECTION_LIMIT_EXCEEDED
+  statuses:
+  - 403
+  operations:
+  - patchRecord
+  - updateRecord
+- code: LONG_TEXT_FIELD_LIMIT_EXCEEDED
+  statuses:
+  - 403
+  operations:
+  - createField
+- code: RECORD_CONNECTION_LIMIT_EXCEEDED
+  statuses:
+  - 403
+  operations:
+  - patchRecord
+  - updateRecord
+- code: RECORD_TYPE_IN_HIERARCHY
+  statuses:
+  - 403
+  operations:
+  - deleteRecordType
+  - updateRecordType
+- code: RECORD_TYPE_LIMIT_EXCEEDED
+  statuses:
+  - 403
+  operations:
+  - createRecordType
+- code: RECORD_TYPE_RECORD_LIMIT_EXCEEDED
+  statuses:
+  - 403
+  operations:
+  - createRecord
+- code: REFERENCE_FIELDS_COUNT_LIMIT_EXCEEDED
+  statuses:
+  - 403
+  operations:
+  - createField
+- code: THUMBNAIL_EMPTY
+  statuses:
+  - 400
+  operations:
+  - uploadThumbnail
+- code: THUMBNAIL_INVALID_CONTENT
+  statuses:
+  - 400
+  operations:
+  - uploadThumbnail
+- code: THUMBNAIL_INVALID_FORMAT
+  statuses:
+  - 400
+  operations:
+  - uploadThumbnail
+- code: THUMBNAIL_SIZE_EXCEEDED
+  statuses:
+  - 400
+  operations:
+  - uploadThumbnail
+- code: UPLOAD_SIZE_EXCEEDED
+  statuses:
+  - 413
+  operations:
+  - uploadThumbnail
+- code: VIEW_LIMIT_EXCEEDED
+  statuses:
+  - 403
+  operations:
+  - createView
+- code: WORKSPACE_LIMIT_EXCEEDED
+  statuses:
+  - 403
+  operations:
+  - createWorkspace
+bulk_errors:
+  status: 207
+  note: bulk record operations return 207 Multi-Status with per-item results; per-item failures use RecordBulkItemErrorDto
+    / RecordBulkRequestErrorDto
+event_subscription_errors:
+- status: 201
+  meaning: event subscription created; Location header carries the subscription URI
+- status: 400
+  meaning: the url field of the subscription resource was deemed invalid
+- status: 401
+  meaning: the sessionID provided was empty or invalid
+- status: 403
+  meaning: the user behind the sessionID does not have administrator access

@@ -1,0 +1,63 @@
+generated: '2026-08-12'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+note: The three hosts below the divider were added by hand because the apis.yml baseURLs for the core
+  and Planning APIs are per-customer templated hosts, so the mechanical probe could not reach them. The
+  reference/API-Explorer instance (api-cl01.my.workfront.com), the MCP host and the developer-support
+  host are the real, reachable equivalents.
+hosts:
+- host: business.adobe.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Jan  4 23:59:59 2027 GMT
+  hsts: null
+  note: unreachable over HTTP/2 from the probing network (curl 92 INTERNAL_ERROR); TLS handshake and
+    certificate validated
+- host: experienceleague.adobe.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Sep 30 23:59:59 2026 GMT
+  hsts: true
+  hsts_max_age: 86400
+- host: developer.adobe.com
+  https: true
+  tls_version: TLSv1.2
+  cert_expires: Dec  7 23:59:59 2026 GMT
+  hsts: true
+  hsts_max_age: 31557600
+- host: mcp.workfront.adobe.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Feb 26 23:59:59 2027 GMT
+  hsts: false
+  note: MCP server host; root path returns 404, the MCP endpoint is /mcp/v1/workfront
+- host: api-cl01.my.workfront.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Feb 25 23:59:59 2027 GMT
+  hsts: true
+  hsts_max_age: 31536000
+  hsts_include_subdomains: true
+  note: public reference instance backing the API Explorer; serves the anonymous object-metadata contract
+- host: developersupport.workfront.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct 29 23:59:59 2026 GMT
+  hsts: false
+  note: hosts the Workfront API Explorer application
+domains:
+- domain: adobe.com
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: reject
+- domain: workfront.com
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: reject
+  dmarc_subdomain_policy: reject
+  note: legacy Workfront domain; www.workfront.com no longer resolves (NXDOMAIN) since the move to
+    business.adobe.com, but the apex retains SPF and a DMARC reject policy

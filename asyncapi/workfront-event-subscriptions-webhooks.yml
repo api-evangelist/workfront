@@ -1,0 +1,117 @@
+generated: '2026-08-12'
+method: searched
+source: https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/event-subscriptions/event-subs-api
+spec_type: null
+asyncapi_published: false
+note: 'Adobe publishes no AsyncAPI document for Workfront. It does publish a fully documented,
+  programmatically managed webhook surface — the Event Subscription API — so this artifact captures the
+  event catalogue and delivery contract as a Webhooks surface rather than fabricating an AsyncAPI. A
+  second, distinct surface (the Document Webhooks API) is an interface Workfront CALLS on a third-party
+  document provider; it is recorded here too because it is part of the same event/callback story, but
+  it is a provider-implemented contract, not an endpoint Workfront exposes.'
+surfaces:
+- name: Event Subscription API
+  kind: outbound webhooks
+  direction: Workfront -> customer endpoint
+  management_api: https://{customer-domain}.my.workfront.adobe.com/attask/eventsubscription/api/v1/subscriptions
+  docs: https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/event-subscriptions/event-subs-api
+  transport: HTTPS POST, application/json
+  authentication:
+    management: sessionID header + System Administrator access level
+    delivery: a customer-supplied authToken is echoed on every outbound message; mutual TLS
+      certificates are documented separately
+    certs_docs: https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/api-notes/event-sub-certs
+  latency:
+    typical: under 1 second from the change being logged
+    stated_ceiling: generally under 5 seconds
+  subscription_resource:
+    fields:
+    - {name: objCode, required: true, description: object type to subscribe to}
+    - {name: objId, required: false, description: restrict to a single object; omit for all objects
+        of the type}
+    - {name: eventType, required: true, description: CREATE, UPDATE or DELETE}
+    - {name: url, required: true, description: destination endpoint}
+    - {name: authToken, required: false, description: token echoed back on delivery}
+    - {name: filter, required: false, description: typed filter expression, see filtering below}
+    - {name: base64Encoding, required: false, description: base64-encode field values in the payload}
+  operations:
+  - {method: POST, path: /attask/eventsubscription/api/v1/subscriptions, description: create a
+      subscription, success: 201 with a Location header carrying the new subscription URI}
+  - {method: GET, path: /attask/eventsubscription/api/v1/subscriptions, description: query all
+      subscriptions}
+  - {method: GET, path: '/attask/eventsubscription/api/v1/subscriptions/{id}', description: query one
+      subscription}
+  - {method: DELETE, path: '/attask/eventsubscription/api/v1/subscriptions/{id}', description: delete
+      a subscription}
+  event_types: [CREATE, UPDATE, DELETE]
+  message_format:
+    fields: [eventType, subscriptionId, eventTime, oldState, newState, fields]
+    event_time: reported in both nanoseconds and epoch seconds; Adobe directs integrators to order
+      events by eventTime
+    note: oldState is not present on CREATE events
+    docs: https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/event-subscriptions/message-format-event-subs
+  filtering:
+    operators: [eq, ne, gt, gte, lt, lte, contains, containsOnly, notContains, change, state]
+    features: [nested filters, connector fields, filter groups]
+    docs: https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/api-notes/filter-event-sub-messages
+  versioning:
+    docs: https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/event-subscriptions/event-subs-versioning
+    note: subscriptions carry a version; single and bulk version changes are documented
+  retries:
+    docs: https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/event-subscriptions/event-sub-retries
+  throttling:
+    note: a user producing too many events too quickly may be sandboxed and see delivery delays;
+      no published threshold
+  allowlist_ips:
+    europe: [52.30.133.50, 52.208.159.124, 54.220.93.204, 52.17.130.201, 34.254.76.122, 34.252.250.191]
+    rest_of_world: [54.244.142.219, 44.241.82.96, 52.36.154.34, 34.211.224.9, 54.218.48.56, 52.39.217.230]
+  objects:
+    count: 30
+    list: [Approval, Approval Stage, Approval Stage Participant, Assignment, Company, Dashboard,
+      Document, Document Version, Expense, Field, Hour, Issue, Note, Portfolio, Program, Project,
+      Proof Approval, Record, Record Type, Report, Staffing Plan, Staffing Plan Parameter Value,
+      Staffing Plan Resource, Staffing Plan Resource Attribute Value,
+      Staffing Plan Resource Attribute Value Set, Staffing Plan Resource Parameter Value, Task,
+      Template, Timesheet, User, Workspace]
+    obj_codes:
+      approval: approval
+      approval_stage: approval_stage
+      approval_stage_participant: approval_stage_participant
+      assignment: ASSGN
+      company: CMPY
+      dashboard: PTLTAB
+      document: DOCU
+      document_version: DOCV
+      expense: EXPNS
+      field: FIELD
+      hour: HOUR
+      issue: OPTASK
+      note: NOTE
+      portfolio: PORT
+      program: PRGM
+      project: PROJ
+  errors:
+  - {status: 201, meaning: subscription created}
+  - {status: 400, meaning: the url field of the subscription resource was deemed invalid}
+  - {status: 401, meaning: sessionID empty or invalid}
+  - {status: 403, meaning: the user does not have administrator access}
+- name: Document Webhooks API
+  kind: inbound callbacks (provider-implemented)
+  direction: Workfront -> third-party document provider
+  docs: https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/document-webhooks-api/document-webhooks-api
+  description: An interface specification a third-party document store implements so Workfront can
+    browse, link, upload, download, thumbnail, rename, move and delete documents in it. Workfront is
+    the client; the endpoints live on the provider.
+  operations: [getServiceInfo, getMetadata, listFolderContents, search, uploadFile, getContent,
+    getThumbnail, createFolder, renameDocumentOrFolder, deleteDocumentOrFolder, performCustomAction,
+    testConnection]
+  authentication: OAuth2 — the provider exposes an authorization and token endpoint that Workfront
+    calls
+  errors_docs: https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/document-webhooks-api/docu-webhooks-errors
+  reference_implementation: https://github.com/Workfront/webhooks-app
+gaps:
+- No AsyncAPI or CloudEvents document is published for either surface.
+- No event schema registry — the payload shape is documented per object through the event-subscription
+  resource-fields page, not as machine-readable schemas.
+- No signature header on delivery; authenticity rests on the customer-supplied authToken and the
+  published source-IP allowlist.

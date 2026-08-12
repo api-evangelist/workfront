@@ -1,0 +1,100 @@
+generated: '2026-08-12'
+method: searched
+source: https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/api-general-information/api-basics
+docs:
+- https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/api-general-information/api-basics
+- https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/configure-integrations/create-oauth-application
+- https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/api-notes/oauth-app-code-token-flow
+- https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-general-information/planning-api-basics
+note: Neither published Workfront Planning OpenAPI declares a components.securitySchemes block, so
+  nothing could be derived mechanically (derive-authentication.py returned zero schemes). This profile
+  is read from the Workfront and Adobe Developer Console documentation and from the live OAuth
+  discovery documents served by the MCP host, which are the only machine-readable auth metadata
+  Workfront publishes.
+summary:
+  types: [http, apiKey, oauth2]
+  api_key_in: [header, query]
+  oauth2_flows: [authorizationCode, clientCredentials, jwtBearer]
+  identity_provider: Adobe IMS (ims-na1.adobelogin.com)
+  deprecated: [apiKey, sessionID-via-login-endpoint]
+schemes:
+- name: SessionID header
+  api: Adobe Workfront API (/attask/api)
+  type: apiKey
+  in: header
+  parameter_name: SessionID
+  description: The documented preferred method for the core API. A session token is passed in a
+    SessionID request header. Adobe calls this out as CSRF-safe and cache-friendly, unlike the URI
+    form.
+  status: current
+- name: Cookie-based session
+  api: Adobe Workfront API (/attask/api)
+  type: http
+  scheme: cookie
+  description: The same cookie the Workfront web UI uses. Adobe restricts this to read-only
+    operations as a CSRF mitigation.
+  status: current
+  restrictions: read-only operations only
+- name: /login endpoint + API key
+  api: Adobe Workfront API (/attask/api)
+  type: apiKey
+  in: query
+  parameter_name: apiKey
+  description: Legacy authentication. Adobe explicitly states it "no longer recommends the use of the
+    /login endpoint or API keys" and directs integrators to JWT server auth or OAuth2 user auth
+    instead. Not supported at all by the Workfront Planning API.
+  status: deprecated
+- name: OAuth2 authorization code (user authentication)
+  api: Adobe Workfront API, Workfront Planning API
+  type: oauth2
+  flow: authorizationCode
+  description: For integrations acting on behalf of a specific user. Requires an OAuth2 application
+    registered in Workfront (Setup > Systems > OAuth2 Applications) or an OAuth Web App / Single Page
+    App credential in the Adobe Developer Console. PKCE variant documented separately.
+  docs: https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/api-notes/oauth-app-code-token-flow
+  status: current
+- name: OAuth2 authorization code with PKCE
+  api: Adobe Workfront API
+  type: oauth2
+  flow: authorizationCode
+  pkce: true
+  docs: https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/api-notes/oauth-app-pkce-flow
+  status: current
+- name: OAuth2 server-to-server (JWT / client credentials)
+  api: Adobe Workfront API, Workfront Planning API
+  type: oauth2
+  flow: clientCredentials
+  description: For automated integrations and backend services with no user interaction. A public/
+    private key pair is generated, a JWT signed with the private key is exchanged for an access token.
+    Credentials are created in the Adobe Developer Console.
+  docs: https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/api-notes/oauth-app-jwt-flow
+  status: current
+- name: Event Subscription API session
+  api: Adobe Workfront Event Subscription API
+  type: apiKey
+  in: header
+  parameter_name: sessionID
+  description: Creating, querying or deleting an event subscription requires a sessionID header AND a
+    System Administrator access level. Outbound event messages carry a customer-supplied authToken.
+  status: current
+- name: MCP OAuth 2.1 bearer
+  api: Adobe Workfront MCP Server
+  type: oauth2
+  flow: authorizationCode
+  pkce: [S256]
+  bearer_methods_supported: [header]
+  authorization_endpoint: https://mcp.workfront.adobe.com/oauth/authorize
+  token_endpoint: https://mcp.workfront.adobe.com/oauth/token
+  jwks_uri: https://mcp.workfront.adobe.com/oauth/jwks
+  registration_endpoint: https://mcp.workfront.adobe.com/mcp/v1/oauth/register
+  revocation_endpoint: https://ims-na1.adobelogin.com/ims/revoke
+  grant_types_supported: [authorization_code, refresh_token]
+  resource_indicators_supported: true
+  description: The MCP endpoint returns a 401 with an RFC 9728 WWW-Authenticate challenge to
+    unauthenticated callers, pointing at its protected-resource metadata. Dynamic client registration
+    is open.
+  sources:
+  - well-known/workfront-oauth-authorization-server.json
+  - well-known/workfront-oauth-protected-resource.json
+  status: current
+scopes: scopes/workfront-scopes.yml

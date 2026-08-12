@@ -1,0 +1,561 @@
+generated: '2026-08-12'
+method: derived
+source: mcp/workfront-mcp.yml + openapi/workfront-planning-v2-openapi.json
+note: Binds the 87 tools Adobe publishes for the Workfront MCP server to the operations in the Workfront Planning
+  OpenAPI v2. Live tools/list on https://mcp.workfront.adobe.com/mcp/v1/workfront is OAuth-gated (HTTP 401, RFC
+  9728 challenge), so tools were mapped by published name, description and action class rather than by an authenticated
+  schema read; confidence is set accordingly. The Approvals, Workflow and Insights tool families sit on the core
+  Workfront API (/attask/api), for which Adobe publishes an object-metadata contract but no OpenAPI, so they are
+  recorded as mcp_only rather than forced onto an operation that does not exist.
+surfaces:
+  openapi:
+  - file: openapi/workfront-planning-v2-openapi.json
+    title: Workfront Planning API Version 2
+    operations: 49
+    gated: false
+  - file: openapi/workfront-planning-v1-openapi.json
+    title: Workfront Planning API Version 1
+    operations: 10
+    gated: false
+  core_api:
+    style: REST + object metadata
+    metadata_endpoint: https://api-cl01.my.workfront.com/attask/api/v22.0/metadata
+    file: data-model/workfront-api-v22-object-metadata.json
+    openapi: null
+    note: 174 objects with fields/references/collections/actions/operations; anonymous read, no OpenAPI published
+  graphql: null
+  mcp:
+    url: https://mcp.workfront.adobe.com/mcp/v1/workfront
+    tools_list_gated: true
+    http_status: 401
+    auth: OAuth 2.1 bearer (RFC 9728 protected-resource metadata)
+coverage:
+  tools_published: 87
+  tools_bound: 38
+  mcp_only: 49
+  rest_operations_total: 49
+  rest_operations_with_tool: 41
+crosswalk:
+- tool: planning_get_workspace
+  category: Planning tools / Workspaces
+  action: read
+  rest:
+  - getWorkspace
+  binding: rest
+  confidence: high
+- tool: planning_get_workspace_list
+  category: Planning tools / Workspaces
+  action: read
+  rest:
+  - getWorkspaces
+  binding: rest
+  confidence: high
+- tool: planning_create_workspace
+  category: Planning tools / Workspaces
+  action: write
+  rest:
+  - createWorkspace
+  binding: rest
+  confidence: high
+- tool: planning_create_workspace_from_template
+  category: Planning tools / Workspaces
+  action: write
+  rest:
+  - createWorkspace
+  binding: rest
+  confidence: medium
+  note: template source selected server-side; no dedicated REST operation
+- tool: planning_update_workspace
+  category: Planning tools / Workspaces
+  action: write
+  rest:
+  - patchWorkspace
+  - updateWorkspace
+  binding: rest
+  confidence: high
+- tool: planning_delete_workspace
+  category: Planning tools / Workspaces
+  action: write
+  rest:
+  - deleteWorkspace
+  binding: rest
+  confidence: high
+- tool: planning_get_workspace_sharing
+  category: Planning tools / Workspaces
+  action: read
+  rest:
+  - getMembers
+  - getMyPermissions
+  - getInheritance
+  binding: rest
+  confidence: medium
+- tool: planning_modify_workspace_sharing
+  category: Planning tools / Workspaces
+  action: write
+  rest:
+  - updateMembers
+  binding: rest
+  confidence: high
+- tool: planning_get_record_type
+  category: Planning tools / Record types
+  action: read
+  rest:
+  - getRecordType
+  - getRecordTypesByWorkspace
+  binding: rest
+  confidence: high
+- tool: planning_create_record_types
+  category: Planning tools / Record types
+  action: write
+  rest:
+  - createRecordType
+  binding: rest
+  confidence: high
+- tool: planning_update_record_type
+  category: Planning tools / Record types
+  action: write
+  rest:
+  - patchRecordType
+  - updateRecordType
+  binding: rest
+  confidence: high
+- tool: planning_delete_record_type
+  category: Planning tools / Record types
+  action: write
+  rest:
+  - deleteRecordType
+  binding: rest
+  confidence: high
+- tool: planning_list_global_record_types
+  category: Planning tools / Record types
+  action: read
+  rest:
+  - getGlobalRecordTypes
+  binding: rest
+  confidence: high
+- tool: planning_list_addable_global_record_types
+  category: Planning tools / Record types
+  action: read
+  rest:
+  - getGlobalRecordTypes
+  binding: rest
+  confidence: medium
+  note: filtered view of the same operation
+- tool: planning_add_global_record_type_to_workspace
+  category: Planning tools / Record types
+  action: write
+  rest:
+  - createRecordType
+  binding: rest
+  confidence: medium
+- tool: planning_remove_global_record_type_from_ws
+  category: Planning tools / Record types
+  action: write
+  rest:
+  - detachRecordTypeFromWorkspace
+  binding: rest
+  confidence: high
+- tool: planning_get_record_type_sharing
+  category: Planning tools / Record types
+  action: read
+  rest:
+  - getMembers
+  - getMyPermissions
+  binding: rest
+  confidence: medium
+- tool: planning_modify_record_type_sharing
+  category: Planning tools / Record types
+  action: write
+  rest:
+  - updateMembers
+  binding: rest
+  confidence: high
+- tool: planning_get_record
+  category: Planning tools / Records
+  action: read
+  rest:
+  - getRecord
+  binding: rest
+  confidence: high
+- tool: planning_search_records
+  category: Planning tools / Records
+  action: read
+  rest:
+  - searchRecordsPost
+  - searchRecordsGet
+  - getRecordsByRecordType
+  binding: rest
+  confidence: high
+- tool: planning_bulk_record_actions
+  category: Planning tools / Records
+  action: write
+  rest:
+  - bulkCreateRecords
+  - bulkUpdateRecords
+  - bulkPatchRecords
+  - bulkDeleteRecords
+  binding: rest
+  confidence: high
+- tool: planning_create_connection_record
+  category: Planning tools / Records
+  action: write
+  rest:
+  - createRecord
+  binding: rest
+  confidence: medium
+  note: connection records are created through the record create operation with a connection field payload
+- tool: planning_update_records_order
+  category: Planning tools / Records
+  action: write
+  rest:
+  - moveRecords
+  binding: rest
+  confidence: medium
+- tool: planning_get_record_change_log
+  category: Planning tools / Records
+  action: read
+  rest:
+  - getHistory
+  binding: rest
+  confidence: high
+- tool: planning_get_record_sharing
+  category: Planning tools / Records
+  action: read
+  rest:
+  - getMembers
+  - getMyPermissions
+  binding: rest
+  confidence: medium
+- tool: planning_modify_records_sharing
+  category: Planning tools / Records
+  action: write
+  rest:
+  - updateMembers
+  binding: rest
+  confidence: high
+- tool: planning_get_field
+  category: Planning tools / Fields
+  action: read
+  rest:
+  - getField
+  - getFieldsByRecordType
+  binding: rest
+  confidence: high
+- tool: planning_create_fields
+  category: Planning tools / Fields
+  action: write
+  rest:
+  - createField
+  binding: rest
+  confidence: high
+- tool: planning_update_field
+  category: Planning tools / Fields
+  action: write
+  rest:
+  - patchField
+  - updateField
+  binding: rest
+  confidence: high
+- tool: planning_delete_field
+  category: Planning tools / Fields
+  action: write
+  rest:
+  - deleteField
+  binding: rest
+  confidence: high
+- tool: planning_get_view
+  category: Planning tools / Views
+  action: read
+  rest:
+  - getView
+  - getViewsByRecordType
+  binding: rest
+  confidence: high
+- tool: planning_create_view
+  category: Planning tools / Views
+  action: write
+  rest:
+  - createView
+  binding: rest
+  confidence: high
+- tool: planning_update_view
+  category: Planning tools / Views
+  action: write
+  rest:
+  - patchView
+  - updateView
+  binding: rest
+  confidence: high
+- tool: planning_delete_view
+  category: Planning tools / Views
+  action: write
+  rest:
+  - deleteView
+  binding: rest
+  confidence: high
+- tool: planning_get_view_sharing
+  category: Planning tools / Views
+  action: read
+  rest:
+  - getMembers
+  - getMyPermissions
+  binding: rest
+  confidence: medium
+- tool: planning_modify_view_sharing
+  category: Planning tools / Views
+  action: write
+  rest:
+  - updateMembers
+  binding: rest
+  confidence: high
+- tool: planning_search_resources
+  category: Planning tools / Search & utilities
+  action: read
+  rest:
+  - searchRecordsPost
+  binding: rest
+  confidence: low
+  note: cross-resource search; no single backing operation
+- tool: planning_search_sharing_data
+  category: Planning tools / Search & utilities
+  action: read
+  rest:
+  - getMembers
+  binding: rest
+  confidence: low
+mcp_only:
+- tool: approvals_find_document_version_by_name
+  category: Approvals tools / Documents
+  action: read
+  reason: served by the core Workfront API (/attask/api) and the approvals service; no published OpenAPI operation
+    to bind to
+- tool: approvals_get_document_by_version_id
+  category: Approvals tools / Documents
+  action: read
+  reason: served by the core Workfront API (/attask/api) and the approvals service; no published OpenAPI operation
+    to bind to
+- tool: approvals_get_documents_by_project
+  category: Approvals tools / Documents
+  action: read
+  reason: served by the core Workfront API (/attask/api) and the approvals service; no published OpenAPI operation
+    to bind to
+- tool: approvals_resolve_document_scope
+  category: Approvals tools / Documents
+  action: read
+  reason: served by the core Workfront API (/attask/api) and the approvals service; no published OpenAPI operation
+    to bind to
+- tool: approvals_find_document
+  category: Approvals tools / Documents
+  action: read
+  reason: served by the core Workfront API (/attask/api) and the approvals service; no published OpenAPI operation
+    to bind to
+- tool: approvals_get_documents_by_scope
+  category: Approvals tools / Documents
+  action: read
+  reason: served by the core Workfront API (/attask/api) and the approvals service; no published OpenAPI operation
+    to bind to
+- tool: approvals_get_approval_info
+  category: Approvals tools / Approval workflows
+  action: read
+  reason: served by the core Workfront API (/attask/api) and the approvals service; no published OpenAPI operation
+    to bind to
+- tool: approvals_create_or_update_approval_workflow
+  category: Approvals tools / Approval workflows
+  action: write
+  reason: served by the core Workfront API (/attask/api) and the approvals service; no published OpenAPI operation
+    to bind to
+- tool: approvals_create_approval_from_template
+  category: Approvals tools / Approval workflows
+  action: write
+  reason: served by the core Workfront API (/attask/api) and the approvals service; no published OpenAPI operation
+    to bind to
+- tool: approvals_delete_approval_stage
+  category: Approvals tools / Approval workflows
+  action: write
+  reason: served by the core Workfront API (/attask/api) and the approvals service; no published OpenAPI operation
+    to bind to
+- tool: approvals_add_path_to_approval
+  category: Approvals tools / Approval workflows
+  action: write
+  reason: served by the core Workfront API (/attask/api) and the approvals service; no published OpenAPI operation
+    to bind to
+- tool: approvals_remove_path_from_approval
+  category: Approvals tools / Approval workflows
+  action: write
+  reason: served by the core Workfront API (/attask/api) and the approvals service; no published OpenAPI operation
+    to bind to
+- tool: approvals_add_stage_to_path
+  category: Approvals tools / Approval workflows
+  action: write
+  reason: served by the core Workfront API (/attask/api) and the approvals service; no published OpenAPI operation
+    to bind to
+- tool: approvals_remove_stage_from_path
+  category: Approvals tools / Approval workflows
+  action: write
+  reason: served by the core Workfront API (/attask/api) and the approvals service; no published OpenAPI operation
+    to bind to
+- tool: approvals_reorder_stages_in_path
+  category: Approvals tools / Approval workflows
+  action: write
+  reason: served by the core Workfront API (/attask/api) and the approvals service; no published OpenAPI operation
+    to bind to
+- tool: approvals_send_reminder_to_participants
+  category: Approvals tools / Reminders
+  action: write
+  reason: served by the core Workfront API (/attask/api) and the approvals service; no published OpenAPI operation
+    to bind to
+- tool: approvals_send_reminder_to_undecided
+  category: Approvals tools / Reminders
+  action: write
+  reason: served by the core Workfront API (/attask/api) and the approvals service; no published OpenAPI operation
+    to bind to
+- tool: approvals_list_templates
+  category: Approvals tools / Approval templates
+  action: read
+  reason: served by the core Workfront API (/attask/api) and the approvals service; no published OpenAPI operation
+    to bind to
+- tool: approvals_search_template_by_name
+  category: Approvals tools / Approval templates
+  action: read
+  reason: served by the core Workfront API (/attask/api) and the approvals service; no published OpenAPI operation
+    to bind to
+- tool: approvals_create_template
+  category: Approvals tools / Approval templates
+  action: write
+  reason: served by the core Workfront API (/attask/api) and the approvals service; no published OpenAPI operation
+    to bind to
+- tool: approvals_update_template
+  category: Approvals tools / Approval templates
+  action: write
+  reason: served by the core Workfront API (/attask/api) and the approvals service; no published OpenAPI operation
+    to bind to
+- tool: approvals_send_approval_reminder
+  category: Approvals tools / Approval templates
+  action: write
+  reason: served by the core Workfront API (/attask/api) and the approvals service; no published OpenAPI operation
+    to bind to
+- tool: approvals_update_approval_participants
+  category: Approvals tools / Approval templates
+  action: write
+  reason: served by the core Workfront API (/attask/api) and the approvals service; no published OpenAPI operation
+    to bind to
+- tool: approvals__submit_update_approval_participants
+  category: Approvals tools / Approval templates
+  action: write
+  reason: served by the core Workfront API (/attask/api) and the approvals service; no published OpenAPI operation
+    to bind to
+- tool: approvals_get_current_user
+  category: Approvals tools / Lookups and users
+  action: read
+  reason: served by the core Workfront API (/attask/api) and the approvals service; no published OpenAPI operation
+    to bind to
+- tool: approvals_find_user_by_name
+  category: Approvals tools / Lookups and users
+  action: read
+  reason: served by the core Workfront API (/attask/api) and the approvals service; no published OpenAPI operation
+    to bind to
+- tool: approvals_find_team_by_name
+  category: Approvals tools / Lookups and users
+  action: read
+  reason: served by the core Workfront API (/attask/api) and the approvals service; no published OpenAPI operation
+    to bind to
+- tool: approvals_find_project_by_name
+  category: Approvals tools / Lookups and users
+  action: read
+  reason: served by the core Workfront API (/attask/api) and the approvals service; no published OpenAPI operation
+    to bind to
+- tool: approvals_get_projects_by_owner
+  category: Approvals tools / Lookups and users
+  action: read
+  reason: served by the core Workfront API (/attask/api) and the approvals service; no published OpenAPI operation
+    to bind to
+- tool: approvals_find_projects
+  category: Approvals tools / Lookups and users
+  action: read
+  reason: served by the core Workfront API (/attask/api) and the approvals service; no published OpenAPI operation
+    to bind to
+- tool: planning_convert_workspace_to_template
+  reason: no public REST operation for template conversion in v2
+- tool: planning_get_external_record_workspaces
+  reason: no public REST operation identified
+- tool: planning_get_template_list
+  reason: template catalogue has no public REST operation in v2
+- tool: planning_get_template
+  reason: template catalogue has no public REST operation in v2
+- tool: planning_search_users
+  reason: user directory is served by the core Workfront API, not the Planning OpenAPI
+- tool: workflow_search_any_object
+  category: Workflow tools / Objects and fields
+  action: read
+  reason: generic object CRUD against the core Workfront API (/attask/api/v22.0/{objCode}); described by the object
+    metadata endpoint, not by an OpenAPI document
+- tool: workflow_create_any_object
+  category: Workflow tools / Objects and fields
+  action: write
+  reason: generic object CRUD against the core Workfront API (/attask/api/v22.0/{objCode}); described by the object
+    metadata endpoint, not by an OpenAPI document
+- tool: workflow_update_any_object
+  category: Workflow tools / Objects and fields
+  action: write
+  reason: generic object CRUD against the core Workfront API (/attask/api/v22.0/{objCode}); described by the object
+    metadata endpoint, not by an OpenAPI document
+- tool: workflow_delete_any_object
+  category: Workflow tools / Objects and fields
+  action: write
+  reason: generic object CRUD against the core Workfront API (/attask/api/v22.0/{objCode}); described by the object
+    metadata endpoint, not by an OpenAPI document
+- tool: workflow_resolve_field_names_any_object
+  category: Workflow tools / Objects and fields
+  action: read
+  reason: generic object CRUD against the core Workfront API (/attask/api/v22.0/{objCode}); described by the object
+    metadata endpoint, not by an OpenAPI document
+- tool: workflow_read_workflow_docs
+  category: Workflow tools / Objects and fields
+  action: read
+  reason: generic object CRUD against the core Workfront API (/attask/api/v22.0/{objCode}); described by the object
+    metadata endpoint, not by an OpenAPI document
+- tool: insights_read_docs
+  category: Workflow tools / Insights tools
+  action: read
+  reason: Insights/reporting surface of the core Workfront API; no published OpenAPI operation
+- tool: insights_get_current_user
+  category: Workflow tools / Insights tools
+  action: read
+  reason: Insights/reporting surface of the core Workfront API; no published OpenAPI operation
+- tool: insights_search_fields
+  category: Workflow tools / Insights tools
+  action: read
+  reason: Insights/reporting surface of the core Workfront API; no published OpenAPI operation
+- tool: insights_get_field_paths
+  category: Workflow tools / Insights tools
+  action: read
+  reason: Insights/reporting surface of the core Workfront API; no published OpenAPI operation
+- tool: insights_find_id_by_name
+  category: Workflow tools / Insights tools
+  action: read
+  reason: Insights/reporting surface of the core Workfront API; no published OpenAPI operation
+- tool: insights_find_workfront_data
+  category: Workflow tools / Insights tools
+  action: read
+  reason: Insights/reporting surface of the core Workfront API; no published OpenAPI operation
+- tool: insights_summarize_object
+  category: Workflow tools / Insights tools
+  action: read
+  reason: Insights/reporting surface of the core Workfront API; no published OpenAPI operation
+- tool: insights_list_entities
+  category: Workflow tools / Insights tools
+  action: read
+  reason: Insights/reporting surface of the core Workfront API; no published OpenAPI operation
+rest_only:
+- capability: permissions
+  operations:
+  - createAccessRequest
+  - deleteAccessRequests
+  - getAccessRequests
+- capability: records
+  operations:
+  - deleteRecord
+  - deleteThumbnail
+  - patchRecord
+  - updateRecord
+  - uploadThumbnail

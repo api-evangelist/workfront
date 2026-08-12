@@ -42,5 +42,29 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Workfront is a company surfaced via the API Evangelist harvest backlog (source: marketing-integration-graph) and added to the network as a stub for full-pipeline profiling.
-- https://workfront.ai/
+Adobe Workfront is Adobe's enterprise work-management platform for marketing and creative operations.
+It was surfaced via the API Evangelist harvest backlog (source: marketing-integration-graph) and has
+since been profiled by the full enrichment pipeline.
+
+- Product: https://business.adobe.com/products/workfront/main.html
+- API documentation: https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/workfront-api
+- API Explorer: https://developersupport.workfront.com/page-api-explorer.html
+- Planning API reference (OpenAPI): https://developer.adobe.com/wf-planning
+- GitHub: https://github.com/Workfront
+
+> **Correction to the original harvest.** This repository was created with `https://workfront.ai/` as
+> the company website. That domain is *not* Adobe Workfront — it is an unrelated AI-training business
+> in Nocatee, Florida, running on a GoDaddy website builder. The website property has been corrected
+> to Adobe's own Workfront product page.
+
+## What was found
+
+| Surface | Result |
+|---|---|
+| OpenAPI | Two first-party Adobe specs — Workfront Planning API **v2** (OpenAPI 3.1.0, 21 paths / 49 operations / 74 schemas) and **v1** (OpenAPI 3.0.1, 7 paths / 10 operations), published at `developer.adobe.com/wf-planning/v{1,2}.json` |
+| Core API contract | No OpenAPI. Adobe serves an anonymous **object-metadata** contract at `api-cl01.my.workfront.com/attask/api/v22.0/metadata` — 174 objects with fields, references, collections, searchable fields, named queries, actions and supported operations |
+| MCP | Hosted server at `mcp.workfront.adobe.com/mcp/v1/workfront`, GA June 2026, **87 documented tools**, OAuth 2.1 (`tools/list` returns 401 with an RFC 9728 challenge) |
+| Agent Skills | **Five first-party Adobe skills** harvested verbatim from `github.com/adobe/skills` (Apache-2.0), plus two generated here |
+| Events | Event Subscription API (30 object types, CREATE/UPDATE/DELETE) and the Document Webhooks API. No AsyncAPI published |
+| A2A | **No agent card** on any host — the 200s on `developer.adobe.com` and `api-cl01.my.workfront.com` are SPA catch-alls returning HTML, and were rejected |
+| Well-known | RFC 8414 + RFC 9728 OAuth discovery on the MCP host; PGP-signed RFC 9116 `security.txt` on `www.adobe.com` |

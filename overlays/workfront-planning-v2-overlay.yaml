@@ -1,0 +1,60 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Adobe Workfront Planning API v2
+  version: 1.0.0
+extends: openapi/workfront-planning-v2-openapi.json
+x-generated: '2026-08-12'
+x-method: generated
+x-source: openapi/workfront-planning-v2-openapi.json
+actions:
+- target: $.info
+  description: Record the API Evangelist profile, the real published spec location and the auth model
+    the spec itself omits.
+  update:
+    x-apievangelist-profile: https://apis.io/provider/workfront
+    x-apievangelist-artifacts:
+      authentication: authentication/workfront-authentication.yml
+      scopes: scopes/workfront-scopes.yml
+      conventions: conventions/workfront-conventions.yml
+      errors: errors/workfront-problem-types.yml
+      rate_limits: rate-limits/workfront-rate-limits.yml
+      lifecycle: lifecycle/workfront-lifecycle.yml
+      mcp: mcp/workfront-mcp.yml
+      tool_crosswalk: mcp/workfront-tool-crosswalk.yml
+    x-spec-source: https://developer.adobe.com/wf-planning/v2.json
+    x-spec-repository: https://github.com/AdobeDocs/Workfront-Planning-API
+    x-published-by: Adobe Inc.
+    x-harvested: '2026-08-12'
+    x-gap-security-schemes: 'The published document declares no components.securitySchemes and no
+      global security requirement, even though Adobe documents the API as OAuth 2.0 only (sessionID
+      and apiKey are explicitly unsupported). A generated client will therefore emit unauthenticated
+      calls. This is the single highest-value fix Adobe could make to the document.'
+    x-documented-auth:
+      type: oauth2
+      flows: [authorizationCode, clientCredentials]
+      console: https://developer.adobe.com/developer-console/docs/guides/authentication/
+- target: $.servers
+  description: Note that the server URL is a customer-domain template, and what the domain resolves to.
+  update:
+  - url: https://{customer-domain}/maestro/api
+    description: Workfront Planning Service URL. {customer-domain} is the organization's own
+      Workfront host, of the form <yourdomain>.my.workfront.adobe.com; it is found in Workfront under
+      Setup > System > Customer Info.
+    variables:
+      customer-domain:
+        default: your-org.my.workfront.adobe.com
+        description: Your organization's Workfront domain.
+- target: $
+  description: Record the runtime semantics that are documented in prose but absent from the contract.
+  update:
+    x-conventions:
+      pagination: cursor
+      partial_update: PATCH (v2 only; v1 requires PUT)
+      bulk_partial_success: 207 Multi-Status with per-item results
+      concurrency: 409 Conflict on write conflict — retry with the latest version
+      idempotency: none documented
+      error_branch_field: errorCode
+      correlation_field: requestId
+    x-rate-limits:
+      exhaustion_status: 429
+      response_headers: none documented

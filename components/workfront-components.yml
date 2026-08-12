@@ -1,0 +1,48 @@
+generated: '2026-08-12'
+method: searched
+source: https://github.com/adobe/skills/tree/main/plugins/app-builder/skills/appbuilder-workfront
+docs:
+- https://developer.adobe.com/app-builder/docs/guides/
+- https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/configure-integrations/workfront-integrations
+note: 'Workfront exposes no embeddable widget library for a third-party website — there is no
+  Workfront.js loader, no web components, no hosted iframe surface to drop into someone else''s page.
+  Its client-side extensibility runs the other direction: an Adobe App Builder application registers
+  itself into fixed extension points INSIDE the Workfront UI. This artifact records those extension
+  points, because they are the real client-side component contract Workfront publishes, and an
+  integrator looking for "embedded components" needs to know the direction is inward, not outward.'
+direction: inbound — third-party UI is embedded into Workfront, not Workfront into a third party
+families:
+- family: Workfront UI extensions (Adobe App Builder)
+  runtime: React + Adobe React Spectrum single-page app, hosted on Adobe I/O
+  registration: a single register() call in ExtensionRegistration, with a top-level id and the
+    extension points declared under methods
+  loader: '@adobe/uix-guest (guestConnection)'
+  scaffold_template: '@adobe/workfront-ui-ext-tpl'
+  extension_points:
+  - id: mainMenu
+    description: adds a button to the Workfront Main Menu; each item declares id, url, label, icon
+  - id: secondaryNav
+    description: adds an item to an object's left panel; registered separately per object type
+    object_types: [PROJECT, TASK, ISSUE, PORTFOLIO, PROGRAM]
+  - id: widgets
+    description: embeds a view inside a custom-form field; supports optional dimensions (height,
+      width, maxHeight, maxWidth)
+  shared_context:
+    description: Workfront supplies the signed-in user, objCode, objID and hostname to the extension
+      through sharedContext plus getWFInstanceUrl(); the extension does not build its own login
+  constraints:
+  - The SPA must never call /attask/api directly from the browser. All Workfront and Adobe API calls
+    belong in an Adobe I/O Runtime action, invoked from the SPA with actionWebInvoke.
+  - Every action reply is shaped '{ data, error }'; the caller must check error before using data.
+  backend: Adobe I/O Runtime serverless actions hold the credentials and call the Workfront Public
+    API (documented by Adobe's skill against API v21) and the Planning API
+- family: Native product integrations
+  description: Adobe ships packaged integrations rather than embeddable components — Workfront for
+    Microsoft Teams, Workfront for Outlook, Adobe Experience Manager Assets connectors, Frame.io,
+    GenStudio, SharePoint and other document-provider integrations configured from Workfront Setup.
+  docs: https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/configure-integrations/workfront-integrations
+packages:
+- '@adobe/workfront-ui-ext-tpl'
+related_skills:
+- skills/workfront-appbuilder-workfront-ui-extension.md
+- skills/workfront-appbuilder-workfront-actions.md

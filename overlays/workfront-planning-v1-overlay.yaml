@@ -1,0 +1,40 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Adobe Workfront Planning API v1
+  version: 1.0.0
+extends: openapi/workfront-planning-v1-openapi.json
+x-generated: '2026-08-12'
+x-method: generated
+x-source: openapi/workfront-planning-v1-openapi.json
+actions:
+- target: $.info
+  description: Record the API Evangelist profile, provenance, and the v1-specific behaviours an agent
+    must know that the document does not state.
+  update:
+    x-apievangelist-profile: https://apis.io/provider/workfront
+    x-spec-source: https://developer.adobe.com/wf-planning/v1.json
+    x-spec-repository: https://github.com/AdobeDocs/Workfront-Planning-API
+    x-published-by: Adobe Inc.
+    x-harvested: '2026-08-12'
+    x-lifecycle:
+      released: '2024-07'
+      superseded_by: Workfront Planning API v2 (2026-05)
+      sunset: not announced
+      note: still the version the Workfront Planning connector for Workfront Fusion targets
+    x-gap-security-schemes: no components.securitySchemes declared; the API is OAuth 2.0 only
+    x-gap-error-responses: 'the v1 document declares NO 4xx or 5xx responses on any operation. v1
+      errors use a numeric `type` field (e.g. 40001) with detail wrapped in a `report` object, and v1
+      returns 200 OK for every success including POST and DELETE.'
+    x-v1-differences:
+      patch_supported: false
+      success_status: 200 for all operations
+      error_shape: numeric type + report object (not RFC 7807)
+- target: $.servers
+  update:
+  - url: https://{customer-domain}/maestro/api
+    description: Workfront Planning Service URL. {customer-domain} is the organization's own
+      Workfront host, of the form <yourdomain>.my.workfront.adobe.com.
+    variables:
+      customer-domain:
+        default: your-org.my.workfront.adobe.com
+        description: Your organization's Workfront domain.

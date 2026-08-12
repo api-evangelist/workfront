@@ -1,0 +1,61 @@
+generated: '2026-08-12'
+method: searched
+source: https://experienceleague.adobe.com/en/docs/workfront/using/product-announcements/product-releases/product-releases
+docs:
+- https://experienceleague.adobe.com/en/docs/workfront/using/product-announcements/product-releases/product-releases
+- https://experienceleague.adobe.com/en/docs/workfront/using/product-announcements/product-releases/workfront-release-schedule
+- https://experienceleague.adobe.com/en/docs/workfront-known-issues/releases/current-updates
+scheme: calendar-quarter (YY.M — e.g. 26.10 is the October 2026 release)
+current_release_line: '26.x'
+cadence:
+  quarterly: one consolidated quarterly release, on the Thursday of the second full week of the final
+    month of the quarter
+  fast_release: an optional monthly track; on the final release of each quarter fast-release
+    organizations receive it one day early
+  maintenance: weekly issue-fix updates to Production, published on the known-issues site
+  preview_lead: features are testable in the Preview Sandbox 2-4 weeks before Production
+note: Workfront publishes dated, per-quarter release notes broken out by product area (AI,
+  Administration, Documents, Financial Management, Home, Projects, Reporting, Requests, Resource
+  Management, Integrations, Other), plus a separate API version-notes page per API version. It does not
+  publish a single machine-readable changelog feed, and the release notes are not versioned per API —
+  API-level change is documented on the per-version "New in API version N" pages instead.
+entries:
+- version: '26.10'
+  quarter: 2026 Q4
+  date: '2026-10-15'
+  fast_release_date: '2026-10-14'
+  monthly_releases: ['26.8 (2026-08-13)', '26.9 (2026-09-17)', '26.10 (2026-10-14)']
+  preview_cutoff: '2026-10-01'
+  areas: [AI, Administrator, Documents, Projects, Reporting, Resource Management, Other]
+  breaking: []
+- version: '26.7'
+  quarter: 2026 Q3
+  date: '2026-07-16'
+  fast_release_date: '2026-07-15'
+  monthly_releases: ['26.5 (2026-05-14)', '26.6 (2026-06-11)', '26.7 (2026-07-15)']
+  preview_cutoff: '2026-07-07'
+  areas: [AI, Administrator, Documents, Financial Management, Home, Projects, Reporting, Requests,
+    Resource Management, Other]
+  highlights:
+  - Workfront API version 22 became the current API version (released 2026-05-08)
+  - Workfront Planning API v2 released (2026-05)
+  - Adobe Workfront MCP server reached general availability (June 2026)
+  breaking: []
+- version: '26.4'
+  quarter: 2026 Q2
+  date: '2026-04-16'
+  fast_release_date: '2026-04-15'
+  monthly_releases: ['26.2 (2026-02-12)', '26.3 (2026-03-12)', '26.4 (2026-04-15)']
+  areas: [Administration, Integrations, Approvals, Custom forms, Scenario Planner, Microsoft Teams]
+  breaking: []
+- version: '26.1'
+  quarter: 2026 Q1
+  date: '2026-01'
+  last_updated: '2026-04-01'
+  areas: [Administration, Integrations, Approvals, Custom forms, Scenario Planner, Requests, Home,
+    Projects, Reporting]
+  breaking: []
+api_version_notes:
+  current: https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/api-notes/new-api-version-22
+  index: https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/workfront-api
+  note: Adobe keeps a separate "New in API version N" page for every version from 6 through 22.

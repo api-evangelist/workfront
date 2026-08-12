@@ -1,0 +1,108 @@
+generated: '2026-08-12'
+method: derived
+source: openapi/workfront-planning-v2-openapi.json + well-known/workfront-oauth-authorization-server.json
+  + https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/api-general-information/api-basics
+note: Conformance is asserted per surface, because Workfront's four surfaces differ sharply. The
+  Planning v2 API is the modern one (OpenAPI 3.1.0, RFC 7807 errors, OAuth); the core /attask API is a
+  2010-era REST design with no spec, no problem details and a session-header auth model.
+standards:
+- id: openapi-3.1
+  conforms: true
+  evidence: openapi/workfront-planning-v2-openapi.json declares openapi 3.1.0 with 21 paths, 49
+    operations and 74 component schemas; published by Adobe at
+    https://developer.adobe.com/wf-planning/v2.json
+  scope: Workfront Planning API v2
+- id: openapi-3.0
+  conforms: true
+  evidence: openapi/workfront-planning-v1-openapi.json declares openapi 3.0.1
+  scope: Workfront Planning API v1
+- id: openapi
+  conforms: false
+  scope: Adobe Workfront API (/attask/api)
+  evidence: no OpenAPI document is published for the core API; the machine-readable contract is a
+    proprietary object-metadata endpoint (data-model/workfront-api-v22-object-metadata.json)
+- id: rfc9457-problem-details
+  conforms: true
+  evidence: components.schemas.V2ProblemDetail is described in the spec as "RFC 7807 Problem Details
+    error response for V2 endpoints" and is referenced by all 233 4xx/5xx responses, with required
+    title, status, detail, errorCode and requestId
+  scope: Workfront Planning API v2
+  caveat: the responses are served as application/json, not application/problem+json
+- id: rfc9457-problem-details
+  conforms: false
+  scope: Adobe Workfront API (/attask/api), Workfront Planning API v1
+  evidence: 'the core API returns {"error": {...}}; Planning v1 uses a numeric `type` code with a
+    nested report object'
+- id: oauth2
+  conforms: true
+  evidence: OAuth 2.0 authorization-code and server-to-server (JWT/client-credentials) flows are
+    documented for both the core and Planning APIs and configured through the Adobe Developer Console
+- id: oauth2.1
+  conforms: true
+  evidence: the MCP server advertises code_challenge_methods_supported [S256] and grant types
+    authorization_code + refresh_token only, with no implicit or password grant
+  scope: Adobe Workfront MCP Server
+- id: rfc8414-authorization-server-metadata
+  conforms: true
+  evidence: https://mcp.workfront.adobe.com/.well-known/oauth-authorization-server returns 200 with a
+    complete metadata document
+- id: rfc9728-protected-resource-metadata
+  conforms: true
+  evidence: the MCP endpoint returns 401 with a WWW-Authenticate Bearer challenge carrying
+    resource_metadata, and both the host-level and resource-scoped protected-resource documents
+    return 200
+- id: rfc7591-dynamic-client-registration
+  conforms: true
+  evidence: registration_endpoint https://mcp.workfront.adobe.com/mcp/v1/oauth/register is advertised
+- id: pkce-rfc7636
+  conforms: true
+  evidence: code_challenge_methods_supported [S256]; a dedicated PKCE flow is documented for Workfront
+    OAuth2 applications
+- id: openid-connect
+  conforms: true
+  evidence: openid, profile and email are in scopes_supported; identity is Adobe IMS
+  caveat: no /.well-known/openid-configuration is served on any Workfront host
+- id: mcp
+  conforms: true
+  evidence: hosted MCP server at https://mcp.workfront.adobe.com/mcp/v1/workfront advertising
+    mcp_protocol_version 2025-11-25 in its protected-resource metadata; 87 tools documented
+- id: a2a
+  conforms: false
+  evidence: no agent card at /.well-known/agent-card.json or /.well-known/agent.json on any host
+- id: asyncapi
+  conforms: false
+  evidence: no AsyncAPI document published; the Event Subscription API is documented in prose only
+- id: rfc9116-security-txt
+  conforms: true
+  evidence: well-known/workfront-security.txt — PGP-signed security.txt on www.adobe.com with
+    Contact, Expires, Policy, Encryption, Acknowledgments, Preferred-Languages and Canonical
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: API retirement dates are published in documentation but no Sunset or Deprecation response
+    header is advertised
+- id: json-api
+  conforms: false
+- id: odata
+  conforms: false
+- id: scim2
+  conforms: false
+  evidence: user provisioning runs through the Adobe Admin Console rather than a Workfront SCIM
+    endpoint
+- id: graphql
+  conforms: false
+- id: grpc
+  conforms: false
+- id: idempotency-key
+  conforms: false
+  evidence: no idempotency key, replay window or safe-retry contract is documented on any surface
+- id: pagination
+  conforms: true
+  evidence: offset pagination on the core API ($$FIRST/$$LIMIT, max 2000) and cursor pagination on
+    the Planning API
+compliance:
+  published: true
+  artifact: security/workfront-trust-center.yml
+  url: https://www.adobe.com/trust/compliance/compliance-list.html
+  certifications: [SOC 2 Type 2, SOC 3, ISO 27001:2022, ISO 27017:2015, ISO 27018:2019, ISO 22301:2019,
+    ISO 9001:2015, HIPAA ready, IRAP Assessed, GDPR, CCPA, TISAX, CMMC Level 1]
+  scope: Adobe Experience Cloud, which the Adobe compliance list names Adobe Workfront as part of

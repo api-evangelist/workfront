@@ -1,0 +1,536 @@
+generated: '2026-08-12'
+method: searched
+source: https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/workfront-mcp-server-tools
+status: published
+server:
+  name: Adobe Workfront MCP server
+  transport: http
+  url: https://mcp.workfront.adobe.com/mcp/v1/workfront
+  mcp_protocol_version: '2025-11-25'
+  availability: General availability June 2026
+  docs: https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/workfront-mcp-server-overview
+  configure: https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/configure-workfront-mcp-server
+  clients_documented:
+  - Claude
+  - ChatGPT
+  - Google Gemini Enterprise
+  - Microsoft Copilot
+  enablement: A Workfront administrator must enable MCP server access for the instance before an agent can connect.
+authentication:
+  scheme: OAuth 2.1 bearer token
+  discovery:
+  - https://mcp.workfront.adobe.com/.well-known/oauth-authorization-server
+  - https://mcp.workfront.adobe.com/.well-known/oauth-protected-resource
+  - https://mcp.workfront.adobe.com/mcp/v1/workfront/.well-known/oauth-protected-resource
+  authorization_endpoint: https://mcp.workfront.adobe.com/oauth/authorize
+  token_endpoint: https://mcp.workfront.adobe.com/oauth/token
+  dynamic_client_registration: https://mcp.workfront.adobe.com/mcp/v1/oauth/register
+  pkce:
+  - S256
+  identity_provider: Adobe IMS (ims-na1.adobelogin.com)
+  artifacts:
+  - well-known/workfront-oauth-authorization-server.json
+  - well-known/workfront-oauth-protected-resource.json
+probe:
+  fetched: '2026-08-12'
+  url: https://mcp.workfront.adobe.com/mcp/v1/workfront
+  method: POST tools/list (JSON-RPC 2.0)
+  http_status: 401
+  www_authenticate: Bearer realm="workfront-mcp", resource_metadata=".../.well-known/oauth-protected-resource",
+    error="invalid_token"
+  result: live tool schemas are auth-gated; the tool list below is the one Adobe publishes in its documentation
+    (names, titles, descriptions, read/write action class). Input schemas require an authenticated tools/list.
+tool_families:
+- family: Approvals tools / Approval templates
+  tools: 7
+- family: Approvals tools / Approval workflows
+  tools: 9
+- family: Approvals tools / Documents
+  tools: 6
+- family: Approvals tools / Lookups and users
+  tools: 6
+- family: Approvals tools / Reminders
+  tools: 2
+- family: Planning tools / Fields
+  tools: 4
+- family: Planning tools / Record types
+  tools: 11
+- family: Planning tools / Records
+  tools: 8
+- family: Planning tools / Search & utilities
+  tools: 3
+- family: Planning tools / Templates
+  tools: 2
+- family: Planning tools / Views
+  tools: 6
+- family: Planning tools / Workspaces
+  tools: 9
+- family: Workflow tools / Insights tools
+  tools: 8
+- family: Workflow tools / Objects and fields
+  tools: 6
+counts:
+  tools: 87
+  read: 46
+  write: 41
+tools:
+- name: approvals_find_document_version_by_name
+  title: Find document version by name
+  family: Approvals tools / Documents
+  action: read
+  description: Looks up a document's current version ID by filename. Supports partial matches.
+- name: approvals_get_document_by_version_id
+  title: Get document by version ID
+  family: Approvals tools / Documents
+  action: read
+  description: Fetches document details (name, size, upload date, uploader) for a known document version ID.
+- name: approvals_get_documents_by_project
+  title: Get documents by project
+  family: Approvals tools / Documents
+  action: read
+  description: Lists documents inside a Workfront project, with each document's current version ID.
+- name: approvals_resolve_document_scope
+  title: Resolve document scope
+  family: Approvals tools / Documents
+  action: read
+  description: Expands a project or folder into the list of document version IDs it contains. Supports project,
+    folder, and folder-by-name scopes.
+- name: approvals_find_document
+  title: Find a document
+  family: Approvals tools / Documents
+  action: read
+  description: Look up a document by filename or document version ID
+- name: approvals_get_documents_by_scope
+  title: Get documents by scope
+  family: Approvals tools / Documents
+  action: read
+  description: List document inside a project or folder.
+- name: approvals_get_approval_info
+  title: Get approval workflow info
+  family: Approvals tools / Approval workflows
+  action: read
+  description: Returns the current approval workflow (stages, participants, status) for a document version. For
+    approvals with multiple paths, it shows each path and its stages.
+- name: approvals_create_or_update_approval_workflow
+  title: Create or update approval workflow
+  family: Approvals tools / Approval workflows
+  action: write
+  description: Creates or updates the approval workflow stages for a document version. Supports a single track of
+    stages or multiple parallel review paths.
+- name: approvals_create_approval_from_template
+  title: Create approval from template
+  family: Approvals tools / Approval workflows
+  action: write
+  description: Creates an approval workflow on a document using an existing template, including templates that define
+    multiple parallel paths.
+- name: approvals_delete_approval_stage
+  title: Delete approval stage
+  family: Approvals tools / Approval workflows
+  action: write
+  description: Deletes a single stage from an approval workflow by name or position. Only not-started stages can
+    be deleted.
+- name: approvals_add_path_to_approval
+  title: Add path to approval
+  family: Approvals tools / Approval workflows
+  action: write
+  description: Adds a new parallel review path to an existing approval workflow, so multiple review tracks run at
+    the same time on a document version.
+- name: approvals_remove_path_from_approval
+  title: Remove path from approval
+  family: Approvals tools / Approval workflows
+  action: write
+  description: Removes a parallel path from an approval workflow. The first path can't be removed, and paths that
+    contain completed or locked stages are protected.
+- name: approvals_add_stage_to_path
+  title: Add stage to path
+  family: Approvals tools / Approval workflows
+  action: write
+  description: Adds a review stage to the end of a specific path within a parallel approval workflow.
+- name: approvals_remove_stage_from_path
+  title: Remove stage from path
+  family: Approvals tools / Approval workflows
+  action: write
+  description: Removes a not-started stage from a specific path in a parallel approval workflow. Each path must
+    keep at least one stage.
+- name: approvals_reorder_stages_in_path
+  title: Reorder stages in path
+  family: Approvals tools / Approval workflows
+  action: write
+  description: Changes the order of stages within a single path of a parallel approval workflow.
+- name: approvals_send_reminder_to_participants
+  title: Send reminder to participants
+  family: Approvals tools / Reminders
+  action: write
+  description: Sends reminder emails to specific participants in an approval stage. Works only for started, not-completed,
+    not-locked stages.
+- name: approvals_send_reminder_to_undecided
+  title: Send reminder to undecided participants
+  family: Approvals tools / Reminders
+  action: write
+  description: Sends reminder emails to all undecided participants (notified, opened, or commented) in an approval
+    stage.
+- name: approvals_list_templates
+  title: List approval templates
+  family: Approvals tools / Approval templates
+  action: read
+  description: Lists approval templates available in this Workfront instance. Supports filtering by creator, participant,
+    and sorting by usage.
+- name: approvals_search_template_by_name
+  title: Search template by name
+  family: Approvals tools / Approval templates
+  action: read
+  description: Finds approval templates by name (case-insensitive partial match).
+- name: approvals_create_template
+  title: Create approval template
+  family: Approvals tools / Approval templates
+  action: write
+  description: Creates a new approval template with linear or graph-based stage dependencies.
+- name: approvals_update_template
+  title: Update approval template
+  family: Approvals tools / Approval templates
+  action: write
+  description: Updates an existing template with structured modifications (add or remove participants, rename stages,
+    set deadlines, etc.).
+- name: approvals_send_approval_reminder
+  title: Remind stakeholders of approvals in bulk
+  family: Approvals tools / Approval templates
+  action: write
+  description: Send approval reminder emails to all pending approvers across an entire project, folder, campaign,
+    or due-date window.
+- name: approvals_update_approval_participants
+  title: Add or remove approval participants in bulk.
+  family: Approvals tools / Approval templates
+  action: write
+  description: Add, remove, or replace participants across an entire portfolio, program, or project scope in one
+    operation.
+- name: approvals__submit_update_approval_participants
+  title: Add or remove approval participants in bulk.
+  family: Approvals tools / Approval templates
+  action: write
+  description: Add, remove, or replace participants across an entire portfolio, program, or project scope in one
+    operation.
+- name: approvals_get_current_user
+  title: Get current user
+  family: Approvals tools / Lookups and users
+  action: read
+  description: Returns the calling user's Workfront identity, including name, user ID, home team name, and home
+    team ID.
+- name: approvals_find_user_by_name
+  title: Find user by name
+  family: Approvals tools / Lookups and users
+  action: read
+  description: Looks up a Workfront user's ID by name (fuzzy or partial match). Returns name, ID, email, title,
+    and avatar URL.
+- name: approvals_find_team_by_name
+  title: Find team by name
+  family: Approvals tools / Lookups and users
+  action: read
+  description: Looks up a Workfront team's ID by name (fuzzy or partial match).
+- name: approvals_find_project_by_name
+  title: Find project by name
+  family: Approvals tools / Lookups and users
+  action: read
+  description: Looks up Workfront projects by partial name match across the system.
+- name: approvals_get_projects_by_owner
+  title: Get projects by owner
+  family: Approvals tools / Lookups and users
+  action: read
+  description: Lists Workfront projects where the calling user is the owner.
+- name: approvals_find_projects
+  title: Find projects
+  family: Approvals tools / Lookups and users
+  action: read
+  description: Look up Workfront projects, optionally filtered by name and/or restricted to projects that the calling
+    user owns.
+- name: planning_get_workspace
+  title: Get workspace
+  family: Planning tools / Workspaces
+  action: read
+  description: Retrieves full details of a workspace by ID or alias.
+- name: planning_get_workspace_list
+  title: Get workspace list
+  family: Planning tools / Workspaces
+  action: read
+  description: Lists all available workspaces with cursor-based pagination.
+- name: planning_create_workspace
+  title: Create workspace
+  family: Planning tools / Workspaces
+  action: write
+  description: Creates a new empty workspace to organize record types, fields, and data.
+- name: planning_create_workspace_from_template
+  title: Create workspace from template
+  family: Planning tools / Workspaces
+  action: write
+  description: Creates a new workspace pre-populated using an existing template.
+- name: planning_update_workspace
+  title: Update workspace
+  family: Planning tools / Workspaces
+  action: write
+  description: Partially updates a workspace — name, description, icon, sections, or owner.
+- name: planning_delete_workspace
+  title: Delete workspace
+  family: Planning tools / Workspaces
+  action: write
+  description: Permanently deletes a workspace and all its data.
+- name: planning_convert_workspace_to_template
+  title: Convert workspace to template
+  family: Planning tools / Workspaces
+  action: write
+  description: Saves an existing workspace as a reusable template (requires admin).
+- name: planning_get_workspace_sharing
+  title: Get workspace sharing
+  family: Planning tools / Workspaces
+  action: read
+  description: Returns the current sharing and permissions configuration for a workspace.
+- name: planning_modify_workspace_sharing
+  title: Modify workspace sharing
+  family: Planning tools / Workspaces
+  action: write
+  description: Updates who has access to a workspace and at what permission level.
+- name: planning_get_record_type
+  title: Get record type
+  family: Planning tools / Record types
+  action: read
+  description: Fetches full details of a record type including its fields and views.
+- name: planning_create_record_types
+  title: Create record types
+  family: Planning tools / Record types
+  action: write
+  description: Creates one or more record types within a workspace section.
+- name: planning_update_record_type
+  title: Update record type
+  family: Planning tools / Record types
+  action: write
+  description: Partially updates a record type's name, description, icon, or color.
+- name: planning_delete_record_type
+  title: Delete record type
+  family: Planning tools / Record types
+  action: write
+  description: Permanently deletes a record type and all its records, fields, and views.
+- name: planning_list_global_record_types
+  title: List global record types
+  family: Planning tools / Record types
+  action: read
+  description: Lists all centrally-defined (global) record types visible to the current user.
+- name: planning_list_addable_global_record_types
+  title: List addable global record types
+  family: Planning tools / Record types
+  action: read
+  description: Lists global record types that can be added to a specific workspace.
+- name: planning_add_global_record_type_to_workspace
+  title: Add global record type to workspace
+  family: Planning tools / Record types
+  action: write
+  description: Links a global record type into a specified workspace.
+- name: planning_remove_global_record_type_from_ws
+  title: Remove global record type from workspace
+  family: Planning tools / Record types
+  action: write
+  description: Unlinks a global record type from a workspace; deletes all its records in that workspace.
+- name: planning_get_external_record_workspaces
+  title: Get external record workspaces
+  family: Planning tools / Record types
+  action: read
+  description: Finds which workspaces and record types are connected to a specific external record.
+- name: planning_get_record_type_sharing
+  title: Get record type sharing
+  family: Planning tools / Record types
+  action: read
+  description: Returns the sharing and permissions for a specific record type.
+- name: planning_modify_record_type_sharing
+  title: Modify record type sharing
+  family: Planning tools / Record types
+  action: write
+  description: Updates who can access a record type and at what permission level.
+- name: planning_get_record
+  title: Get record
+  family: Planning tools / Records
+  action: read
+  description: Retrieves full details of a single record by ID.
+- name: planning_search_records
+  title: Search records
+  family: Planning tools / Records
+  action: read
+  description: Searches and filters records within a record type.
+- name: planning_bulk_record_actions
+  title: Bulk record actions
+  family: Planning tools / Records
+  action: write
+  description: Creates, updates, deletes, or restores multiple records in a single request.
+- name: planning_create_connection_record
+  title: Create connection record
+  family: Planning tools / Records
+  action: write
+  description: Creates a new record in a connected external system (for example, a Workfront project).
+- name: planning_update_records_order
+  title: Update records order
+  family: Planning tools / Records
+  action: write
+  description: Changes the display order of records within a record type.
+- name: planning_get_record_change_log
+  title: Get record change log
+  family: Planning tools / Records
+  action: read
+  description: Returns the field-level edit history for a record.
+- name: planning_get_record_sharing
+  title: Get record sharing
+  family: Planning tools / Records
+  action: read
+  description: Returns the sharing configuration for a specific record.
+- name: planning_modify_records_sharing
+  title: Modify records sharing
+  family: Planning tools / Records
+  action: write
+  description: Updates who can access one or more records and at what permission level.
+- name: planning_get_field
+  title: Get field
+  family: Planning tools / Fields
+  action: read
+  description: Retrieves full details and value schema for a field by ID.
+- name: planning_create_fields
+  title: Create fields
+  family: Planning tools / Fields
+  action: write
+  description: Adds one or more fields (columns) to a record type.
+- name: planning_update_field
+  title: Update field
+  family: Planning tools / Fields
+  action: write
+  description: Partially updates a field's name, description, options, or configuration.
+- name: planning_delete_field
+  title: Delete field
+  family: Planning tools / Fields
+  action: write
+  description: Permanently removes a field and all its data from a record type.
+- name: planning_get_view
+  title: Get view
+  family: Planning tools / Views
+  action: read
+  description: Returns complete details of a view by ID.
+- name: planning_create_view
+  title: Create view
+  family: Planning tools / Views
+  action: write
+  description: Creates a new table, timeline, or calendar view for a record type.
+- name: planning_update_view
+  title: Update view
+  family: Planning tools / Views
+  action: write
+  description: Partially updates an existing view's configuration, filters, or sorting.
+- name: planning_delete_view
+  title: Delete view
+  family: Planning tools / Views
+  action: write
+  description: Permanently deletes a view (records are not affected).
+- name: planning_get_view_sharing
+  title: Get view sharing
+  family: Planning tools / Views
+  action: read
+  description: Returns the sharing configuration for a specific view.
+- name: planning_modify_view_sharing
+  title: Modify view sharing
+  family: Planning tools / Views
+  action: write
+  description: Updates who can access a view and at what permission level.
+- name: planning_get_template_list
+  title: Get template list
+  family: Planning tools / Templates
+  action: read
+  description: Lists all available workspace templates with summary info.
+- name: planning_get_template
+  title: Get template
+  family: Planning tools / Templates
+  action: read
+  description: Retrieves full details of a specific template by ID.
+- name: planning_search_resources
+  title: Search resources
+  family: Planning tools / Search & utilities
+  action: read
+  description: Searches across workspaces, record types, and views by name.
+- name: planning_search_sharing_data
+  title: Search sharing data
+  family: Planning tools / Search & utilities
+  action: read
+  description: Finds users, groups, teams, roles, and companies by name for sharing and permissions.
+- name: planning_search_users
+  title: Search users
+  family: Planning tools / Search & utilities
+  action: read
+  description: Searches for users with pagination support.
+- name: workflow_search_any_object
+  title: Search objects
+  family: Workflow tools / Objects and fields
+  action: read
+  description: Searches for Workfront objects with flexible filter parameters, ordering, and pagination.
+- name: workflow_create_any_object
+  title: Create object
+  family: Workflow tools / Objects and fields
+  action: write
+  description: Creates a new Workfront object such as a project, task, issue, hour, assignment, program, or portfolio.
+- name: workflow_update_any_object
+  title: Update object
+  family: Workflow tools / Objects and fields
+  action: write
+  description: Updates fields on an existing Workfront object.
+- name: workflow_delete_any_object
+  title: Delete object
+  family: Workflow tools / Objects and fields
+  action: write
+  description: Deletes a Workfront object by ID. Requires explicit user confirmation before the action is performed.
+- name: workflow_resolve_field_names_any_object
+  title: Resolve field names
+  family: Workflow tools / Objects and fields
+  action: read
+  description: Converts user-provided field names or labels to the underlying Workfront API field names so the AI
+    agentic platform can build accurate requests.
+- name: workflow_read_workflow_docs
+  title: Read Workflow docs
+  family: Workflow tools / Objects and fields
+  action: read
+  description: Loads the Workfront Workflow documentation, including tool usage guides and object-specific operations
+    playbooks. This is the required first step before performing Workflow actions.
+- name: insights_read_docs
+  title: Read documents
+  family: Workflow tools / Insights tools
+  action: read
+  description: Load the Workfront playbook or domain documentation, such as conditions, status, dates, or field
+    paths. This is the required first step before querying data.
+- name: insights_get_current_user
+  title: Get current user
+  family: Workflow tools / Insights tools
+  action: read
+  description: Retrieve your own Workfront identity, including name, ID, and URL.
+- name: insights_search_fields
+  title: Search fields
+  family: Workflow tools / Insights tools
+  action: read
+  description: Search for available fields (standard and custom) on projects, tasks, issues, users, portfolios,
+    teams, and so on.
+- name: insights_get_field_paths
+  title: Get field paths
+  family: Workflow tools / Insights tools
+  action: read
+  description: Resolve dot-notation field paths for entities, required by the data query tool.
+- name: insights_find_id_by_name
+  title: Find ID by name
+  family: Workflow tools / Insights tools
+  action: read
+  description: Look up the ID of any Workfront object by name, such as projects, tasks, users, portfolios, and so
+    on.
+- name: insights_find_workfront_data
+  title: Find Workfront data
+  family: Workflow tools / Insights tools
+  action: read
+  description: Find, filter, count, sort, and aggregate Workfront data. This is the main query and report tool.
+- name: insights_summarize_object
+  title: Summarize object
+  family: Workflow tools / Insights tools
+  action: read
+  description: Fetch and summarize a single Workfront object by ID.
+- name: insights_list_entities
+  title: List entities
+  family: Workflow tools / Insights tools
+  action: read
+  description: List all Workfront object types available to query.
+crosswalk: mcp/workfront-tool-crosswalk.yml
+skills: skills/_index.yml
