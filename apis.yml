@@ -14,7 +14,7 @@ url: https://raw.githubusercontent.com/api-evangelist/workfront/refs/heads/main/
 image: https://avatars.githubusercontent.com/u/3494194?v=4
 x-type: company
 x-source: harvest:marketing-integration-graph
-specificationVersion: '0.20'
+specificationVersion: '0.23'
 created: '2026-08-12'
 modified: '2026-08-12'
 tags:
