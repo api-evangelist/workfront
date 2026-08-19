@@ -1,0 +1,317 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Workfront Planning API Version 1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Records",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Record",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{customer-domain}/maestro/api/v1/records/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the record to be retrieved"
+              },
+              {
+                "name": "aliased",
+                "value": "",
+                "type": "query",
+                "description": "Flag to include alias support"
+              },
+              {
+                "name": "attributes",
+                "value": "ALL",
+                "type": "query",
+                "description": "List of attributes to be included in the response"
+              }
+            ]
+          },
+          "docs": "Retrieve a specific record by its ID along with optional attributes."
+        },
+        {
+          "info": {
+            "name": "Update Record",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{customer-domain}/maestro/api/v1/records/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the record to be updated"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing record with the given ID and details."
+        },
+        {
+          "info": {
+            "name": "Delete Record by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{customer-domain}/maestro/api/v1/records/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the record to be deleted"
+              }
+            ]
+          },
+          "docs": "Delete a specific record by its ID."
+        },
+        {
+          "info": {
+            "name": "Create Record",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{customer-domain}/maestro/api/v1/records",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new record with the given details."
+        },
+        {
+          "info": {
+            "name": "Search Records by field values",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{customer-domain}/maestro/api/v1/records/search",
+            "params": [
+              {
+                "name": "recordTypeId",
+                "value": "",
+                "type": "query",
+                "description": "Id of the record type"
+              },
+              {
+                "name": "recordTypeAlias",
+                "value": "",
+                "type": "query",
+                "description": "Alias of the record type"
+              },
+              {
+                "name": "aliased",
+                "value": "",
+                "type": "query",
+                "description": "Flag to include alias support"
+              },
+              {
+                "name": "filters",
+                "value": "",
+                "type": "query",
+                "description": "Filters"
+              },
+              {
+                "name": "groupingFieldIds",
+                "value": "",
+                "type": "query",
+                "description": "Grouping field ids"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Offset"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit"
+              },
+              {
+                "name": "rowOrderViewId",
+                "value": "",
+                "type": "query",
+                "description": "Row order view id"
+              },
+              {
+                "name": "attributes",
+                "value": "ALL",
+                "type": "query",
+                "description": "List of attributes to be included in the response"
+              }
+            ]
+          },
+          "docs": "Search for records based on specific field values."
+        },
+        {
+          "info": {
+            "name": "Search Records by field values",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{customer-domain}/maestro/api/v1/records/search",
+            "params": [
+              {
+                "name": "recordTypeAlias",
+                "value": "",
+                "type": "query",
+                "description": "Alias of the record type"
+              },
+              {
+                "name": "aliased",
+                "value": "",
+                "type": "query",
+                "description": "Flag to include alias support"
+              },
+              {
+                "name": "attributes",
+                "value": "ALL",
+                "type": "query",
+                "description": "List of attributes to be included in the response"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Search for records based on specific field values."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Workspaces",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get All Workspaces",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{customer-domain}/maestro/api/v1/workspaces",
+            "params": [
+              {
+                "name": "attributes",
+                "value": "ALL",
+                "type": "query",
+                "description": "List of attributes to be included in the response"
+              }
+            ]
+          },
+          "docs": "Retrieve a list of all workspaces along with optional attributes."
+        },
+        {
+          "info": {
+            "name": "Get Workspace",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{customer-domain}/maestro/api/v1/workspaces/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the workspace to be retrieved"
+              },
+              {
+                "name": "attributes",
+                "value": "ALL",
+                "type": "query",
+                "description": "List of attributes to be included in the response"
+              }
+            ]
+          },
+          "docs": "Retrieve a workspace by its ID along with optional attributes."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Record Types",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Record Types of specified Workspace",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{customer-domain}/maestro/api/v1/record-types",
+            "params": [
+              {
+                "name": "workspaceId",
+                "value": "",
+                "type": "query",
+                "description": "ID of the workspace"
+              },
+              {
+                "name": "attributes",
+                "value": "ALL",
+                "type": "query",
+                "description": "List of attributes to be included in the response"
+              }
+            ]
+          },
+          "docs": "Retrieve a list of record types associated with a specified workspace. If a user has view access to workspaces, they gain visibility into all record types."
+        },
+        {
+          "info": {
+            "name": "Get Record Type by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{customer-domain}/maestro/api/v1/record-types/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the record type to be retrieved"
+              },
+              {
+                "name": "attributes",
+                "value": "ALL",
+                "type": "query",
+                "description": "List of attributes to be included in the response"
+              }
+            ]
+          },
+          "docs": "Retrieve a specific record type by its ID along with optional attributes."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,1362 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Workfront Planning API Version 2"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Workspaces",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Workspace",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{customer-domain}/maestro/api/v2/workspaces/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the workspace to be retrieved"
+              }
+            ]
+          },
+          "docs": "Retrieve a workspace by its ID."
+        },
+        {
+          "info": {
+            "name": "Update Workspace",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{customer-domain}/maestro/api/v2/workspaces/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the workspace to be updated"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing workspace using PUT (full replacement). All fields not provided in the request will be set to null."
+        },
+        {
+          "info": {
+            "name": "Patch Workspace",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{customer-domain}/maestro/api/v2/workspaces/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the workspace to be patched"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Partially update a workspace using PATCH (merge-patch semantics). Only provided fields will be updated; omitted fields remain unchanged."
+        },
+        {
+          "info": {
+            "name": "Delete Workspace",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{customer-domain}/maestro/api/v2/workspaces/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the workspace to be deleted"
+              }
+            ]
+          },
+          "docs": "Delete a workspace by its ID."
+        },
+        {
+          "info": {
+            "name": "Get All Workspaces",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{customer-domain}/maestro/api/v2/workspaces",
+            "params": [
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor from the previous page response for fetching the next page"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of items to return per page (1-50, default 20)"
+              }
+            ]
+          },
+          "docs": "Retrieve a cursor-paginated list of all workspaces."
+        },
+        {
+          "info": {
+            "name": "Create Workspace",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{customer-domain}/maestro/api/v2/workspaces",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new workspace."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Views",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get View",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{customer-domain}/maestro/api/v2/views/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the view to be retrieved"
+              }
+            ]
+          },
+          "docs": "Retrieve a view by its ID."
+        },
+        {
+          "info": {
+            "name": "Update View",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{customer-domain}/maestro/api/v2/views/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the view to be updated"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing view using PUT (full replacement). All fields not provided in the request will be set to null."
+        },
+        {
+          "info": {
+            "name": "Patch View",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{customer-domain}/maestro/api/v2/views/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the view to be patched"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Partially update a view using PATCH (merge-patch semantics). Only provided fields will be updated; omitted fields remain unchanged."
+        },
+        {
+          "info": {
+            "name": "Delete View",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{customer-domain}/maestro/api/v2/views/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the view to be deleted"
+              }
+            ]
+          },
+          "docs": "Delete a view by its ID."
+        },
+        {
+          "info": {
+            "name": "Get Views by Record Type",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{customer-domain}/maestro/api/v2/record-types/:recordTypeId/views",
+            "params": [
+              {
+                "name": "recordTypeId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the record type"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor from the previous page response for fetching the next page"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of items to return per page (1-100, default 20)"
+              }
+            ]
+          },
+          "docs": "Retrieve a cursor-paginated list of views for a specific record type."
+        },
+        {
+          "info": {
+            "name": "Create View",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{customer-domain}/maestro/api/v2/record-types/:recordTypeId/views",
+            "params": [
+              {
+                "name": "recordTypeId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the record type"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new view for a record type. Subject to limits: max 100 personal views per record type."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Records",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Record",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{customer-domain}/maestro/api/v2/records/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the record to be retrieved"
+              }
+            ]
+          },
+          "docs": "Retrieve a record by its ID."
+        },
+        {
+          "info": {
+            "name": "Update Record",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{customer-domain}/maestro/api/v2/records/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the record to be updated"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing record using PUT (full replacement). All fields not provided in the request will be set to null."
+        },
+        {
+          "info": {
+            "name": "Patch Record",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{customer-domain}/maestro/api/v2/records/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the record to be patched"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Partially update an existing record using PATCH (merge-patch semantics). Only provided fields will be updated; omitted fields remain unchanged. Setting a field value to JSON null (e.g. {\"data\":{\"F123\":null}}) explicitly clears that field; omitting the key leaves the field untouched. For list-type fields (connections, multi-select), you can use operational updates: [{\"op\": \"add\", \"value\": [...]}, {\"op\": \"remove\", \"value\": [...]}]."
+        },
+        {
+          "info": {
+            "name": "Delete Record",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{customer-domain}/maestro/api/v2/records/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the record to be deleted"
+              }
+            ]
+          },
+          "docs": "Delete a record by its ID."
+        },
+        {
+          "info": {
+            "name": "Bulk Create Records",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{customer-domain}/maestro/api/v2/record-types/:recordTypeId/records/bulk",
+            "params": [
+              {
+                "name": "recordTypeId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the record type"
+              },
+              {
+                "name": "aliased",
+                "value": "",
+                "type": "query",
+                "description": "Flag to include alias support in response (field keys will be aliases instead of IDs)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create multiple records in a record type in a single request. Limited to 100 records per request."
+        },
+        {
+          "info": {
+            "name": "Bulk Update Records",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{customer-domain}/maestro/api/v2/record-types/:recordTypeId/records/bulk",
+            "params": [
+              {
+                "name": "recordTypeId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the record type"
+              },
+              {
+                "name": "aliased",
+                "value": "",
+                "type": "query",
+                "description": "Flag to include alias support in response (field keys will be aliases instead of IDs)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update multiple records using PUT semantics (full replacement). All fields not provided will be set to null. Each record must include an id. Limited to 100 records per request."
+        },
+        {
+          "info": {
+            "name": "Bulk Patch Records",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{customer-domain}/maestro/api/v2/record-types/:recordTypeId/records/bulk",
+            "params": [
+              {
+                "name": "recordTypeId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the record type"
+              },
+              {
+                "name": "aliased",
+                "value": "",
+                "type": "query",
+                "description": "Flag to include alias support in response (field keys will be aliases instead of IDs)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Partially update multiple records using PATCH semantics (merge-patch). Only provided fields are updated; omitted fields remain unchanged. Each record must include an id. Limited to 100 records per request."
+        },
+        {
+          "info": {
+            "name": "Bulk Delete Records",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{customer-domain}/maestro/api/v2/record-types/:recordTypeId/records/bulk",
+            "params": [
+              {
+                "name": "recordTypeId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the record type"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Delete multiple records by their IDs in a single request. Limited to 100 records per request."
+        },
+        {
+          "info": {
+            "name": "Upload thumbnail on record",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{customer-domain}/maestro/api/v2/records/:id/thumbnail",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the record"
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "file",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Replace the record's thumbnail with the uploaded image. Each successful upload produces a new URL, even for identical content."
+        },
+        {
+          "info": {
+            "name": "Delete thumbnail on record",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{customer-domain}/maestro/api/v2/records/:id/thumbnail",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the record"
+              }
+            ]
+          },
+          "docs": "Remove the record's thumbnail. Idempotent — succeeds with 204 even when no thumbnail is set."
+        },
+        {
+          "info": {
+            "name": "Get Records by Record Type",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{customer-domain}/maestro/api/v2/record-types/:recordTypeId/records",
+            "params": [
+              {
+                "name": "recordTypeId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the record type"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Zero-based page index (0..N)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "The size of the page to be returned"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported."
+              }
+            ]
+          },
+          "docs": "Retrieve a page-based paginated list of records for a specific record type. Uses standard page/size query parameters (default page=0, size=20, sorted by createdAt)."
+        },
+        {
+          "info": {
+            "name": "Create Record",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{customer-domain}/maestro/api/v2/record-types/:recordTypeId/records",
+            "params": [
+              {
+                "name": "recordTypeId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the record type"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new record in a record type. Subject to limits: max 25,000 records per record type."
+        },
+        {
+          "info": {
+            "name": "Search Records (GET)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{customer-domain}/maestro/api/v2/record-types/:recordTypeId/records/search",
+            "params": [
+              {
+                "name": "recordTypeId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the record type"
+              },
+              {
+                "name": "recordTypeAlias",
+                "value": "",
+                "type": "query",
+                "description": "Alias of the record type"
+              },
+              {
+                "name": "aliased",
+                "value": "",
+                "type": "query",
+                "description": "Flag to include alias support in response (field keys will be aliases instead of IDs)"
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "JSON filter using the composite filter pattern. Example: {\"operator\":\"AND\",\"conditions\":[{\"fieldId\":\"status\",\"condition\":\"IS\",\"value\":\"Active\"}]}"
+              },
+              {
+                "name": "groupingFieldIds",
+                "value": "F693ab1c96f11ea3f4175e000,F693ab1c96f11ea3f4175e001",
+                "type": "query",
+                "description": "List of field IDs to group results by"
+              },
+              {
+                "name": "scopeWorkspaceIds",
+                "value": "Ws123,Ws456",
+                "type": "query",
+                "description": "List of workspace IDs to scope the search to (for global record types)"
+              },
+              {
+                "name": "globalRecordTypeWorkspaceFieldId",
+                "value": "F693ab1c96f11ea3f4175e717",
+                "type": "query",
+                "description": "ID of the global record type workspace field (for global record types)"
+              },
+              {
+                "name": "fieldIds",
+                "value": "F693ab1c96f11ea3f4175e710,F693ab1c96f11ea3f4175e711",
+                "type": "query",
+                "description": "List of field IDs to include in the record's data"
+              },
+              {
+                "name": "fieldAliases",
+                "value": "name,description",
+                "type": "query",
+                "description": "List of field aliases to include in the record's data"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Zero-based page index (0..N)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "The size of the page to be returned"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported."
+              }
+            ]
+          },
+          "docs": "Search records using query parameters. Accepts a JSON filter string using the composite filter pattern, field projection, and alias-based field access. Returns page-based paginated records along with group information."
+        },
+        {
+          "info": {
+            "name": "Search Records (POST)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{customer-domain}/maestro/api/v2/record-types/:recordTypeId/records/search",
+            "params": [
+              {
+                "name": "recordTypeId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the record type"
+              },
+              {
+                "name": "aliased",
+                "value": "",
+                "type": "query",
+                "description": "Flag to include alias support in response (field keys will be aliases instead of IDs)"
+              },
+              {
+                "name": "fieldIds",
+                "value": "F693ab1c96f11ea3f4175e710,F693ab1c96f11ea3f4175e711",
+                "type": "query",
+                "description": "List of field IDs to include in the record's data"
+              },
+              {
+                "name": "fieldAliases",
+                "value": "name,description",
+                "type": "query",
+                "description": "List of field aliases to include in the record's data"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Zero-based page index (0..N)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "The size of the page to be returned"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Search records using the composite filter pattern with strongly-typed conditions. Supports recursive AND/OR filter nesting, sorting, grouping, field projection, and alias-based field access. Returns page-based paginated records along with group information."
+        },
+        {
+          "info": {
+            "name": "Move Records",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{customer-domain}/maestro/api/v2/record-types/:recordTypeId/records/move",
+            "params": [
+              {
+                "name": "recordTypeId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the record type"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Reorder one or more records within a record type by specifying where to place them. Provide exactly one of putAfterRecordId (place after) or putBeforeRecordId (place before). Maximum 100 records per request. Requires EDIT permission on the record type. Move is all-or-nothing: on failure, no records are reordered."
+        },
+        {
+          "info": {
+            "name": "Get Record Field Change History",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{customer-domain}/maestro/api/v2/records/:id/history",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the record"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor from the previous page response for fetching the next page"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of items to return per page (1-50, default 20)"
+              }
+            ]
+          },
+          "docs": "Retrieve a cursor-paginated list of field change events for a specific record."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Record Types",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Record Type",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{customer-domain}/maestro/api/v2/record-types/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the record type to be retrieved"
+              },
+              {
+                "name": "scopeWorkspaceId",
+                "value": "",
+                "type": "query",
+                "description": "ID of the workspace to scope dynamic field resolution for global/dynamic record types"
+              }
+            ]
+          },
+          "docs": "Retrieve a record type by its ID."
+        },
+        {
+          "info": {
+            "name": "Update Record Type",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{customer-domain}/maestro/api/v2/record-types/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the record type to be updated"
+              },
+              {
+                "name": "scopeWorkspaceId",
+                "value": "",
+                "type": "query",
+                "description": "For global record types, the workspace whose default-permission rule is set when permissionSettings is provided. Defaults to the primary workspace; ignored for regular record types."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing record type using PUT (full replacement). All fields not provided in the request will be set to null."
+        },
+        {
+          "info": {
+            "name": "Patch Record Type",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{customer-domain}/maestro/api/v2/record-types/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the record type to be patched"
+              },
+              {
+                "name": "scopeWorkspaceId",
+                "value": "",
+                "type": "query",
+                "description": "For global record types, the workspace whose default-permission rule is set when permissionSettings is provided. Defaults to the primary workspace; ignored for regular record types."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Partially update a record type using PATCH (merge-patch semantics). Only provided fields will be updated; omitted fields remain unchanged."
+        },
+        {
+          "info": {
+            "name": "Permanently delete record type",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{customer-domain}/maestro/api/v2/record-types/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the record type to be deleted"
+              }
+            ]
+          },
+          "docs": "Delete a record type and all its associated data, fields, and records. This action is irreversible."
+        },
+        {
+          "info": {
+            "name": "Get Record Types by Workspace",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{customer-domain}/maestro/api/v2/workspaces/:workspaceId/record-types",
+            "params": [
+              {
+                "name": "workspaceId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the workspace"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor from the previous page response for fetching the next page"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of items to return per page (1-100, default 20)"
+              }
+            ]
+          },
+          "docs": "Retrieve a cursor-paginated list of record types for a specific workspace."
+        },
+        {
+          "info": {
+            "name": "Create Record Type",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{customer-domain}/maestro/api/v2/workspaces/:workspaceId/record-types",
+            "params": [
+              {
+                "name": "workspaceId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the workspace"
+              },
+              {
+                "name": "sectionIndex",
+                "value": "",
+                "type": "query",
+                "description": "Zero-based index of the section to add the record type to. Defaults to 0 (first section)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new record type in a workspace. Subject to limits: max 100 record types per workspace."
+        },
+        {
+          "info": {
+            "name": "Detach record type from workspace",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{customer-domain}/maestro/api/v2/workspaces/:workspaceId/record-types/:recordTypeId/detach",
+            "params": [
+              {
+                "name": "workspaceId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the workspace"
+              },
+              {
+                "name": "recordTypeId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the record type to detach"
+              }
+            ]
+          },
+          "docs": "Remove a dynamic (global) record type usage from a workspace. The underlying global record type and its data are preserved; only the workspace association is removed."
+        },
+        {
+          "info": {
+            "name": "Get Global Record Types",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{customer-domain}/maestro/api/v2/workspaces/:workspaceId/global-record-types",
+            "params": [
+              {
+                "name": "workspaceId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the workspace"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor from the previous page response for fetching the next page"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of items to return per page (1-100, default 20)"
+              }
+            ]
+          },
+          "docs": "Retrieve a cursor-paginated list of global record types available to attach to a specific workspace."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Fields",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Field",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{customer-domain}/maestro/api/v2/fields/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the field to be retrieved"
+              }
+            ]
+          },
+          "docs": "Retrieve a field by its ID."
+        },
+        {
+          "info": {
+            "name": "Update Field",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{customer-domain}/maestro/api/v2/fields/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the field to be updated"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing field using PUT (full replacement). All fields not provided in the request will be set to null."
+        },
+        {
+          "info": {
+            "name": "Patch Field",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{customer-domain}/maestro/api/v2/fields/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the field to be patched"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Partially update a field using PATCH (merge-patch semantics). Only provided fields will be updated; omitted fields remain unchanged."
+        },
+        {
+          "info": {
+            "name": "Delete Field",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{customer-domain}/maestro/api/v2/fields/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the field to be deleted"
+              }
+            ]
+          },
+          "docs": "Delete a field by its ID."
+        },
+        {
+          "info": {
+            "name": "Get Fields by Record Type",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{customer-domain}/maestro/api/v2/record-types/:recordTypeId/fields",
+            "params": [
+              {
+                "name": "recordTypeId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the record type"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor from the previous page response for fetching the next page"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of items to return per page (1-100, default 20)"
+              }
+            ]
+          },
+          "docs": "Retrieve a cursor-paginated list of fields for a specific record type."
+        },
+        {
+          "info": {
+            "name": "Create Field",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{customer-domain}/maestro/api/v2/record-types/:recordTypeId/fields",
+            "params": [
+              {
+                "name": "recordTypeId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the record type"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new field in a record type. Subject to limits: max 500 fields per record type, max 20 long-text fields, max 20 formula fields, max 30 reference fields per record type."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Permissions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List pending access requests for a resource",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{customer-domain}/maestro/api/v2/permissions/:resourceType/:resourceId/requests",
+            "params": [
+              {
+                "name": "resourceType",
+                "value": "",
+                "type": "path",
+                "description": "Type of resource (workspaces, record-types, records, views)"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the resource"
+              }
+            ]
+          },
+          "docs": "Returns all pending access requests for the given resource. Requires MANAGE permission."
+        },
+        {
+          "info": {
+            "name": "Request access to a resource",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{customer-domain}/maestro/api/v2/permissions/:resourceType/:resourceId/requests",
+            "params": [
+              {
+                "name": "resourceType",
+                "value": "",
+                "type": "path",
+                "description": "Type of resource (workspaces, record-types, records, views)"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the resource"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates or updates an access request for the current user on the given resource."
+        },
+        {
+          "info": {
+            "name": "Dismiss access requests",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{customer-domain}/maestro/api/v2/permissions/:resourceType/:resourceId/requests",
+            "params": [
+              {
+                "name": "resourceType",
+                "value": "",
+                "type": "path",
+                "description": "Type of resource (workspaces, record-types, records, views)"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the resource"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Dismisses the specified access requests by ID. Requires MANAGE permission."
+        },
+        {
+          "info": {
+            "name": "Get all members and their roles for a resource",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{customer-domain}/maestro/api/v2/permissions/:resourceType/:resourceId/members",
+            "params": [
+              {
+                "name": "resourceType",
+                "value": "",
+                "type": "path",
+                "description": "Type of resource (workspaces, record-types, records, views)"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the resource"
+              }
+            ]
+          },
+          "docs": "Lists all subjects (users, groups, teams) that have an explicit sharing relation on the resource. Requires MANAGE permission."
+        },
+        {
+          "info": {
+            "name": "Bulk grant, update, or revoke member permissions",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{customer-domain}/maestro/api/v2/permissions/:resourceType/:resourceId/members",
+            "params": [
+              {
+                "name": "resourceType",
+                "value": "",
+                "type": "path",
+                "description": "Type of resource (workspaces, record-types, records, views)"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the resource"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Grants new roles, changes existing roles, or revokes access for the provided subjects. Requires MANAGE permission."
+        },
+        {
+          "info": {
+            "name": "Get current user's effective permissions on a resource",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{customer-domain}/maestro/api/v2/permissions/:resourceType/:resourceId",
+            "params": [
+              {
+                "name": "resourceType",
+                "value": "",
+                "type": "path",
+                "description": "Type of resource (workspaces, record-types, records, views)"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the resource"
+              }
+            ]
+          },
+          "docs": "Returns the current user's effective canView, canEdit, canDelete, and canAdd flags for the given resource."
+        },
+        {
+          "info": {
+            "name": "Get inheritance setting for a record-type",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{customer-domain}/maestro/api/v2/permissions/:resourceType/:resourceId/inheritance",
+            "params": [
+              {
+                "name": "resourceType",
+                "value": "",
+                "type": "path",
+                "description": "Type of resource (must be record-types)"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the resource"
+              }
+            ]
+          },
+          "docs": "Returns whether workspace members inherit their workspace-level access on the record type. Only valid for record-types."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

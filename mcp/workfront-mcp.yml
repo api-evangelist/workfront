@@ -15,7 +15,8 @@ server:
   - ChatGPT
   - Google Gemini Enterprise
   - Microsoft Copilot
-  enablement: A Workfront administrator must enable MCP server access for the instance before an agent can connect.
+  enablement: A Workfront administrator must enable MCP server access for the instance before an agent
+    can connect.
 authentication:
   scheme: OAuth 2.1 bearer token
   discovery:
@@ -83,7 +84,8 @@ tools:
   title: Get document by version ID
   family: Approvals tools / Documents
   action: read
-  description: Fetches document details (name, size, upload date, uploader) for a known document version ID.
+  description: Fetches document details (name, size, upload date, uploader) for a known document version
+    ID.
 - name: approvals_get_documents_by_project
   title: Get documents by project
   family: Approvals tools / Documents
@@ -93,8 +95,8 @@ tools:
   title: Resolve document scope
   family: Approvals tools / Documents
   action: read
-  description: Expands a project or folder into the list of document version IDs it contains. Supports project,
-    folder, and folder-by-name scopes.
+  description: Expands a project or folder into the list of document version IDs it contains. Supports
+    project, folder, and folder-by-name scopes.
 - name: approvals_find_document
   title: Find a document
   family: Approvals tools / Documents
@@ -109,38 +111,38 @@ tools:
   title: Get approval workflow info
   family: Approvals tools / Approval workflows
   action: read
-  description: Returns the current approval workflow (stages, participants, status) for a document version. For
-    approvals with multiple paths, it shows each path and its stages.
+  description: Returns the current approval workflow (stages, participants, status) for a document version.
+    For approvals with multiple paths, it shows each path and its stages.
 - name: approvals_create_or_update_approval_workflow
   title: Create or update approval workflow
   family: Approvals tools / Approval workflows
   action: write
-  description: Creates or updates the approval workflow stages for a document version. Supports a single track of
-    stages or multiple parallel review paths.
+  description: Creates or updates the approval workflow stages for a document version. Supports a single
+    track of stages or multiple parallel review paths.
 - name: approvals_create_approval_from_template
   title: Create approval from template
   family: Approvals tools / Approval workflows
   action: write
-  description: Creates an approval workflow on a document using an existing template, including templates that define
-    multiple parallel paths.
+  description: Creates an approval workflow on a document using an existing template, including templates
+    that define multiple parallel paths.
 - name: approvals_delete_approval_stage
   title: Delete approval stage
   family: Approvals tools / Approval workflows
   action: write
-  description: Deletes a single stage from an approval workflow by name or position. Only not-started stages can
-    be deleted.
+  description: Deletes a single stage from an approval workflow by name or position. Only not-started
+    stages can be deleted.
 - name: approvals_add_path_to_approval
   title: Add path to approval
   family: Approvals tools / Approval workflows
   action: write
-  description: Adds a new parallel review path to an existing approval workflow, so multiple review tracks run at
-    the same time on a document version.
+  description: Adds a new parallel review path to an existing approval workflow, so multiple review tracks
+    run at the same time on a document version.
 - name: approvals_remove_path_from_approval
   title: Remove path from approval
   family: Approvals tools / Approval workflows
   action: write
-  description: Removes a parallel path from an approval workflow. The first path can't be removed, and paths that
-    contain completed or locked stages are protected.
+  description: Removes a parallel path from an approval workflow. The first path can't be removed, and
+    paths that contain completed or locked stages are protected.
 - name: approvals_add_stage_to_path
   title: Add stage to path
   family: Approvals tools / Approval workflows
@@ -150,8 +152,8 @@ tools:
   title: Remove stage from path
   family: Approvals tools / Approval workflows
   action: write
-  description: Removes a not-started stage from a specific path in a parallel approval workflow. Each path must
-    keep at least one stage.
+  description: Removes a not-started stage from a specific path in a parallel approval workflow. Each
+    path must keep at least one stage.
 - name: approvals_reorder_stages_in_path
   title: Reorder stages in path
   family: Approvals tools / Approval workflows
@@ -161,20 +163,20 @@ tools:
   title: Send reminder to participants
   family: Approvals tools / Reminders
   action: write
-  description: Sends reminder emails to specific participants in an approval stage. Works only for started, not-completed,
-    not-locked stages.
+  description: Sends reminder emails to specific participants in an approval stage. Works only for started,
+    not-completed, not-locked stages.
 - name: approvals_send_reminder_to_undecided
   title: Send reminder to undecided participants
   family: Approvals tools / Reminders
   action: write
-  description: Sends reminder emails to all undecided participants (notified, opened, or commented) in an approval
-    stage.
+  description: Sends reminder emails to all undecided participants (notified, opened, or commented) in
+    an approval stage.
 - name: approvals_list_templates
   title: List approval templates
   family: Approvals tools / Approval templates
   action: read
-  description: Lists approval templates available in this Workfront instance. Supports filtering by creator, participant,
-    and sorting by usage.
+  description: Lists approval templates available in this Workfront instance. Supports filtering by creator,
+    participant, and sorting by usage.
 - name: approvals_search_template_by_name
   title: Search template by name
   family: Approvals tools / Approval templates
@@ -189,38 +191,38 @@ tools:
   title: Update approval template
   family: Approvals tools / Approval templates
   action: write
-  description: Updates an existing template with structured modifications (add or remove participants, rename stages,
-    set deadlines, etc.).
+  description: Updates an existing template with structured modifications (add or remove participants,
+    rename stages, set deadlines, etc.).
 - name: approvals_send_approval_reminder
   title: Remind stakeholders of approvals in bulk
   family: Approvals tools / Approval templates
   action: write
-  description: Send approval reminder emails to all pending approvers across an entire project, folder, campaign,
-    or due-date window.
+  description: Send approval reminder emails to all pending approvers across an entire project, folder,
+    campaign, or due-date window.
 - name: approvals_update_approval_participants
   title: Add or remove approval participants in bulk.
   family: Approvals tools / Approval templates
   action: write
-  description: Add, remove, or replace participants across an entire portfolio, program, or project scope in one
-    operation.
+  description: Add, remove, or replace participants across an entire portfolio, program, or project scope
+    in one operation.
 - name: approvals__submit_update_approval_participants
   title: Add or remove approval participants in bulk.
   family: Approvals tools / Approval templates
   action: write
-  description: Add, remove, or replace participants across an entire portfolio, program, or project scope in one
-    operation.
+  description: Add, remove, or replace participants across an entire portfolio, program, or project scope
+    in one operation.
 - name: approvals_get_current_user
   title: Get current user
   family: Approvals tools / Lookups and users
   action: read
-  description: Returns the calling user's Workfront identity, including name, user ID, home team name, and home
-    team ID.
+  description: Returns the calling user's Workfront identity, including name, user ID, home team name,
+    and home team ID.
 - name: approvals_find_user_by_name
   title: Find user by name
   family: Approvals tools / Lookups and users
   action: read
-  description: Looks up a Workfront user's ID by name (fuzzy or partial match). Returns name, ID, email, title,
-    and avatar URL.
+  description: Looks up a Workfront user's ID by name (fuzzy or partial match). Returns name, ID, email,
+    title, and avatar URL.
 - name: approvals_find_team_by_name
   title: Find team by name
   family: Approvals tools / Lookups and users
@@ -240,8 +242,8 @@ tools:
   title: Find projects
   family: Approvals tools / Lookups and users
   action: read
-  description: Look up Workfront projects, optionally filtered by name and/or restricted to projects that the calling
-    user owns.
+  description: Look up Workfront projects, optionally filtered by name and/or restricted to projects that
+    the calling user owns.
 - name: planning_get_workspace
   title: Get workspace
   family: Planning tools / Workspaces
@@ -466,7 +468,8 @@ tools:
   title: Create object
   family: Workflow tools / Objects and fields
   action: write
-  description: Creates a new Workfront object such as a project, task, issue, hour, assignment, program, or portfolio.
+  description: Creates a new Workfront object such as a project, task, issue, hour, assignment, program,
+    or portfolio.
 - name: workflow_update_any_object
   title: Update object
   family: Workflow tools / Objects and fields
@@ -476,25 +479,26 @@ tools:
   title: Delete object
   family: Workflow tools / Objects and fields
   action: write
-  description: Deletes a Workfront object by ID. Requires explicit user confirmation before the action is performed.
+  description: Deletes a Workfront object by ID. Requires explicit user confirmation before the action
+    is performed.
 - name: workflow_resolve_field_names_any_object
   title: Resolve field names
   family: Workflow tools / Objects and fields
   action: read
-  description: Converts user-provided field names or labels to the underlying Workfront API field names so the AI
-    agentic platform can build accurate requests.
+  description: Converts user-provided field names or labels to the underlying Workfront API field names
+    so the AI agentic platform can build accurate requests.
 - name: workflow_read_workflow_docs
   title: Read Workflow docs
   family: Workflow tools / Objects and fields
   action: read
-  description: Loads the Workfront Workflow documentation, including tool usage guides and object-specific operations
-    playbooks. This is the required first step before performing Workflow actions.
+  description: Loads the Workfront Workflow documentation, including tool usage guides and object-specific
+    operations playbooks. This is the required first step before performing Workflow actions.
 - name: insights_read_docs
   title: Read documents
   family: Workflow tools / Insights tools
   action: read
-  description: Load the Workfront playbook or domain documentation, such as conditions, status, dates, or field
-    paths. This is the required first step before querying data.
+  description: Load the Workfront playbook or domain documentation, such as conditions, status, dates,
+    or field paths. This is the required first step before querying data.
 - name: insights_get_current_user
   title: Get current user
   family: Workflow tools / Insights tools
@@ -515,13 +519,14 @@ tools:
   title: Find ID by name
   family: Workflow tools / Insights tools
   action: read
-  description: Look up the ID of any Workfront object by name, such as projects, tasks, users, portfolios, and so
-    on.
+  description: Look up the ID of any Workfront object by name, such as projects, tasks, users, portfolios,
+    and so on.
 - name: insights_find_workfront_data
   title: Find Workfront data
   family: Workflow tools / Insights tools
   action: read
-  description: Find, filter, count, sort, and aggregate Workfront data. This is the main query and report tool.
+  description: Find, filter, count, sort, and aggregate Workfront data. This is the main query and report
+    tool.
 - name: insights_summarize_object
   title: Summarize object
   family: Workflow tools / Insights tools
@@ -534,3 +539,10 @@ tools:
   description: List all Workfront object types available to query.
 crosswalk: mcp/workfront-tool-crosswalk.yml
 skills: skills/_index.yml
+deployment:
+  mode: remote
+  endpoint: https://mcp.workfront.adobe.com/mcp/v1/workfront
+  verified: probed
+  probe: gated
+  checked: '2026-08-12'
+  source: catalog MCP census
