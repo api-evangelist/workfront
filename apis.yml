@@ -26,6 +26,19 @@ tags:
 - Collaboration
 - Approvals
 - Resource Management
+- Workflow-Automation
+- Enterprise Software
+- Adobe
+- MCP
+tags_raw:
+- Company
+- Work Management
+- Project Management
+- Marketing Operations
+- Creative Operations
+- Collaboration
+- Approvals
+- Resource Management
 - Workflow Automation
 - Enterprise Software
 - Adobe
@@ -104,6 +117,10 @@ apis:
   humanURL: https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/event-subscriptions/event-subs-api
   baseURL: https://{customer-domain}.my.workfront.adobe.com/attask/eventsubscription/api/v1
   tags:
+  - Webhook
+  - Event
+  - Work Management
+  tags_raw:
   - Webhooks
   - Events
   - Work Management
@@ -123,6 +140,10 @@ apis:
   humanURL: https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/workfront-mcp-server-overview
   baseURL: https://mcp.workfront.adobe.com/mcp/v1/workfront
   tags:
+  - MCP
+  - Agents
+  - Work Management
+  tags_raw:
   - Model Context Protocol
   - Agents
   - Work Management
