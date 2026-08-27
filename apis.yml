@@ -46,13 +46,14 @@ tags_raw:
 apis:
 - aid: workfront:workfront-api
   name: Adobe Workfront API
-  description: 'The core Workfront REST API. Every object in the system has a URI of the form
-    /attask/api/v22.0/{objCode}/{id}; GET retrieves or searches, POST inserts, PUT edits and DELETE
-    removes. Adobe does not publish an OpenAPI document for this API — the machine-readable contract is
-    an object-metadata endpoint that returns all 174 objects with their fields, references, collections,
-    searchable fields, named queries, actions and supported operations, and which answers anonymously
-    for the public reference instance.'
-  humanURL: https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/api-general-information/api-basics
+  description: >-
+    The core Workfront REST API. Every object in the system has a URI of the form /attask/api/v22.0/{objCode}/{id};
+    GET retrieves or searches, POST inserts, PUT edits and DELETE removes. Adobe does not publish an OpenAPI
+    document for this API — the machine-readable contract is an object-metadata endpoint that returns
+    all 174 objects with their fields, references, collections, searchable fields, named queries, actions
+    and supported operations, and which answers anonymously for the public reference instance.
+  humanURL: >-
+    https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/api-general-information/api-basics
   baseURL: https://{customer-domain}.my.workfront.adobe.com/attask/api/v22.0
   tags:
   - Work Management
@@ -60,61 +61,26 @@ apis:
   - REST
   properties:
   - type: Documentation
-    url: https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/api-general-information/api-general
+    url: >-
+      https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/api-general-information/api-general
   - type: APIReference
     url: https://developersupport.workfront.com/page-api-explorer.html
   - type: GettingStarted
-    url: https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/api-general-information/api-basics
+    url: >-
+      https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/api-general-information/api-basics
   - type: ObjectMetadata
     url: data-model/workfront-api-v22-object-metadata.json
   - type: DataModel
     url: data-model/workfront-data-model.yml
-- aid: workfront:workfront-planning-api-v2
-  name: Adobe Workfront Planning API v2
-  description: 'The Workfront Planning (Maestro) API — workspaces, record types, records, fields, views
-    and permissions — published by Adobe as an OpenAPI 3.1.0 document with 21 paths, 49 operations and
-    74 component schemas. Version 2 shipped May 2026 and adds PATCH, bulk record operations, a
-    permissions surface and RFC-9457-shaped error bodies.'
-  humanURL: https://developer.adobe.com/wf-planning/api/v2
-  baseURL: https://{customer-domain}/maestro/api
-  tags:
-  - Work Management
-  - Planning
-  - OpenAPI
-  properties:
-  - type: OpenAPI
-    url: openapi/workfront-planning-v2-openapi.json
-  - type: Overlay
-    url: overlays/workfront-planning-v2-overlay.yaml
-  - type: Documentation
-    url: https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-general-information/planning-api-basics
-  - type: APIReference
-    url: https://developer.adobe.com/wf-planning/api/v2
-- aid: workfront:workfront-planning-api-v1
-  name: Adobe Workfront Planning API v1
-  description: 'Version 1 of the Workfront Planning API, published by Adobe as an OpenAPI 3.0.1 document
-    covering records, record types and workspaces across 7 paths and 10 operations. Released July 2024
-    and still the version the Workfront Planning connector for Workfront Fusion targets.'
-  humanURL: https://developer.adobe.com/wf-planning/api/v1
-  baseURL: https://{customer-domain}/maestro/api
-  tags:
-  - Work Management
-  - Planning
-  - OpenAPI
-  properties:
-  - type: OpenAPI
-    url: openapi/workfront-planning-v1-openapi.json
-  - type: Overlay
-    url: overlays/workfront-planning-v1-overlay.yaml
-  - type: APIReference
-    url: https://developer.adobe.com/wf-planning/api/v1
 - aid: workfront:workfront-event-subscription-api
   name: Adobe Workfront Event Subscription API
-  description: 'The Workfront webhook/event surface. A system administrator registers a subscription for
-    an object type (objCode) and event type (CREATE, UPDATE, DELETE) with a destination URL and auth
-    token; Workfront then POSTs a JSON message carrying oldState, newState and eventTime to that
-    endpoint, typically within one second of the change being logged. 30 object types are supported.'
-  humanURL: https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/event-subscriptions/event-subs-api
+  description: >-
+    The Workfront webhook/event surface. A system administrator registers a subscription for an object
+    type (objCode) and event type (CREATE, UPDATE, DELETE) with a destination URL and auth token; Workfront
+    then POSTs a JSON message carrying oldState, newState and eventTime to that endpoint, typically within
+    one second of the change being logged. 30 object types are supported.
+  humanURL: >-
+    https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/event-subscriptions/event-subs-api
   baseURL: https://{customer-domain}.my.workfront.adobe.com/attask/eventsubscription/api/v1
   tags:
   - Webhook
@@ -128,16 +94,19 @@ apis:
   - type: Webhooks
     url: asyncapi/workfront-event-subscriptions-webhooks.yml
   - type: Documentation
-    url: https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/event-subscriptions/event-subs-api
+    url: >-
+      https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/event-subscriptions/event-subs-api
 - aid: workfront:workfront-mcp-server
   name: Adobe Workfront MCP Server
-  description: 'Adobe''s hosted Model Context Protocol server for Workfront, generally available since
-    June 2026. It exposes 87 documented tools across three families — Approvals (documents, approval
-    workflows, reminders, templates, lookups), Planning (workspaces, record types, records, fields,
-    views, templates) and Workflow/Insights (generic object CRUD and reporting over the core API) — to
-    any MCP-compatible agent. Access is OAuth 2.1 with PKCE and dynamic client registration against
-    Adobe IMS; a Workfront administrator must enable MCP access for the instance first.'
-  humanURL: https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/workfront-mcp-server-overview
+  description: >-
+    Adobe's hosted Model Context Protocol server for Workfront, generally available since June 2026. It
+    exposes 87 documented tools across three families — Approvals (documents, approval workflows, reminders,
+    templates, lookups), Planning (workspaces, record types, records, fields, views, templates) and Workflow/Insights
+    (generic object CRUD and reporting over the core API) — to any MCP-compatible agent. Access is OAuth
+    2.1 with PKCE and dynamic client registration against Adobe IMS; a Workfront administrator must enable
+    MCP access for the instance first.
+  humanURL: >-
+    https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/workfront-mcp-server-overview
   baseURL: https://mcp.workfront.adobe.com/mcp/v1/workfront
   tags:
   - MCP
@@ -153,13 +122,130 @@ apis:
   - type: ToolCrosswalk
     url: mcp/workfront-tool-crosswalk.yml
   - type: Documentation
-    url: https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/workfront-mcp-server-tools
+    url: >-
+      https://experienceleague.adobe.com/en/docs/workfront/using/basics/workfront-mcp-server/workfront-mcp-server-tools
+- aid: workfront:workfront-fields-api
+  name: Adobe Workfront Fields API
+  description: >-
+    Field management. Per-record-type quotas: max 500 fields total; max 20 PARAGRAPH (long-text) fields;
+    max 20 FORMULA fields; max 30 REFERENCE fields. Field display names must be unique within a record
+    type and capped at 256 characters. Formula expressions: max 50,000 characters; lookup depth: max 5.
+  humanURL: >-
+    https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/api-general-information/api-basics
+  baseURL: https://{customer-domain}.my.workfront.adobe.com/attask/api/v22.0
+  tags:
+  - Fields
+  properties:
+  - type: OpenAPI
+    url: openapi/workfront-fields-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-general-information/planning-api-basics
+  - type: APIReference
+    url: https://developer.adobe.com/wf-planning/api/v2
+  - type: APIReference
+    url: https://developer.adobe.com/wf-planning/api/v1
+- aid: workfront:workfront-permissions-api
+  name: Adobe Workfront Permissions API
+  description: Resource permissions, member management, and access requests.
+  humanURL: >-
+    https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/api-general-information/api-basics
+  baseURL: https://{customer-domain}.my.workfront.adobe.com/attask/api/v22.0
+  tags:
+  - Permissions
+  properties:
+  - type: OpenAPI
+    url: openapi/workfront-permissions-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-general-information/planning-api-basics
+  - type: APIReference
+    url: https://developer.adobe.com/wf-planning/api/v2
+  - type: APIReference
+    url: https://developer.adobe.com/wf-planning/api/v1
+- aid: workfront:workfront-record-types-api
+  name: Adobe Workfront Record Types API
+  description: Record Type Controller
+  humanURL: >-
+    https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/api-general-information/api-basics
+  baseURL: https://{customer-domain}.my.workfront.adobe.com/attask/api/v22.0
+  tags:
+  - Record Types
+  properties:
+  - type: OpenAPI
+    url: openapi/workfront-record-types-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-general-information/planning-api-basics
+  - type: APIReference
+    url: https://developer.adobe.com/wf-planning/api/v2
+  - type: APIReference
+    url: https://developer.adobe.com/wf-planning/api/v1
+- aid: workfront:workfront-records-api
+  name: Adobe Workfront Records API
+  description: Record Controller
+  humanURL: >-
+    https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/api-general-information/api-basics
+  baseURL: https://{customer-domain}.my.workfront.adobe.com/attask/api/v22.0
+  tags:
+  - Records
+  properties:
+  - type: OpenAPI
+    url: openapi/workfront-records-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-general-information/planning-api-basics
+  - type: APIReference
+    url: https://developer.adobe.com/wf-planning/api/v2
+  - type: APIReference
+    url: https://developer.adobe.com/wf-planning/api/v1
+- aid: workfront:workfront-views-api
+  name: Adobe Workfront Views API
+  description: >-
+    View management. Limits: max 100 personal views per record type; max 255 characters for view name.
+  humanURL: >-
+    https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/api-general-information/api-basics
+  baseURL: https://{customer-domain}.my.workfront.adobe.com/attask/api/v22.0
+  tags:
+  - Views
+  properties:
+  - type: OpenAPI
+    url: openapi/workfront-views-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-general-information/planning-api-basics
+  - type: APIReference
+    url: https://developer.adobe.com/wf-planning/api/v2
+  - type: APIReference
+    url: https://developer.adobe.com/wf-planning/api/v1
+- aid: workfront:workfront-workspaces-api
+  name: Adobe Workfront Workspaces API
+  description: Workspace Controller
+  humanURL: >-
+    https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/api-general-information/api-basics
+  baseURL: https://{customer-domain}.my.workfront.adobe.com/attask/api/v22.0
+  tags:
+  - Workspaces
+  properties:
+  - type: OpenAPI
+    url: openapi/workfront-workspaces-api-openapi.yml
+  - type: Documentation
+    url: >-
+      https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-general-information/planning-api-basics
+  - type: APIReference
+    url: https://developer.adobe.com/wf-planning/api/v2
+  - type: APIReference
+    url: https://developer.adobe.com/wf-planning/api/v1
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/workfront-planning-v2-overlay.yaml
+- type: Overlay
+  url: overlays/workfront-planning-v1-overlay.yaml
 - type: AgenticAccess
   url: agentic-access/workfront-agentic-access.yml
 - type: Website
