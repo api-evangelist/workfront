@@ -11,6 +11,18 @@ description: 'Adobe Workfront is Adobe''s enterprise work-management platform fo
   2026 — a hosted Model Context Protocol server at mcp.workfront.adobe.com exposing 87 documented tools
   behind OAuth 2.1, plus first-party agent Skills published in the adobe/skills repository.'
 url: https://raw.githubusercontent.com/api-evangelist/workfront/refs/heads/main/apis.yml
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://avatars.githubusercontent.com/u/3494194?v=4
 x-type: company
 x-source: harvest:marketing-integration-graph
