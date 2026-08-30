@@ -1,0 +1,1281 @@
+openapi: 3.2.0
+info:
+  title: Workfront Record Types API
+  version: '1.0'
+  description: 'Operations tagged Record Types across 2 of this provider''s published API definitions: workfront-planning-v1-openapi.json, workfront-planning-v2-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{customer-domain}/maestro/api
+  description: Workfront Planning Service Url
+tags:
+- name: Record Types
+  description: Record Type Controller
+paths:
+  /v1/record-types:
+    get:
+      tags:
+      - Record Types
+      summary: Get Record Types of specified Workspace
+      description: Retrieve a list of record types associated with a specified workspace. If a user has view access to workspaces, they gain visibility into all record types.
+      operationId: getRecordTypes
+      parameters:
+      - name: workspaceId
+        in: query
+        description: ID of the workspace
+        required: true
+        schema:
+          type: string
+      - name: attributes
+        in: query
+        description: List of attributes to be included in the response
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          default:
+          - '*'
+        example: ALL
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecordTypeDto'
+    servers:
+    - url: https://{customer-domain}/maestro/api
+      description: Workfront Planning Service Url
+  /v1/record-types/{id}:
+    get:
+      tags:
+      - Record Types
+      summary: Get Record Type by ID
+      description: Retrieve a specific record type by its ID along with optional attributes.
+      operationId: getRecordType
+      parameters:
+      - name: id
+        in: path
+        description: ID of the record type to be retrieved
+        required: true
+        schema:
+          type: string
+      - name: attributes
+        in: query
+        description: List of attributes to be included in the response
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          default:
+          - '*'
+        example: ALL
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/RecordTypeDto'
+    servers:
+    - url: https://{customer-domain}/maestro/api
+      description: Workfront Planning Service Url
+  /v2/record-types/{id}:
+    get:
+      tags:
+      - Record Types
+      summary: Get Record Type
+      description: Retrieve a record type by its ID.
+      operationId: getRecordType
+      parameters:
+      - name: id
+        in: path
+        description: ID of the record type to be retrieved
+        required: true
+        schema:
+          type: string
+      - name: scopeWorkspaceId
+        in: query
+        description: ID of the workspace to scope dynamic field resolution for global/dynamic record types
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordTypeDto_2'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+    put:
+      tags:
+      - Record Types
+      summary: Update Record Type
+      description: Update an existing record type using PUT (full replacement). All fields not provided in the request will be set to null.
+      operationId: updateRecordType
+      parameters:
+      - name: id
+        in: path
+        description: ID of the record type to be updated
+        required: true
+        schema:
+          type: string
+      - name: scopeWorkspaceId
+        in: query
+        description: For global record types, the workspace whose default-permission rule is set when permissionSettings is provided. Defaults to the primary workspace; ignored for regular record types.
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordTypeDto_2'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordTypeDto_2'
+        '400':
+          description: Bad Request (validation failure)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '403':
+          description: Forbidden (RECORD_TYPE_IN_HIERARCHY)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '409':
+          description: Conflict (write conflict, retry)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+    delete:
+      tags:
+      - Record Types
+      summary: Permanently delete record type
+      description: Delete a record type and all its associated data, fields, and records. This action is irreversible.
+      operationId: deleteRecordType
+      parameters:
+      - name: id
+        in: path
+        description: ID of the record type to be deleted
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '403':
+          description: Forbidden (RECORD_TYPE_IN_HIERARCHY)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+    patch:
+      tags:
+      - Record Types
+      summary: Patch Record Type
+      description: Partially update a record type using PATCH (merge-patch semantics). Only provided fields will be updated; omitted fields remain unchanged.
+      operationId: patchRecordType
+      parameters:
+      - name: id
+        in: path
+        description: ID of the record type to be patched
+        required: true
+        schema:
+          type: string
+      - name: scopeWorkspaceId
+        in: query
+        description: For global record types, the workspace whose default-permission rule is set when permissionSettings is provided. Defaults to the primary workspace; ignored for regular record types.
+        required: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordTypeDto_2'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordTypeDto_2'
+        '400':
+          description: Bad Request (validation failure)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '409':
+          description: Conflict (write conflict, retry)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+    servers:
+    - url: https://{customer-domain}/maestro/api
+      description: Workfront Planning Service Url
+  /v2/workspaces/{workspaceId}/record-types:
+    get:
+      tags:
+      - Record Types
+      summary: Get Record Types by Workspace
+      description: Retrieve a cursor-paginated list of record types for a specific workspace.
+      operationId: getRecordTypesByWorkspace
+      parameters:
+      - name: workspaceId
+        in: path
+        description: ID of the workspace
+        required: true
+        schema:
+          type: string
+      - name: cursor
+        in: query
+        description: Cursor from the previous page response for fetching the next page
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of items to return per page (1-100, default 20)
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 20
+          maximum: 100
+          minimum: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CursorResponseRecordTypeDto'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '404':
+          description: Workspace Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+    post:
+      tags:
+      - Record Types
+      summary: Create Record Type
+      description: 'Create a new record type in a workspace. Subject to limits: max 100 record types per workspace.'
+      operationId: createRecordType
+      parameters:
+      - name: workspaceId
+        in: path
+        description: ID of the workspace
+        required: true
+        schema:
+          type: string
+      - name: sectionIndex
+        in: query
+        description: Zero-based index of the section to add the record type to. Defaults to 0 (first section).
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+          minimum: 0
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordTypeBaseDto'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordTypeDto_2'
+        '400':
+          description: Bad Request (validation failure)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '403':
+          description: Forbidden (RECORD_TYPE_LIMIT_EXCEEDED)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '404':
+          description: Workspace Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+    servers:
+    - url: https://{customer-domain}/maestro/api
+      description: Workfront Planning Service Url
+  /v2/workspaces/{workspaceId}/record-types/{recordTypeId}/detach:
+    post:
+      tags:
+      - Record Types
+      summary: Detach record type from workspace
+      description: Remove a dynamic (global) record type usage from a workspace. The underlying global record type and its data are preserved; only the workspace association is removed.
+      operationId: detachRecordTypeFromWorkspace
+      parameters:
+      - name: workspaceId
+        in: path
+        description: ID of the workspace
+        required: true
+        schema:
+          type: string
+      - name: recordTypeId
+        in: path
+        description: ID of the record type to detach
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+    servers:
+    - url: https://{customer-domain}/maestro/api
+      description: Workfront Planning Service Url
+  /v2/workspaces/{workspaceId}/global-record-types:
+    get:
+      tags:
+      - Record Types
+      summary: Get Global Record Types
+      description: Retrieve a cursor-paginated list of global record types available to attach to a specific workspace.
+      operationId: getGlobalRecordTypes
+      parameters:
+      - name: workspaceId
+        in: path
+        description: ID of the workspace
+        required: true
+        schema:
+          type: string
+      - name: cursor
+        in: query
+        description: Cursor from the previous page response for fetching the next page
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of items to return per page (1-100, default 20)
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 20
+          maximum: 100
+          minimum: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CursorResponseRecordTypeDto'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '404':
+          description: Workspace Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+    servers:
+    - url: https://{customer-domain}/maestro/api
+      description: Workfront Planning Service Url
+components:
+  schemas:
+    FieldLookupOptionsDto:
+      type: object
+      properties:
+        referenceFieldId:
+          type: string
+        rollup:
+          type: string
+        sourceField:
+          $ref: '#/components/schemas/FieldDto'
+    FieldFormulaOptionsDto:
+      type: object
+      properties:
+        formula:
+          type: string
+    FieldDateOptionsDto:
+      type: object
+      properties:
+        dateFormat:
+          type: string
+          enum:
+          - locale
+          - standard
+          - friendly
+          - european
+          - iso
+        timeFormat:
+          type: string
+          enum:
+          - h12
+          - h24
+    FieldReferenceExternalOptionsDto:
+      type: object
+      properties:
+        connectionName:
+          type: string
+        objectName:
+          type: string
+        connectionOptions:
+          type: object
+          additionalProperties:
+            type: string
+    FieldNumberOptionsDto:
+      type: object
+      properties:
+        precision:
+          type: integer
+          format: int32
+        allowNegatives:
+          type: boolean
+        currency:
+          type: string
+          enum:
+          - AED
+          - AFN
+          - ALL
+          - AMD
+          - AON
+          - ARS
+          - AUD
+          - AZN
+          - BAM
+          - BBD
+          - BDT
+          - BGL
+          - BHD
+          - BIF
+          - BND
+          - BOB
+          - BRL
+          - BSD
+          - BTN
+          - BWP
+          - BYN
+          - BZD
+          - CAD
+          - CDF
+          - CHF
+          - CLP
+          - CNY
+          - COP
+          - CRC
+          - CUP
+          - CVE
+          - DJF
+          - DKK
+          - DOP
+          - DZD
+          - EGP
+          - ERN
+          - ETB
+          - EUR
+          - FJD
+          - GBP
+          - GEL
+          - GHC
+          - GMD
+          - GNF
+          - GTQ
+          - GYD
+          - HNL
+          - HRK
+          - HTG
+          - HUF
+          - IDR
+          - ILS
+          - INR
+          - IQD
+          - IRR
+          - ISK
+          - JMD
+          - JOD
+          - JPY
+          - KES
+          - KGS
+          - KHR
+          - KMF
+          - KPW
+          - KRW
+          - KWD
+          - KZT
+          - LAK
+          - LBP
+          - LKR
+          - LRD
+          - LSL
+          - LYD
+          - MAD
+          - MDL
+          - MGA
+          - MKD
+          - MMK
+          - MNT
+          - MRU
+          - MUR
+          - MVR
+          - MWK
+          - MXN
+          - MYR
+          - MZM
+          - NAD
+          - NGN
+          - NIO
+          - NOK
+          - NPR
+          - NZD
+          - OMR
+          - PAB
+          - PEN
+          - PGK
+          - PHP
+          - PKR
+          - PLN
+          - PYG
+          - QAR
+          - RON
+          - RSD
+          - RUB
+          - RWF
+          - SAR
+          - SBD
+          - SCR
+          - SDG
+          - SEK
+          - SGD
+          - SLL
+          - SOS
+          - SRD
+          - SSP
+          - STN
+          - SYP
+          - SZL
+          - THB
+          - TJS
+          - TMT
+          - TND
+          - TOP
+          - TRY
+          - TTD
+          - TZS
+          - UAH
+          - UGS
+          - USD
+          - UYU
+          - UZS
+          - VEF
+          - VND
+          - VUV
+          - WST
+          - XAF
+          - XCD
+          - XOF
+          - YER
+          - ZAR
+          - ZMK
+          - ZWD
+    FieldUserOptionsDto:
+      type: object
+      properties:
+        multipleUsersAllowed:
+          type: boolean
+    FieldDto:
+      type: object
+      properties:
+        id:
+          type: string
+        createdBy:
+          type: string
+        createdAt:
+          type: string
+        updatedBy:
+          type: string
+        updatedAt:
+          type: string
+        customerId:
+          type: string
+        imsOrgId:
+          type: string
+        alias:
+          type: string
+        displayName:
+          type: string
+        type:
+          type: string
+        linkedField:
+          $ref: '#/components/schemas/FieldDto'
+        description:
+          type: string
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldOptionDto'
+        dateOptions:
+          $ref: '#/components/schemas/FieldDateOptionsDto'
+        numberOptions:
+          $ref: '#/components/schemas/FieldNumberOptionsDto'
+        referenceOptions:
+          $ref: '#/components/schemas/FieldReferenceOptionsDto'
+        lookupOptions:
+          $ref: '#/components/schemas/FieldLookupOptionsDto'
+        formulaOptions:
+          $ref: '#/components/schemas/FieldFormulaOptionsDto'
+        userOptions:
+          $ref: '#/components/schemas/FieldUserOptionsDto'
+        hasError:
+          type: boolean
+    FieldReferenceOptionsDto:
+      type: object
+      properties:
+        multiple:
+          type: boolean
+        recordTypeId:
+          type: string
+        isExternal:
+          type: boolean
+        externalOptions:
+          $ref: '#/components/schemas/FieldReferenceExternalOptionsDto'
+        filters:
+          type: object
+          additionalProperties:
+            type: object
+        lookupFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldReferenceLookupFieldDto'
+    FieldReferenceLookupFieldDto:
+      type: object
+      properties:
+        fieldId:
+          type: string
+        rollup:
+          type: string
+    RecordTypeDto:
+      type: object
+      properties:
+        id:
+          type: string
+        createdBy:
+          type: string
+        createdAt:
+          type: string
+        updatedBy:
+          type: string
+        updatedAt:
+          type: string
+        customerId:
+          type: string
+        imsOrgId:
+          type: string
+        alias:
+          type: string
+        displayName:
+          type: string
+        permission:
+          type: string
+          enum:
+          - manage
+          - edit
+          - view
+          - none
+        primaryFieldId:
+          type: string
+        icon:
+          type: string
+        description:
+          type: string
+        color:
+          type: string
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldDto'
+        isExternal:
+          type: boolean
+        externalOptions:
+          $ref: '#/components/schemas/RecordTypeExternalOptionsDto'
+    RecordTypeExternalOptionsDto:
+      type: object
+      properties:
+        connectionName:
+          type: string
+        objectName:
+          type: string
+        fields:
+          type: object
+          additionalProperties:
+            type: string
+    FieldOptionDto:
+      type: object
+      properties:
+        name:
+          type: string
+        displayName:
+          type: string
+        color:
+          type: string
+    V2FieldError:
+      type: object
+      description: Field-level error detail used in validation errors and per-item batch failures.
+      properties:
+        field:
+          type: string
+          description: Name of the field or path that caused the error.
+          example: name
+        message:
+          type: string
+          description: Human-readable explanation of the error for this field.
+          example: Workspace name can not be blank
+        code:
+          type: string
+          description: Machine-readable code identifying the validation rule that failed.
+          example: NotBlank
+    PermissionSubjectDto:
+      type: object
+      description: A subject (user/group/team/role/company) granted explicit edit access in a RESTRICTED rule
+      properties:
+        id:
+          type: string
+          description: Identifier of the subject
+          example: 642f1c0a0e38f35f28c3ccee
+          minLength: 1
+        type:
+          type: string
+          description: Type of the subject
+          enum:
+          - USER
+          - GROUP
+          - TEAM
+          - ROLE
+          - COMPANY
+          example: USER
+        displayName:
+          type: string
+          description: Display name of the subject, resolved from Redrock at read time
+          example: Jane Doe
+          readOnly: true
+      required:
+      - id
+      - type
+    CursorResponseRecordTypeDto:
+      type: object
+      description: Cursor-paginated list of record types
+      properties:
+        content:
+          type: array
+          description: List of record types in the current page
+          items:
+            $ref: '#/components/schemas/RecordTypeBaseDto'
+        cursor:
+          $ref: '#/components/schemas/CursorInfo'
+          description: Cursor metadata for fetching subsequent pages
+    RecordTypeExternalOptionsDto_2:
+      type: object
+      description: External options for external record types
+      properties:
+        connection:
+          type: string
+          description: External connection type
+          enum:
+          - WORKFRONT
+          - BRAND
+          - AEM
+          - INTAKE
+          example: WORKFRONT
+        object:
+          type: string
+          description: External object type
+          enum:
+          - PROJECT
+          - PORTFOLIO
+          - PROGRAM
+          - COMPANY
+          - GROUP
+          - TEMPLATE
+          - ASSET
+          - BRAND
+          - ORIGINAL_REQUEST
+          example: PROJECT
+        fields:
+          type: object
+          additionalProperties:
+            type: string
+          description: Field mappings between external and internal fields
+    AuthzSubjectDtoV2:
+      type: object
+      description: Authorization subject reference (user, group, team, etc.)
+      properties:
+        type:
+          type: string
+          description: Type of the authorization subject
+          enum:
+          - maestro/workspace
+          - maestro/public_workspace
+          - maestro/recordtype
+          - maestro/record
+          - redrock/user
+          - redrock/group
+          - redrock/cmpy
+          - redrock/cust
+          - redrock/teamob
+          - redrock/role
+          - ims/user
+          - member
+          - groupmember
+          - maestro/view
+          - maestro/dynamic_recordtype
+          - maestro/field
+          example: redrock/user
+        id:
+          type: string
+          description: ID of the authorization subject
+          example: U123abc
+    CursorInfo:
+      type: object
+      description: Cursor pagination metadata
+      properties:
+        nextCursor:
+          type: string
+          description: Opaque cursor for fetching the next page. Absent when there are no more pages.
+          example: UnQ2OWIxNGY3ZTBlMzhmMzVmMjhjM2NjZWU=
+        hasMore:
+          type: boolean
+          description: Whether more items exist beyond this page
+    UserReferenceDto:
+      type: object
+      description: Reference to a user with identifier and display name
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the user
+          example: 1C341E7B682505430A494138@0bd0200063c87f9749412b.e
+          readOnly: true
+        name:
+          type: string
+          description: Display name of the user
+          example: Jane Doe
+          readOnly: true
+    RecordTypeDto_2:
+      type: object
+      description: Complete record type data including linkability settings and external options
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the entity
+          example: 69a976d02587b929c9e26dfa
+          readOnly: true
+        createdBy:
+          $ref: '#/components/schemas/UserReferenceDto'
+          description: User who created this entity
+          readOnly: true
+        createdAt:
+          type: string
+          description: Date/time when this entity was created
+          example: '2026-01-15T10:30:00.000Z'
+          pattern: yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
+          readOnly: true
+        updatedBy:
+          $ref: '#/components/schemas/UserReferenceDto'
+          description: User who last updated this entity
+          readOnly: true
+        updatedAt:
+          type: string
+          description: Date/time when this entity was last updated
+          example: '2026-01-15T14:45:00.000Z'
+          pattern: yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
+          readOnly: true
+        alias:
+          type: string
+          description: Unique alias identifier for the record type
+          example: campaigns
+          readOnly: true
+        displayName:
+          type: string
+          description: Display name of the record type. Maximum 255 characters; cannot be blank.
+          example: Campaigns
+          maxLength: 255
+          minLength: 0
+        description:
+          type: string
+          description: Description of the record type purpose. Maximum 1024 characters.
+          example: Marketing campaigns and promotional activities
+          maxLength: 1024
+          minLength: 0
+        primaryFieldId:
+          type: string
+          description: ID of the primary field for this record type
+          example: F693ab1c96f11ea3f4175e716
+        icon:
+          type: string
+          description: Icon identifier for the record type
+          example: diamond
+        color:
+          type: string
+          description: Color theme for the record type
+          example: purple
+        isExternal:
+          type: boolean
+          description: Indicates if this is an external record type
+          example: false
+        sourceRecordTypeId:
+          type: string
+          description: ID of an existing global record type to attach to the workspace (used only on create). When provided, the record type is not created but attached as a dynamic usage.
+          example: Rt69b14f7e0e38f35f28c3ccee
+          writeOnly: true
+        permissionSettings:
+          $ref: '#/components/schemas/RecordTypePermissionSettingsDto'
+          description: Default record-level permission rule for this record type. On read, the resolved rule for the current workspace context (defaulted to OPEN when never configured); omitted when the default-record-permissions feature is disabled. On PATCH/PUT, set this to configure the rule — for global record types it applies to the workspace given by the scopeWorkspaceId query param (defaulting to the primary workspace).
+        externalOptions:
+          $ref: '#/components/schemas/RecordTypeExternalOptionsDto_2'
+          description: External options for external record types
+        linkableWithAllWorkspaces:
+          type: boolean
+          description: Indicates if this record type can be linked with all workspaces
+          example: false
+        linkableWithWorkspaceIds:
+          type: array
+          description: List of workspace IDs that this record type can be linked with
+          items:
+            type: string
+        globalRecordTypeWorkspaceFieldId:
+          type: string
+          description: ID of the global record type workspace field
+          example: F693ab1c96f11ea3f4175e717
+          readOnly: true
+        isGlobal:
+          type: boolean
+          description: Indicates if this is a global record type
+          example: false
+          readOnly: true
+        authorizedToCreateDynamicRecordType:
+          type: array
+          description: List of subjects authorized to create dynamic record types from this global record type
+          items:
+            $ref: '#/components/schemas/AuthzSubjectDtoV2'
+        primaryWorkspaceId:
+          type: string
+          description: ID of the workspace where this global record type was originally created
+          example: Ws69b14f7e0e38f35f28c3ccee
+          readOnly: true
+        dynamicWorkspaceIds:
+          type: array
+          description: List of workspace IDs that use this global record type dynamically
+          items:
+            type: string
+          readOnly: true
+      required:
+      - displayName
+    RecordTypeBaseDto:
+      type: object
+      description: Base record type data containing common record type properties
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the entity
+          example: 69a976d02587b929c9e26dfa
+          readOnly: true
+        createdBy:
+          $ref: '#/components/schemas/UserReferenceDto'
+          description: User who created this entity
+          readOnly: true
+        createdAt:
+          type: string
+          description: Date/time when this entity was created
+          example: '2026-01-15T10:30:00.000Z'
+          pattern: yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
+          readOnly: true
+        updatedBy:
+          $ref: '#/components/schemas/UserReferenceDto'
+          description: User who last updated this entity
+          readOnly: true
+        updatedAt:
+          type: string
+          description: Date/time when this entity was last updated
+          example: '2026-01-15T14:45:00.000Z'
+          pattern: yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
+          readOnly: true
+        alias:
+          type: string
+          description: Unique alias identifier for the record type
+          example: campaigns
+          readOnly: true
+        displayName:
+          type: string
+          description: Display name of the record type. Maximum 255 characters; cannot be blank.
+          example: Campaigns
+          maxLength: 255
+          minLength: 0
+        description:
+          type: string
+          description: Description of the record type purpose. Maximum 1024 characters.
+          example: Marketing campaigns and promotional activities
+          maxLength: 1024
+          minLength: 0
+        primaryFieldId:
+          type: string
+          description: ID of the primary field for this record type
+          example: F693ab1c96f11ea3f4175e716
+        icon:
+          type: string
+          description: Icon identifier for the record type
+          example: diamond
+        color:
+          type: string
+          description: Color theme for the record type
+          example: purple
+        isExternal:
+          type: boolean
+          description: Indicates if this is an external record type
+          example: false
+        sourceRecordTypeId:
+          type: string
+          description: ID of an existing global record type to attach to the workspace (used only on create). When provided, the record type is not created but attached as a dynamic usage.
+          example: Rt69b14f7e0e38f35f28c3ccee
+          writeOnly: true
+        permissionSettings:
+          $ref: '#/components/schemas/RecordTypePermissionSettingsDto'
+          description: Default record-level permission rule for this record type. On read, the resolved rule for the current workspace context (defaulted to OPEN when never configured); omitted when the default-record-permissions feature is disabled. On PATCH/PUT, set this to configure the rule — for global record types it applies to the workspace given by the scopeWorkspaceId query param (defaulting to the primary workspace).
+      required:
+      - displayName
+    RecordTypePermissionSettingsDto:
+      type: object
+      description: Default record-level permission rule for a record type
+      properties:
+        mode:
+          type: string
+          description: OPEN (all workspace contributors can edit new records) or RESTRICTED (only the creator + selected subjects can edit; inheritance of edit access disabled)
+          enum:
+          - OPEN
+          - RESTRICTED
+          example: RESTRICTED
+        subjects:
+          type: array
+          description: Subjects with explicit edit access in RESTRICTED mode. Retained across mode toggles so a prior selection is restored when switching back to RESTRICTED.
+          items:
+            $ref: '#/components/schemas/PermissionSubjectDto'
+      required:
+      - mode
+    V2ProblemDetail:
+      type: object
+      description: RFC 7807 Problem Details error response for V2 endpoints.
+      properties:
+        title:
+          type: string
+          description: Short, human-readable summary of the error type. Same for all occurrences of the same error.
+          example: Not found
+        status:
+          type: integer
+          format: int32
+          description: HTTP status code of the response.
+          example: 404
+        detail:
+          type: string
+          description: Human-readable, resource-specific explanation of this error occurrence. Always English.
+          example: Record type with ID 'Rt69b14f7e' was not found.
+        errorCode:
+          type: string
+          description: Machine-readable error code (enum name).
+          example: ENTITY_WITH_ATTRIBUTE_NOT_FOUND
+        messageArguments:
+          type: object
+          additionalProperties:
+            type: string
+          description: Named parameters used to compose the detail message. Values are always strings.
+          example:
+            recordTypeId: Rt69b14f7e
+        requestId:
+          type: string
+          description: Request correlation ID for tracing and support.
+          example: 5b1f7a8c-2c0e-4a8f-9c4f-2a3b1c0e4d5f
+        errors:
+          type: array
+          description: Field-level or per-item error details. Present for validation, business-rule, or batch failures.
+          items:
+            $ref: '#/components/schemas/V2FieldError'
+      required:
+      - detail
+      - errorCode
+      - requestId
+      - status
+      - title
+x-refined-from:
+- workfront-planning-v1-openapi.json
+- workfront-planning-v2-openapi.json

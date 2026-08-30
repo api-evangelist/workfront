@@ -1,0 +1,611 @@
+openapi: 3.2.0
+info:
+  title: Workfront Planning API Version 2 Permissions API
+  description: This is Workfront Planning Service API documentation. Workfront Planning Service is responsible for creating and managing new workspace, field, record, record type objects across the Workfront application and Adobe DX infrastructure.
+servers:
+- url: https://{customer-domain}/maestro/api
+  description: Workfront Planning Service Url
+tags:
+- name: Permissions
+  description: Resource permissions, member management, and access requests.
+paths:
+  /v2/permissions/{resourceType}/{resourceId}/requests:
+    get:
+      tags:
+      - Permissions
+      summary: List pending access requests for a resource
+      description: Returns all pending access requests for the given resource. Requires MANAGE permission.
+      operationId: getAccessRequests
+      parameters:
+      - name: resourceType
+        in: path
+        description: Type of resource (workspaces, record-types, records, views)
+        required: true
+        schema:
+          type: string
+      - name: resourceId
+        in: path
+        description: ID of the resource
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccessRequestDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+    post:
+      tags:
+      - Permissions
+      summary: Request access to a resource
+      description: Creates or updates an access request for the current user on the given resource.
+      operationId: createAccessRequest
+      parameters:
+      - name: resourceType
+        in: path
+        description: Type of resource (workspaces, record-types, records, views)
+        required: true
+        schema:
+          type: string
+      - name: resourceId
+        in: path
+        description: ID of the resource
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAccessRequestDto'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Object containing the ID of the created access request
+                example:
+                  id: AR1234567890
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+    delete:
+      tags:
+      - Permissions
+      summary: Dismiss access requests
+      description: Dismisses the specified access requests by ID. Requires MANAGE permission.
+      operationId: deleteAccessRequests
+      parameters:
+      - name: resourceType
+        in: path
+        description: Type of resource (workspaces, record-types, records, views)
+        required: true
+        schema:
+          type: string
+      - name: resourceId
+        in: path
+        description: ID of the resource
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteAccessRequestsDto'
+        required: true
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+  /v2/permissions/{resourceType}/{resourceId}/members:
+    get:
+      tags:
+      - Permissions
+      summary: Get all members and their roles for a resource
+      description: Lists all subjects (users, groups, teams) that have an explicit sharing relation on the resource. Requires MANAGE permission.
+      operationId: getMembers
+      parameters:
+      - name: resourceType
+        in: path
+        description: Type of resource (workspaces, record-types, records, views)
+        required: true
+        schema:
+          type: string
+      - name: resourceId
+        in: path
+        description: ID of the resource
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MemberPermissionDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+    patch:
+      tags:
+      - Permissions
+      summary: Bulk grant, update, or revoke member permissions
+      description: Grants new roles, changes existing roles, or revokes access for the provided subjects. Requires MANAGE permission.
+      operationId: updateMembers
+      parameters:
+      - name: resourceType
+        in: path
+        description: Type of resource (workspaces, record-types, records, views)
+        required: true
+        schema:
+          type: string
+      - name: resourceId
+        in: path
+        description: ID of the resource
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMembersRequestDto'
+        required: true
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+  /v2/permissions/{resourceType}/{resourceId}:
+    get:
+      tags:
+      - Permissions
+      summary: Get current user's effective permissions on a resource
+      description: Returns the current user's effective canView, canEdit, canDelete, and canAdd flags for the given resource.
+      operationId: getMyPermissions
+      parameters:
+      - name: resourceType
+        in: path
+        description: Type of resource (workspaces, record-types, records, views)
+        required: true
+        schema:
+          type: string
+      - name: resourceId
+        in: path
+        description: ID of the resource
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PermissionDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+  /v2/permissions/{resourceType}/{resourceId}/inheritance:
+    get:
+      tags:
+      - Permissions
+      summary: Get inheritance setting for a record-type
+      description: Returns whether workspace members inherit their workspace-level access on the record type. Only valid for record-types.
+      operationId: getInheritance
+      parameters:
+      - name: resourceType
+        in: path
+        description: Type of resource (must be record-types)
+        required: true
+        schema:
+          type: string
+      - name: resourceId
+        in: path
+        description: ID of the resource
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InheritanceDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2ProblemDetail'
+components:
+  schemas:
+    CreateAccessRequestDto:
+      type: object
+      description: Request body for creating an access request
+      properties:
+        message:
+          type: string
+          description: Optional message to include with the access request
+          maxLength: 2000
+          minLength: 0
+    UpdateMembersRequestDto:
+      type: object
+      description: Bulk grant, update, and revoke operations for resource members
+      properties:
+        grant:
+          type: array
+          description: Members to grant new access to
+          items:
+            $ref: '#/components/schemas/MemberGrantDto'
+        update:
+          type: array
+          description: Members whose existing role should be changed
+          items:
+            $ref: '#/components/schemas/MemberGrantDto'
+        revoke:
+          type: array
+          description: Members to revoke all access from
+          items:
+            $ref: '#/components/schemas/MemberRevokeDto'
+        inheritViewOnly:
+          type: boolean
+          description: Set inheritance for a record-type (true=inherited, false=view-only). Only valid for record-types.
+        wildcard:
+          type: string
+          description: Set wildcard access mode for a record. Only valid for records.
+          enum:
+          - SELECTED_USERS_ONLY
+          - EVERYONE_IN_WORKSPACE
+    V2FieldError:
+      type: object
+      description: Field-level error detail used in validation errors and per-item batch failures.
+      properties:
+        field:
+          type: string
+          description: Name of the field or path that caused the error.
+          example: name
+        message:
+          type: string
+          description: Human-readable explanation of the error for this field.
+          example: Workspace name can not be blank
+        code:
+          type: string
+          description: Machine-readable code identifying the validation rule that failed.
+          example: NotBlank
+    MemberPermissionDto:
+      type: object
+      description: A subject (user, group, team, role, or company) with a role on a resource
+      properties:
+        subjectId:
+          type: string
+          description: ID of the subject
+        subjectType:
+          type: string
+          description: Type of the subject
+          enum:
+          - user
+          - group
+          - team
+          - role
+          - company
+        name:
+          type: string
+          description: Display name of the subject
+        avatarUrl:
+          type: string
+          description: Avatar URL of the subject, if available
+        role:
+          type: string
+          description: Role of the subject on this resource
+          enum:
+          - viewer
+          - editor
+          - manager
+    MemberGrantDto:
+      type: object
+      description: A subject and role to grant or update on a resource
+      properties:
+        subjectId:
+          type: string
+          description: ID of the user, group, team, role, or company
+          minLength: 1
+        subjectType:
+          type: string
+          description: Type of the subject
+          enum:
+          - user
+          - group
+          - team
+          - role
+          - company
+        role:
+          type: string
+          description: Role to assign to the subject
+          enum:
+          - viewer
+          - editor
+          - manager
+      required:
+      - role
+      - subjectId
+      - subjectType
+    RequesterDto:
+      type: object
+      description: The user who submitted an access request
+      properties:
+        id:
+          type: string
+          description: User's external identifier
+        name:
+          type: string
+          description: User's display name
+        email:
+          type: string
+          description: User's email address
+    PermissionDto:
+      type: object
+      description: Current user's effective permissions on a resource
+      properties:
+        canView:
+          type: boolean
+          description: Whether the user can view this resource
+        canEdit:
+          type: boolean
+          description: Whether the user can edit this resource
+        canDelete:
+          type: boolean
+          description: Whether the user can delete this resource
+        canAdd:
+          type: boolean
+          description: Whether the user can add items to this resource
+    MemberRevokeDto:
+      type: object
+      description: A subject to revoke permissions from
+      properties:
+        subjectId:
+          type: string
+          description: ID of the subject to revoke access from
+          minLength: 1
+        subjectType:
+          type: string
+          description: Type of the subject
+          enum:
+          - user
+          - group
+          - team
+          - role
+          - company
+      required:
+      - subjectId
+      - subjectType
+    InheritanceDto:
+      type: object
+      description: Workspace-member inheritance setting for a record type
+      properties:
+        inherited:
+          type: boolean
+          description: When true, workspace members inherit their workspace-level access on this record type. When false, workspace members are restricted to view-only.
+    AccessRequestDto:
+      type: object
+      description: A pending access request for a resource
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the access request
+        message:
+          type: string
+          description: Optional message from the requester
+        requester:
+          $ref: '#/components/schemas/RequesterDto'
+          description: User who submitted the request
+    DeleteAccessRequestsDto:
+      type: object
+      description: Request body for dismissing access requests
+      properties:
+        requestIds:
+          type: array
+          description: IDs of access requests to dismiss
+          items:
+            type: string
+          minItems: 1
+      required:
+      - requestIds
+    V2ProblemDetail:
+      type: object
+      description: RFC 7807 Problem Details error response for V2 endpoints.
+      properties:
+        title:
+          type: string
+          description: Short, human-readable summary of the error type. Same for all occurrences of the same error.
+          example: Not found
+        status:
+          type: integer
+          format: int32
+          description: HTTP status code of the response.
+          example: 404
+        detail:
+          type: string
+          description: Human-readable, resource-specific explanation of this error occurrence. Always English.
+          example: Record type with ID 'Rt69b14f7e' was not found.
+        errorCode:
+          type: string
+          description: Machine-readable error code (enum name).
+          example: ENTITY_WITH_ATTRIBUTE_NOT_FOUND
+        messageArguments:
+          type: object
+          additionalProperties:
+            type: string
+          description: Named parameters used to compose the detail message. Values are always strings.
+          example:
+            recordTypeId: Rt69b14f7e
+        requestId:
+          type: string
+          description: Request correlation ID for tracing and support.
+          example: 5b1f7a8c-2c0e-4a8f-9c4f-2a3b1c0e4d5f
+        errors:
+          type: array
+          description: Field-level or per-item error details. Present for validation, business-rule, or batch failures.
+          items:
+            $ref: '#/components/schemas/V2FieldError'
+      required:
+      - detail
+      - errorCode
+      - requestId
+      - status
+      - title
