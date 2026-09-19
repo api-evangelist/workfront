@@ -254,6 +254,8 @@ apis:
     https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-api/api-general-information/api-basics
   baseURL: https://{customer-domain}.my.workfront.adobe.com/attask/api/v22.0
   tags:
+  - Workspace
+  tags_raw:
   - Workspaces
   properties:
   - type: OpenAPI
