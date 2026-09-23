@@ -375,43 +375,45 @@ paths:
                 $ref: '#/components/schemas/V2ProblemDetail'
 components:
   schemas:
-    CreateAccessRequestDto:
+    InheritanceDto:
       type: object
-      description: Request body for creating an access request
+      description: Workspace-member inheritance setting for a record type
       properties:
-        message:
-          type: string
-          description: Optional message to include with the access request
-          maxLength: 2000
-          minLength: 0
-    UpdateMembersRequestDto:
-      type: object
-      description: Bulk grant, update, and revoke operations for resource members
-      properties:
-        grant:
-          type: array
-          description: Members to grant new access to
-          items:
-            $ref: '#/components/schemas/MemberGrantDto'
-        update:
-          type: array
-          description: Members whose existing role should be changed
-          items:
-            $ref: '#/components/schemas/MemberGrantDto'
-        revoke:
-          type: array
-          description: Members to revoke all access from
-          items:
-            $ref: '#/components/schemas/MemberRevokeDto'
-        inheritViewOnly:
+        inherited:
           type: boolean
-          description: Set inheritance for a record-type (true=inherited, false=view-only). Only valid for record-types.
-        wildcard:
+          description: When true, workspace members inherit their workspace-level access on this record type. When false, workspace members are restricted to view-only.
+    DeleteAccessRequestsDto:
+      type: object
+      description: Request body for dismissing access requests
+      properties:
+        requestIds:
+          type: array
+          description: IDs of access requests to dismiss
+          items:
+            type: string
+          minItems: 1
+      required:
+      - requestIds
+    MemberRevokeDto:
+      type: object
+      description: A subject to revoke permissions from
+      properties:
+        subjectId:
           type: string
-          description: Set wildcard access mode for a record. Only valid for records.
+          description: ID of the subject to revoke access from
+          minLength: 1
+        subjectType:
+          type: string
+          description: Type of the subject
           enum:
-          - SELECTED_USERS_ONLY
-          - EVERYONE_IN_WORKSPACE
+          - user
+          - group
+          - team
+          - role
+          - company
+      required:
+      - subjectId
+      - subjectType
     V2FieldError:
       type: object
       description: Field-level error detail used in validation errors and per-item batch failures.
@@ -428,35 +430,15 @@ components:
           type: string
           description: Machine-readable code identifying the validation rule that failed.
           example: NotBlank
-    MemberPermissionDto:
+    CreateAccessRequestDto:
       type: object
-      description: A subject (user, group, team, role, or company) with a role on a resource
+      description: Request body for creating an access request
       properties:
-        subjectId:
+        message:
           type: string
-          description: ID of the subject
-        subjectType:
-          type: string
-          description: Type of the subject
-          enum:
-          - user
-          - group
-          - team
-          - role
-          - company
-        name:
-          type: string
-          description: Display name of the subject
-        avatarUrl:
-          type: string
-          description: Avatar URL of the subject, if available
-        role:
-          type: string
-          description: Role of the subject on this resource
-          enum:
-          - viewer
-          - editor
-          - manager
+          description: Optional message to include with the access request
+          maxLength: 2000
+          minLength: 0
     MemberGrantDto:
       type: object
       description: A subject and role to grant or update on a resource
@@ -485,62 +467,6 @@ components:
       - role
       - subjectId
       - subjectType
-    RequesterDto:
-      type: object
-      description: The user who submitted an access request
-      properties:
-        id:
-          type: string
-          description: User's external identifier
-        name:
-          type: string
-          description: User's display name
-        email:
-          type: string
-          description: User's email address
-    PermissionDto:
-      type: object
-      description: Current user's effective permissions on a resource
-      properties:
-        canView:
-          type: boolean
-          description: Whether the user can view this resource
-        canEdit:
-          type: boolean
-          description: Whether the user can edit this resource
-        canDelete:
-          type: boolean
-          description: Whether the user can delete this resource
-        canAdd:
-          type: boolean
-          description: Whether the user can add items to this resource
-    MemberRevokeDto:
-      type: object
-      description: A subject to revoke permissions from
-      properties:
-        subjectId:
-          type: string
-          description: ID of the subject to revoke access from
-          minLength: 1
-        subjectType:
-          type: string
-          description: Type of the subject
-          enum:
-          - user
-          - group
-          - team
-          - role
-          - company
-      required:
-      - subjectId
-      - subjectType
-    InheritanceDto:
-      type: object
-      description: Workspace-member inheritance setting for a record type
-      properties:
-        inherited:
-          type: boolean
-          description: When true, workspace members inherit their workspace-level access on this record type. When false, workspace members are restricted to view-only.
     AccessRequestDto:
       type: object
       description: A pending access request for a resource
@@ -554,18 +480,34 @@ components:
         requester:
           $ref: '#/components/schemas/RequesterDto'
           description: User who submitted the request
-    DeleteAccessRequestsDto:
+    UpdateMembersRequestDto:
       type: object
-      description: Request body for dismissing access requests
+      description: Bulk grant, update, and revoke operations for resource members
       properties:
-        requestIds:
+        grant:
           type: array
-          description: IDs of access requests to dismiss
+          description: Members to grant new access to
           items:
-            type: string
-          minItems: 1
-      required:
-      - requestIds
+            $ref: '#/components/schemas/MemberGrantDto'
+        update:
+          type: array
+          description: Members whose existing role should be changed
+          items:
+            $ref: '#/components/schemas/MemberGrantDto'
+        revoke:
+          type: array
+          description: Members to revoke all access from
+          items:
+            $ref: '#/components/schemas/MemberRevokeDto'
+        inheritViewOnly:
+          type: boolean
+          description: Set inheritance for a record-type (true=inherited, false=view-only). Only valid for record-types.
+        wildcard:
+          type: string
+          description: Set wildcard access mode for a record. Only valid for records.
+          enum:
+          - SELECTED_USERS_ONLY
+          - EVERYONE_IN_WORKSPACE
     V2ProblemDetail:
       type: object
       description: RFC 7807 Problem Details error response for V2 endpoints.
@@ -609,3 +551,61 @@ components:
       - requestId
       - status
       - title
+    MemberPermissionDto:
+      type: object
+      description: A subject (user, group, team, role, or company) with a role on a resource
+      properties:
+        subjectId:
+          type: string
+          description: ID of the subject
+        subjectType:
+          type: string
+          description: Type of the subject
+          enum:
+          - user
+          - group
+          - team
+          - role
+          - company
+        name:
+          type: string
+          description: Display name of the subject
+        avatarUrl:
+          type: string
+          description: Avatar URL of the subject, if available
+        role:
+          type: string
+          description: Role of the subject on this resource
+          enum:
+          - viewer
+          - editor
+          - manager
+    PermissionDto:
+      type: object
+      description: Current user's effective permissions on a resource
+      properties:
+        canView:
+          type: boolean
+          description: Whether the user can view this resource
+        canEdit:
+          type: boolean
+          description: Whether the user can edit this resource
+        canDelete:
+          type: boolean
+          description: Whether the user can delete this resource
+        canAdd:
+          type: boolean
+          description: Whether the user can add items to this resource
+    RequesterDto:
+      type: object
+      description: The user who submitted an access request
+      properties:
+        id:
+          type: string
+          description: User's external identifier
+        name:
+          type: string
+          description: User's display name
+        email:
+          type: string
+          description: User's email address

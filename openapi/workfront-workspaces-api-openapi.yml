@@ -383,46 +383,16 @@ paths:
       description: Workfront Planning Service Url
 components:
   schemas:
-    FieldLookupOptionsDto:
-      type: object
-      properties:
-        referenceFieldId:
-          type: string
-        rollup:
-          type: string
-        sourceField:
-          $ref: '#/components/schemas/FieldDto'
-    RecordTypeSectionDto:
+    FieldOptionDto:
       type: object
       properties:
         name:
           type: string
         displayName:
           type: string
-        recordTypeIds:
-          type: array
-          items:
-            type: string
-    FieldFormulaOptionsDto:
-      type: object
-      properties:
-        formula:
+        color:
           type: string
-    WorkspaceListDto:
-      type: object
-      properties:
-        workspaces:
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkspaceDto'
-        permission:
-          type: string
-          enum:
-          - manage
-          - edit
-          - view
-          - none
-    WorkspaceDto:
+    RecordTypeDto:
       type: object
       properties:
         id:
@@ -441,11 +411,7 @@ components:
           type: string
         alias:
           type: string
-        name:
-          type: string
-        description:
-          type: string
-        color:
+        displayName:
           type: string
         permission:
           type: string
@@ -454,40 +420,30 @@ components:
           - edit
           - view
           - none
+        primaryFieldId:
+          type: string
         icon:
           type: string
-        recordTypes:
+        description:
+          type: string
+        color:
+          type: string
+        fields:
           type: array
           items:
-            $ref: '#/components/schemas/RecordTypeDto'
-        recordTypeSections:
-          type: array
-          items:
-            $ref: '#/components/schemas/RecordTypeSectionDto'
-    FieldDateOptionsDto:
-      type: object
-      properties:
-        dateFormat:
-          type: string
-          enum:
-          - locale
-          - standard
-          - friendly
-          - european
-          - iso
-        timeFormat:
-          type: string
-          enum:
-          - h12
-          - h24
-    FieldReferenceExternalOptionsDto:
+            $ref: '#/components/schemas/FieldDto'
+        isExternal:
+          type: boolean
+        externalOptions:
+          $ref: '#/components/schemas/RecordTypeExternalOptionsDto'
+    RecordTypeExternalOptionsDto:
       type: object
       properties:
         connectionName:
           type: string
         objectName:
           type: string
-        connectionOptions:
+        fields:
           type: object
           additionalProperties:
             type: string
@@ -645,11 +601,133 @@ components:
           - ZAR
           - ZMK
           - ZWD
-    FieldUserOptionsDto:
+    FieldLookupOptionsDto:
       type: object
       properties:
-        multipleUsersAllowed:
+        referenceFieldId:
+          type: string
+        rollup:
+          type: string
+        sourceField:
+          $ref: '#/components/schemas/FieldDto'
+    FieldDateOptionsDto:
+      type: object
+      properties:
+        dateFormat:
+          type: string
+          enum:
+          - locale
+          - standard
+          - friendly
+          - european
+          - iso
+        timeFormat:
+          type: string
+          enum:
+          - h12
+          - h24
+    FieldReferenceOptionsDto:
+      type: object
+      properties:
+        multiple:
           type: boolean
+        recordTypeId:
+          type: string
+        isExternal:
+          type: boolean
+        externalOptions:
+          $ref: '#/components/schemas/FieldReferenceExternalOptionsDto'
+        filters:
+          type: object
+          additionalProperties:
+            type: object
+        lookupFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldReferenceLookupFieldDto'
+    RecordTypeSectionDto:
+      type: object
+      properties:
+        name:
+          type: string
+        displayName:
+          type: string
+        recordTypeIds:
+          type: array
+          items:
+            type: string
+    FieldReferenceExternalOptionsDto:
+      type: object
+      properties:
+        connectionName:
+          type: string
+        objectName:
+          type: string
+        connectionOptions:
+          type: object
+          additionalProperties:
+            type: string
+    WorkspaceListDto:
+      type: object
+      properties:
+        workspaces:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkspaceDto'
+        permission:
+          type: string
+          enum:
+          - manage
+          - edit
+          - view
+          - none
+    FieldFormulaOptionsDto:
+      type: object
+      properties:
+        formula:
+          type: string
+    WorkspaceDto:
+      type: object
+      properties:
+        id:
+          type: string
+        createdBy:
+          type: string
+        createdAt:
+          type: string
+        updatedBy:
+          type: string
+        updatedAt:
+          type: string
+        customerId:
+          type: string
+        imsOrgId:
+          type: string
+        alias:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        color:
+          type: string
+        permission:
+          type: string
+          enum:
+          - manage
+          - edit
+          - view
+          - none
+        icon:
+          type: string
+        recordTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecordTypeDto'
+        recordTypeSections:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecordTypeSectionDto'
     FieldDto:
       type: object
       properties:
@@ -695,25 +773,6 @@ components:
           $ref: '#/components/schemas/FieldUserOptionsDto'
         hasError:
           type: boolean
-    FieldReferenceOptionsDto:
-      type: object
-      properties:
-        multiple:
-          type: boolean
-        recordTypeId:
-          type: string
-        isExternal:
-          type: boolean
-        externalOptions:
-          $ref: '#/components/schemas/FieldReferenceExternalOptionsDto'
-        filters:
-          type: object
-          additionalProperties:
-            type: object
-        lookupFields:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldReferenceLookupFieldDto'
     FieldReferenceLookupFieldDto:
       type: object
       properties:
@@ -721,70 +780,41 @@ components:
           type: string
         rollup:
           type: string
-    RecordTypeDto:
+    FieldUserOptionsDto:
       type: object
+      properties:
+        multipleUsersAllowed:
+          type: boolean
+    V2FieldError:
+      type: object
+      description: Field-level error detail used in validation errors and per-item batch failures.
+      properties:
+        field:
+          type: string
+          description: Name of the field or path that caused the error.
+          example: name
+        message:
+          type: string
+          description: Human-readable explanation of the error for this field.
+          example: Workspace name can not be blank
+        code:
+          type: string
+          description: Machine-readable code identifying the validation rule that failed.
+          example: NotBlank
+    UserReferenceDto:
+      type: object
+      description: Reference to a user with identifier and display name
       properties:
         id:
           type: string
-        createdBy:
-          type: string
-        createdAt:
-          type: string
-        updatedBy:
-          type: string
-        updatedAt:
-          type: string
-        customerId:
-          type: string
-        imsOrgId:
-          type: string
-        alias:
-          type: string
-        displayName:
-          type: string
-        permission:
-          type: string
-          enum:
-          - manage
-          - edit
-          - view
-          - none
-        primaryFieldId:
-          type: string
-        icon:
-          type: string
-        description:
-          type: string
-        color:
-          type: string
-        fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldDto'
-        isExternal:
-          type: boolean
-        externalOptions:
-          $ref: '#/components/schemas/RecordTypeExternalOptionsDto'
-    RecordTypeExternalOptionsDto:
-      type: object
-      properties:
-        connectionName:
-          type: string
-        objectName:
-          type: string
-        fields:
-          type: object
-          additionalProperties:
-            type: string
-    FieldOptionDto:
-      type: object
-      properties:
+          description: Unique identifier of the user
+          example: 1C341E7B682505430A494138@0bd0200063c87f9749412b.e
+          readOnly: true
         name:
           type: string
-        displayName:
-          type: string
-        color:
-          type: string
+          description: Display name of the user
+          example: Jane Doe
+          readOnly: true
     RecordTypeSectionDto_2:
       type: object
       description: Section for organizing and grouping record types within a workspace. Sections are ordered by their position in the array.
@@ -802,6 +832,60 @@ components:
             type: string
       required:
       - displayName
+    V2ProblemDetail:
+      type: object
+      description: RFC 7807 Problem Details error response for V2 endpoints.
+      properties:
+        title:
+          type: string
+          description: Short, human-readable summary of the error type. Same for all occurrences of the same error.
+          example: Not found
+        status:
+          type: integer
+          format: int32
+          description: HTTP status code of the response.
+          example: 404
+        detail:
+          type: string
+          description: Human-readable, resource-specific explanation of this error occurrence. Always English.
+          example: Record type with ID 'Rt69b14f7e' was not found.
+        errorCode:
+          type: string
+          description: Machine-readable error code (enum name).
+          example: ENTITY_WITH_ATTRIBUTE_NOT_FOUND
+        messageArguments:
+          type: object
+          additionalProperties:
+            type: string
+          description: Named parameters used to compose the detail message. Values are always strings.
+          example:
+            recordTypeId: Rt69b14f7e
+        requestId:
+          type: string
+          description: Request correlation ID for tracing and support.
+          example: 5b1f7a8c-2c0e-4a8f-9c4f-2a3b1c0e4d5f
+        errors:
+          type: array
+          description: Field-level or per-item error details. Present for validation, business-rule, or batch failures.
+          items:
+            $ref: '#/components/schemas/V2FieldError'
+      required:
+      - detail
+      - errorCode
+      - requestId
+      - status
+      - title
+    CursorInfo:
+      type: object
+      description: Cursor pagination metadata
+      properties:
+        nextCursor:
+          type: string
+          description: Opaque cursor for fetching the next page. Absent when there are no more pages.
+          example: UnQ2OWIxNGY3ZTBlMzhmMzVmMjhjM2NjZWU=
+        hasMore:
+          type: boolean
+          description: Whether more items exist beyond this page
     CursorResponseWorkspaceDto:
       type: object
       description: Cursor-paginated list of workspaces
@@ -814,22 +898,6 @@ components:
         cursor:
           $ref: '#/components/schemas/CursorInfo'
           description: Cursor metadata for fetching subsequent pages
-    V2FieldError:
-      type: object
-      description: Field-level error detail used in validation errors and per-item batch failures.
-      properties:
-        field:
-          type: string
-          description: Name of the field or path that caused the error.
-          example: name
-        message:
-          type: string
-          description: Human-readable explanation of the error for this field.
-          example: Workspace name can not be blank
-        code:
-          type: string
-          description: Machine-readable code identifying the validation rule that failed.
-          example: NotBlank
     WorkspaceBaseDto:
       type: object
       description: Base class for Workspace DTOs containing common workspace properties
@@ -894,74 +962,6 @@ components:
           description: List of record type sections for organizing record types
           items:
             $ref: '#/components/schemas/RecordTypeSectionDto_2'
-    CursorInfo:
-      type: object
-      description: Cursor pagination metadata
-      properties:
-        nextCursor:
-          type: string
-          description: Opaque cursor for fetching the next page. Absent when there are no more pages.
-          example: UnQ2OWIxNGY3ZTBlMzhmMzVmMjhjM2NjZWU=
-        hasMore:
-          type: boolean
-          description: Whether more items exist beyond this page
-    UserReferenceDto:
-      type: object
-      description: Reference to a user with identifier and display name
-      properties:
-        id:
-          type: string
-          description: Unique identifier of the user
-          example: 1C341E7B682505430A494138@0bd0200063c87f9749412b.e
-          readOnly: true
-        name:
-          type: string
-          description: Display name of the user
-          example: Jane Doe
-          readOnly: true
-    V2ProblemDetail:
-      type: object
-      description: RFC 7807 Problem Details error response for V2 endpoints.
-      properties:
-        title:
-          type: string
-          description: Short, human-readable summary of the error type. Same for all occurrences of the same error.
-          example: Not found
-        status:
-          type: integer
-          format: int32
-          description: HTTP status code of the response.
-          example: 404
-        detail:
-          type: string
-          description: Human-readable, resource-specific explanation of this error occurrence. Always English.
-          example: Record type with ID 'Rt69b14f7e' was not found.
-        errorCode:
-          type: string
-          description: Machine-readable error code (enum name).
-          example: ENTITY_WITH_ATTRIBUTE_NOT_FOUND
-        messageArguments:
-          type: object
-          additionalProperties:
-            type: string
-          description: Named parameters used to compose the detail message. Values are always strings.
-          example:
-            recordTypeId: Rt69b14f7e
-        requestId:
-          type: string
-          description: Request correlation ID for tracing and support.
-          example: 5b1f7a8c-2c0e-4a8f-9c4f-2a3b1c0e4d5f
-        errors:
-          type: array
-          description: Field-level or per-item error details. Present for validation, business-rule, or batch failures.
-          items:
-            $ref: '#/components/schemas/V2FieldError'
-      required:
-      - detail
-      - errorCode
-      - requestId
-      - status
-      - title
 x-refined-from:
 - workfront-planning-v1-openapi.json
 - workfront-planning-v2-openapi.json

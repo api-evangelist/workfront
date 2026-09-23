@@ -1,0 +1,38 @@
+{
+  "provider": "workfront",
+  "sources": [
+    "_original/workfront-planning-v1-openapi.json",
+    "_original/workfront-planning-v2-openapi.json"
+  ],
+  "outputs": [
+    "workfront-record-types-api-openapi.yml",
+    "workfront-records-api-openapi.yml",
+    "workfront-workspaces-api-openapi.yml",
+    "workfront-fields-api-openapi.yml",
+    "workfront-permissions-api-openapi.yml",
+    "workfront-views-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [
+    "workfront-planning-v1-openapi.json: info.version missing",
+    "workfront-planning-v2-openapi.json: info.version missing"
+  ],
+  "notes": [
+    "sourced from openapi/_original/ (2 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "workfront-planning-v1-openapi.json: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "workfront-planning-v2-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "tag 'Record Types' spans 2 source specs (workfront-planning-v1-openapi.json, workfront-planning-v2-openapi.json): per-path servers applied",
+    "tag 'Records' spans 2 source specs (workfront-planning-v1-openapi.json, workfront-planning-v2-openapi.json): per-path servers applied",
+    "tag 'Workspaces' spans 2 source specs (workfront-planning-v1-openapi.json, workfront-planning-v2-openapi.json): per-path servers applied",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "workfront-fields-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "workfront-permissions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "workfront-record-types-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "workfront-records-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "workfront-views-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "workfront-workspaces-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}
