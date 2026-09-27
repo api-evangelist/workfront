@@ -248,7 +248,7 @@ paths:
       - Records
       summary: Get Record
       description: Retrieve a record by its ID.
-      operationId: getRecord
+      operationId: getV2RecordsById
       parameters:
       - name: id
         in: path
@@ -287,12 +287,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/V2ProblemDetail'
+      x-operation-id-source: normalized
+      x-operation-id-original: getRecord
     put:
       tags:
       - Records
       summary: Update Record
       description: Update an existing record using PUT (full replacement). All fields not provided in the request will be set to null.
-      operationId: updateRecord
+      operationId: putV2RecordsById
       parameters:
       - name: id
         in: path
@@ -355,12 +357,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/V2ProblemDetail'
+      x-operation-id-source: normalized
+      x-operation-id-original: updateRecord
     delete:
       tags:
       - Records
       summary: Delete Record
       description: Delete a record by its ID.
-      operationId: deleteRecord
+      operationId: deleteV2RecordsById
       parameters:
       - name: id
         in: path
@@ -395,6 +399,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/V2ProblemDetail'
+      x-operation-id-source: normalized
+      x-operation-id-original: deleteRecord
     patch:
       tags:
       - Records
@@ -948,7 +954,7 @@ paths:
       - Records
       summary: Create Record
       description: 'Create a new record in a record type. Subject to limits: max 25,000 records per record type.'
-      operationId: createRecord
+      operationId: postV2RecordTypesByRecordTypeIdRecords
       parameters:
       - name: recordTypeId
         in: path
@@ -1005,6 +1011,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/V2ProblemDetail'
+      x-operation-id-source: normalized
+      x-operation-id-original: createRecord
     servers:
     - url: https://{customer-domain}/maestro/api
       description: Workfront Planning Service Url
@@ -1014,7 +1022,7 @@ paths:
       - Records
       summary: Search Records (GET)
       description: Search records using query parameters. Accepts a JSON filter string using the composite filter pattern, field projection, and alias-based field access. Returns page-based paginated records along with group information.
-      operationId: searchRecordsGet
+      operationId: getV2RecordTypesByRecordTypeIdRecordsSearch
       parameters:
       - name: recordTypeId
         in: path
@@ -1149,12 +1157,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/V2ProblemDetail'
+      x-operation-id-source: normalized
+      x-operation-id-original: searchRecordsGet
     post:
       tags:
       - Records
       summary: Search Records (POST)
       description: Search records using the composite filter pattern with strongly-typed conditions. Supports recursive AND/OR filter nesting, sorting, grouping, field projection, and alias-based field access. Returns page-based paginated records along with group information.
-      operationId: searchRecordsPost
+      operationId: postV2RecordTypesByRecordTypeIdRecordsSearch
       parameters:
       - name: recordTypeId
         in: path
@@ -1258,6 +1268,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/V2ProblemDetail'
+      x-operation-id-source: normalized
+      x-operation-id-original: searchRecordsPost
     servers:
     - url: https://{customer-domain}/maestro/api
       description: Workfront Planning Service Url
@@ -1408,32 +1420,6 @@ components:
           type: integer
           format: int32
       readOnly: true
-    JsonNode:
-      type: object
-    RecordSorting:
-      type: object
-      properties:
-        fieldId:
-          type: string
-        direction:
-          type: string
-          enum:
-          - asc
-          - desc
-    GroupedRecordsDto:
-      type: object
-      properties:
-        records:
-          type: array
-          items:
-            $ref: '#/components/schemas/RecordDto'
-        groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/RecordGroupDto'
-        totalCount:
-          type: integer
-          format: int32
     RecordSearchDto:
       type: object
       properties:
@@ -1500,6 +1486,16 @@ components:
           type: array
           items:
             type: string
+    RecordSorting:
+      type: object
+      properties:
+        fieldId:
+          type: string
+        direction:
+          type: string
+          enum:
+          - asc
+          - desc
     RecordExternalOptions:
       type: object
       properties:
@@ -1525,15 +1521,35 @@ components:
             type: object
         link:
           type: string
-    CellValueDto:
+    JsonNode:
       type: object
-      description: A snapshot of a field value at a point in time
+    GroupedRecordsDto:
+      type: object
       properties:
-        value:
-          description: The stored value of the field at the time of the change
-        fieldSnapshot:
-          $ref: '#/components/schemas/FieldSnapshotDto'
-          description: Snapshot of the field metadata at the time of the change
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecordDto'
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecordGroupDto'
+        totalCount:
+          type: integer
+          format: int32
+    FieldUserOptionsDto:
+      type: object
+      description: User field options
+      properties:
+        multipleUsersAllowed:
+          type: boolean
+          description: Whether multiple users can be selected
+    FilterOperator:
+      type: string
+      description: Logical operator for combining filter conditions
+      enum:
+      - AND
+      - OR
     SortDto:
       type: object
       description: Sort specification
@@ -1552,6 +1568,315 @@ components:
           example: asc
       required:
       - fieldId
+    CursorInfo:
+      type: object
+      description: Cursor pagination metadata
+      properties:
+        nextCursor:
+          type: string
+          description: Opaque cursor for fetching the next page. Absent when there are no more pages.
+          example: UnQ2OWIxNGY3ZTBlMzhmMzVmMjhjM2NjZWU=
+        hasMore:
+          type: boolean
+          description: Whether more items exist beyond this page
+    FieldDateOptionsDto:
+      type: object
+      description: Date field options
+      properties:
+        dateFormat:
+          type: string
+          description: Date format
+          enum:
+          - locale
+          - standard
+          - friendly
+          - european
+          - iso
+          - short
+          - medium
+          - long
+        timeFormat:
+          type: string
+          description: Time format
+          enum:
+          - h12
+          - h24
+    V2ProblemDetail:
+      type: object
+      description: RFC 7807 Problem Details error response for V2 endpoints.
+      properties:
+        title:
+          type: string
+          description: Short, human-readable summary of the error type. Same for all occurrences of the same error.
+          example: Not found
+        status:
+          type: integer
+          format: int32
+          description: HTTP status code of the response.
+          example: 404
+        detail:
+          type: string
+          description: Human-readable, resource-specific explanation of this error occurrence. Always English.
+          example: Record type with ID 'Rt69b14f7e' was not found.
+        errorCode:
+          type: string
+          description: Machine-readable error code (enum name).
+          example: ENTITY_WITH_ATTRIBUTE_NOT_FOUND
+        messageArguments:
+          type: object
+          additionalProperties:
+            type: string
+          description: Named parameters used to compose the detail message. Values are always strings.
+          example:
+            recordTypeId: Rt69b14f7e
+        requestId:
+          type: string
+          description: Request correlation ID for tracing and support.
+          example: 5b1f7a8c-2c0e-4a8f-9c4f-2a3b1c0e4d5f
+        errors:
+          type: array
+          description: Field-level or per-item error details. Present for validation, business-rule, or batch failures.
+          items:
+            $ref: '#/components/schemas/V2FieldError'
+      required:
+      - detail
+      - errorCode
+      - requestId
+      - status
+      - title
+    RecordBulkResultItemDtoObject:
+      type: object
+      description: Result for one input item in a bulk record operation.
+      properties:
+        requestIndex:
+          type: integer
+          format: int32
+          description: Zero-based index of the input item.
+          example: 0
+        id:
+          type: string
+          description: Record ID for this item when available.
+          example: Rc69b2a78e63cd0d41a1bedf2e
+        status:
+          type: string
+          description: Per-item operation status.
+          enum:
+          - success
+          - error
+        error:
+          $ref: '#/components/schemas/RecordBulkItemErrorDto'
+          description: Error payload. Present only when status is error.
+        record:
+          $ref: '#/components/schemas/RecordDto_2'
+          description: Record payload. Present on successful create, update, and patch items.
+    MoveRecordsRequestDto:
+      type: object
+      description: Move request specifying which records to move and where
+      properties:
+        recordIds:
+          type: array
+          description: IDs of the records to move, in the order they should appear at the destination.
+          example:
+          - Rc6796...01
+          - Rc6796...02
+          items:
+            type: string
+            minLength: 1
+          maxItems: 100
+          minItems: 0
+        putAfterRecordId:
+          type: string
+          description: Place the moved records immediately AFTER this record. Mutually exclusive with putBeforeRecordId.
+          example: Rc67a1...
+        putBeforeRecordId:
+          type: string
+          description: Place the moved records immediately BEFORE this record. Mutually exclusive with putAfterRecordId.
+          example: Rc67a2...
+      required:
+      - recordIds
+    RecordSearchRequestDto:
+      type: object
+      description: Search criteria including filters, sorting, and grouping
+      properties:
+        recordTypeId:
+          type: string
+          description: ID of the record type to search within
+          example: Rt69b14f7e0e38f35f28c3ccee
+        recordTypeAlias:
+          type: string
+          description: Alias of the record type to search within
+          example: campaigns
+        filter:
+          $ref: '#/components/schemas/FilterGroupDto'
+          description: Filter criteria using the composite filter pattern. Supports recursive AND/OR nesting with strongly-typed conditions.
+        sort:
+          type: array
+          description: Sorting configuration for records
+          items:
+            $ref: '#/components/schemas/SortDto'
+        group:
+          type: array
+          description: Grouping configuration for records
+          items:
+            $ref: '#/components/schemas/GroupDto'
+        scopeWorkspaceIds:
+          type: array
+          description: List of workspace IDs to scope the search to (for global record types)
+          example:
+          - Ws123
+          - Ws456
+          items:
+            type: string
+        globalRecordTypeWorkspaceFieldId:
+          type: string
+          description: ID of the global record type workspace field (for global record types)
+          example: F693ab1c96f11ea3f4175e717
+    FilterNodeDto:
+      description: 'A node in the filter tree: either a leaf condition or a nested group'
+      oneOf:
+      - $ref: '#/components/schemas/FilterConditionDto'
+      - $ref: '#/components/schemas/FilterGroupDto'
+    RecordGroupDto_2:
+      type: object
+      description: Group of records with common field values
+      properties:
+        fieldId:
+          type: string
+          description: ID of the field used for grouping
+          example: F693ab1c96f11ea3f4175e716
+        value:
+          description: Value of the grouping field
+          example: Active
+        recordIds:
+          type: array
+          description: List of record IDs in this group
+          example:
+          - R123
+          - R456
+          - R789
+          items:
+            type: string
+        count:
+          type: integer
+          format: int32
+          description: Count of records in this group
+          example: 3
+    BulkDeleteRequestDto:
+      type: object
+      description: List of record IDs to delete
+      properties:
+        ids:
+          type: array
+          description: List of record IDs to delete (max 100)
+          example:
+          - r1
+          - r2
+          items:
+            type: string
+          maxItems: 100
+          minItems: 0
+      required:
+      - ids
+    RecordSearchPageDto:
+      type: object
+      description: Paginated search response containing records and groups
+      properties:
+        records:
+          $ref: '#/components/schemas/PageRecordDto'
+          description: Paginated records matching the search criteria
+        groups:
+          type: array
+          description: List of record groups (if grouping was requested)
+          items:
+            $ref: '#/components/schemas/RecordGroupDto_2'
+    RecordBulkResponseDto:
+      type: object
+      description: Response envelope for V2 bulk record operations.
+      properties:
+        status:
+          type: string
+          description: Overall bulk operation status.
+          enum:
+          - success
+          - partial
+          - failed
+        total:
+          type: integer
+          format: int32
+          description: Number of input items submitted.
+          example: 10
+        succeeded:
+          type: integer
+          format: int32
+          description: Number of successful item results.
+          example: 3
+        failed:
+          type: integer
+          format: int32
+          description: Number of failed item results.
+          example: 7
+        requestId:
+          type: string
+          description: Request correlation ID for tracing and support.
+          example: 5b1f7a8c-2c0e-4a8f-9c4f-2a3b1c0e4d5f
+        errors:
+          type: array
+          description: Request-level errors affecting multiple items.
+          items:
+            $ref: '#/components/schemas/RecordBulkRequestErrorDto'
+        results:
+          type: array
+          description: Per-item results in the same order as the input.
+          items:
+            $ref: '#/components/schemas/RecordBulkResultItemDtoObject'
+    PageRecordDto:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        first:
+          type: boolean
+        last:
+          type: boolean
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecordDto_2'
+        number:
+          type: integer
+          format: int32
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        numberOfElements:
+          type: integer
+          format: int32
+        empty:
+          type: boolean
+    V2FieldError:
+      type: object
+      description: Field-level error detail used in validation errors and per-item batch failures.
+      properties:
+        field:
+          type: string
+          description: Name of the field or path that caused the error.
+          example: name
+        message:
+          type: string
+          description: Human-readable explanation of the error for this field.
+          example: Workspace name can not be blank
+        code:
+          type: string
+          description: Machine-readable code identifying the validation rule that failed.
+          example: NotBlank
     FieldNumberOptionsDto:
       type: object
       description: Number field options for number, percentage, and currency fields
@@ -1717,52 +2042,6 @@ components:
           - TEXT
           - PROGRESS_BAR
           - PROGRESS_CIRCLE
-    HistoryEntryDto:
-      type: object
-      description: A single record field change event
-      properties:
-        id:
-          type: string
-          description: Unique identifier of this history entry
-        recordId:
-          type: string
-          description: ID of the record this change belongs to
-        createdBy:
-          type: string
-          description: ID of the user who made the change
-        createdAt:
-          type: string
-          description: ISO-8601 timestamp of when the change occurred
-          example: '2026-01-15T10:30:00.000Z'
-        fieldId:
-          type: string
-          description: ID of the field that changed
-        before:
-          $ref: '#/components/schemas/CellValueDto'
-          description: Field state before the change
-        after:
-          $ref: '#/components/schemas/CellValueDto'
-          description: Field state after the change
-    FilterNodeDto:
-      description: 'A node in the filter tree: either a leaf condition or a nested group'
-      oneOf:
-      - $ref: '#/components/schemas/FilterConditionDto'
-      - $ref: '#/components/schemas/FilterGroupDto'
-    FieldOptionDto:
-      type: object
-      description: Field option for single-select and multi-select fields
-      properties:
-        name:
-          description: Name identifier for the option
-        displayName:
-          type: string
-          description: Display name for the option
-        color:
-          type: string
-          description: Color code for the option
-        groupId:
-          type: string
-          description: Group ID for grouped options
     FieldSnapshotDto:
       type: object
       description: Snapshot of field metadata captured at the time of the change
@@ -1796,366 +2075,6 @@ components:
         userOptions:
           $ref: '#/components/schemas/FieldUserOptionsDto'
           description: User-specific configuration options
-    PageRecordDto:
-      type: object
-      properties:
-        totalElements:
-          type: integer
-          format: int64
-        totalPages:
-          type: integer
-          format: int32
-        pageable:
-          $ref: '#/components/schemas/PageableObject'
-        first:
-          type: boolean
-        last:
-          type: boolean
-        size:
-          type: integer
-          format: int32
-        content:
-          type: array
-          items:
-            $ref: '#/components/schemas/RecordDto_2'
-        number:
-          type: integer
-          format: int32
-        sort:
-          $ref: '#/components/schemas/SortObject'
-        numberOfElements:
-          type: integer
-          format: int32
-        empty:
-          type: boolean
-    V2FieldError:
-      type: object
-      description: Field-level error detail used in validation errors and per-item batch failures.
-      properties:
-        field:
-          type: string
-          description: Name of the field or path that caused the error.
-          example: name
-        message:
-          type: string
-          description: Human-readable explanation of the error for this field.
-          example: Workspace name can not be blank
-        code:
-          type: string
-          description: Machine-readable code identifying the validation rule that failed.
-          example: NotBlank
-    RecordBulkRequestErrorDto:
-      type: object
-      description: Request-level error affecting multiple items in a bulk operation.
-      properties:
-        code:
-          type: string
-          description: Machine-readable error code.
-          example: RATE_LIMIT_EXCEEDED
-        message:
-          type: string
-          description: Human-readable description of the request-level error.
-          example: Bulk operation limit of 100 items per request exceeded; 58 items were skipped
-        affectedIds:
-          type: array
-          description: IDs of the items affected by this request-level error.
-          items:
-            type: string
-    CursorInfo:
-      type: object
-      description: Cursor pagination metadata
-      properties:
-        nextCursor:
-          type: string
-          description: Opaque cursor for fetching the next page. Absent when there are no more pages.
-          example: UnQ2OWIxNGY3ZTBlMzhmMzVmMjhjM2NjZWU=
-        hasMore:
-          type: boolean
-          description: Whether more items exist beyond this page
-    FilterGroupDto:
-      allOf:
-      - $ref: '#/components/schemas/FilterNodeDto'
-      - type: object
-        properties:
-          operator:
-            $ref: '#/components/schemas/FilterOperator'
-            description: Logical operator to combine conditions
-          conditions:
-            type: array
-            description: 'List of filter nodes: leaf conditions or nested groups'
-            items:
-              $ref: '#/components/schemas/FilterNodeDto'
-            minItems: 1
-      description: A group of filter conditions combined with a logical operator (AND/OR). Supports recursive nesting for complex filter logic.
-      required:
-      - conditions
-      - operator
-    RecordSearchRequestDto:
-      type: object
-      description: Search criteria including filters, sorting, and grouping
-      properties:
-        recordTypeId:
-          type: string
-          description: ID of the record type to search within
-          example: Rt69b14f7e0e38f35f28c3ccee
-        recordTypeAlias:
-          type: string
-          description: Alias of the record type to search within
-          example: campaigns
-        filter:
-          $ref: '#/components/schemas/FilterGroupDto'
-          description: Filter criteria using the composite filter pattern. Supports recursive AND/OR nesting with strongly-typed conditions.
-        sort:
-          type: array
-          description: Sorting configuration for records
-          items:
-            $ref: '#/components/schemas/SortDto'
-        group:
-          type: array
-          description: Grouping configuration for records
-          items:
-            $ref: '#/components/schemas/GroupDto'
-        scopeWorkspaceIds:
-          type: array
-          description: List of workspace IDs to scope the search to (for global record types)
-          example:
-          - Ws123
-          - Ws456
-          items:
-            type: string
-        globalRecordTypeWorkspaceFieldId:
-          type: string
-          description: ID of the global record type workspace field (for global record types)
-          example: F693ab1c96f11ea3f4175e717
-    FieldUserOptionsDto:
-      type: object
-      description: User field options
-      properties:
-        multipleUsersAllowed:
-          type: boolean
-          description: Whether multiple users can be selected
-    RecordBulkItemErrorDto:
-      type: object
-      description: Per-item error detail in a bulk record operation response.
-      properties:
-        code:
-          type: string
-          description: Machine-readable error code.
-          example: ENTITY_WITH_ATTRIBUTE_NOT_FOUND
-        message:
-          type: string
-          description: Human-readable explanation of this specific item failure.
-          example: Record with ID 'Rc123' was not found.
-        details:
-          type: object
-          additionalProperties: {}
-          description: Optional structured context for this item failure.
-    FilterConditionDto:
-      allOf:
-      - $ref: '#/components/schemas/FilterNodeDto'
-      - type: object
-        properties:
-          fieldId:
-            type: string
-            description: ID or alias of the field to filter on
-            example: F693ab1c96f11ea3f4175e710
-            minLength: 1
-          condition:
-            $ref: '#/components/schemas/FilterCondition'
-            description: Filter condition to apply
-          value:
-            description: Value to compare against. Omit for unary conditions (IS_EMPTY, IS_NOT_EMPTY). Use an array for range conditions (IS_BETWEEN) or multi-value conditions (IS_ANY_OF). For People fields (USER, CREATED_BY, UPDATED_BY, APPROVED_BY), by default plain string values are interpreted as Adobe IMS user IDs when the customer is IMS-migrated; otherwise they are interpreted as Workfront user IDs. To explicitly set the ID type and avoid ambiguity, pass a typed object such as {"id":"63e3b13000078c1795146248182d15dc","idType":"WF"} (use "idType":"IMS" for Adobe IMS IDs).
-            example: Active
-          matchExternalId:
-            type: boolean
-            description: When true, values for REFERENCE fields are treated as external connection IDs and resolved to internal record IDs before the search executes. Only valid for external REFERENCE fields (isExternal=true).
-      description: A leaf filter condition applied to a single field
-      required:
-      - condition
-      - fieldId
-    FilterOperator:
-      type: string
-      description: Logical operator for combining filter conditions
-      enum:
-      - AND
-      - OR
-    RecordBaseDto:
-      type: object
-      description: Partial record data to update. Only provided fields will be updated.
-      properties:
-        id:
-          type: string
-          description: Unique identifier of the record
-          example: Rc69b2a78e63cd0d41a1bedf2e
-          readOnly: true
-        createdBy:
-          $ref: '#/components/schemas/UserReferenceDto'
-          description: User who created this entity
-          readOnly: true
-        createdAt:
-          type: string
-          description: Date/time when this entity was created
-          example: '2026-01-15T10:30:00.000Z'
-          pattern: yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
-          readOnly: true
-        updatedBy:
-          $ref: '#/components/schemas/UserReferenceDto'
-          description: User who last updated this entity
-          readOnly: true
-        updatedAt:
-          type: string
-          description: Date/time when this entity was last updated
-          example: '2026-01-15T14:45:00.000Z'
-          pattern: yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
-          readOnly: true
-        recordTypeId:
-          type: string
-          description: ID of the record type this record belongs to
-          example: Rt69b14f7e0e38f35f28c3ccee
-        data:
-          type: object
-          additionalProperties: {}
-          description: Field data for the record as key-value pairs where keys are field IDs
-          example:
-            F693ab1c96f11ea3f4175e710: Campaign Name
-            F693ab1c96f11ea3f4175e711: '2026-03-15'
-        thumbnailUrl:
-          type: string
-          description: URL of the record thumbnail image
-          example: /maestro/static/thumbnail/default/thumbnail-1.png
-          readOnly: true
-        coverImage:
-          $ref: '#/components/schemas/CoverImageDto'
-          description: Cover image information for the record
-          readOnly: true
-    FieldDateOptionsDto:
-      type: object
-      description: Date field options
-      properties:
-        dateFormat:
-          type: string
-          description: Date format
-          enum:
-          - locale
-          - standard
-          - friendly
-          - european
-          - iso
-          - short
-          - medium
-          - long
-        timeFormat:
-          type: string
-          description: Time format
-          enum:
-          - h12
-          - h24
-    UserReferenceDto:
-      type: object
-      description: Reference to a user with identifier and display name
-      properties:
-        id:
-          type: string
-          description: Unique identifier of the user
-          example: 1C341E7B682505430A494138@0bd0200063c87f9749412b.e
-          readOnly: true
-        name:
-          type: string
-          description: Display name of the user
-          example: Jane Doe
-          readOnly: true
-    RecordSearchPageDto:
-      type: object
-      description: Paginated search response containing records and groups
-      properties:
-        records:
-          $ref: '#/components/schemas/PageRecordDto'
-          description: Paginated records matching the search criteria
-        groups:
-          type: array
-          description: List of record groups (if grouping was requested)
-          items:
-            $ref: '#/components/schemas/RecordGroupDto_2'
-    PageableObject:
-      type: object
-      properties:
-        paged:
-          type: boolean
-        pageSize:
-          type: integer
-          format: int32
-        pageNumber:
-          type: integer
-          format: int32
-        offset:
-          type: integer
-          format: int64
-        sort:
-          $ref: '#/components/schemas/SortObject'
-        unpaged:
-          type: boolean
-    CoverImageDto:
-      type: object
-      description: Cover image information for a record
-      properties:
-        url:
-          type: string
-          description: URL of the cover image
-          example: /maestro/static/thumbnail/default/thumbnail-1.png
-        position:
-          type: integer
-          format: int32
-          description: Vertical position of the cover image
-          example: 0
-    RecordBulkResponseDto:
-      type: object
-      description: Response envelope for V2 bulk record operations.
-      properties:
-        status:
-          type: string
-          description: Overall bulk operation status.
-          enum:
-          - success
-          - partial
-          - failed
-        total:
-          type: integer
-          format: int32
-          description: Number of input items submitted.
-          example: 10
-        succeeded:
-          type: integer
-          format: int32
-          description: Number of successful item results.
-          example: 3
-        failed:
-          type: integer
-          format: int32
-          description: Number of failed item results.
-          example: 7
-        requestId:
-          type: string
-          description: Request correlation ID for tracing and support.
-          example: 5b1f7a8c-2c0e-4a8f-9c4f-2a3b1c0e4d5f
-        errors:
-          type: array
-          description: Request-level errors affecting multiple items.
-          items:
-            $ref: '#/components/schemas/RecordBulkRequestErrorDto'
-        results:
-          type: array
-          description: Per-item results in the same order as the input.
-          items:
-            $ref: '#/components/schemas/RecordBulkResultItemDtoObject'
-    SortObject:
-      type: object
-      properties:
-        sorted:
-          type: boolean
-        empty:
-          type: boolean
-        unsorted:
-          type: boolean
     RecordDto_2:
       type: object
       description: Complete record data including all record properties
@@ -2210,31 +2129,85 @@ components:
           description: Alias of the record type (only populated when aliased=true)
           example: campaigns
           readOnly: true
-    RecordGroupDto_2:
+    SortObject:
       type: object
-      description: Group of records with common field values
       properties:
-        fieldId:
+        sorted:
+          type: boolean
+        empty:
+          type: boolean
+        unsorted:
+          type: boolean
+    RecordBulkRequestErrorDto:
+      type: object
+      description: Request-level error affecting multiple items in a bulk operation.
+      properties:
+        code:
           type: string
-          description: ID of the field used for grouping
-          example: F693ab1c96f11ea3f4175e716
-        value:
-          description: Value of the grouping field
-          example: Active
-        recordIds:
+          description: Machine-readable error code.
+          example: RATE_LIMIT_EXCEEDED
+        message:
+          type: string
+          description: Human-readable description of the request-level error.
+          example: Bulk operation limit of 100 items per request exceeded; 58 items were skipped
+        affectedIds:
           type: array
-          description: List of record IDs in this group
-          example:
-          - R123
-          - R456
-          - R789
+          description: IDs of the items affected by this request-level error.
           items:
             type: string
-        count:
+    FieldOptionDto:
+      type: object
+      description: Field option for single-select and multi-select fields
+      properties:
+        name:
+          description: Name identifier for the option
+        displayName:
+          type: string
+          description: Display name for the option
+        color:
+          type: string
+          description: Color code for the option
+        groupId:
+          type: string
+          description: Group ID for grouped options
+    RecordBulkItemErrorDto:
+      type: object
+      description: Per-item error detail in a bulk record operation response.
+      properties:
+        code:
+          type: string
+          description: Machine-readable error code.
+          example: ENTITY_WITH_ATTRIBUTE_NOT_FOUND
+        message:
+          type: string
+          description: Human-readable explanation of this specific item failure.
+          example: Record with ID 'Rc123' was not found.
+        details:
+          type: object
+          additionalProperties: {}
+          description: Optional structured context for this item failure.
+    CoverImageDto:
+      type: object
+      description: Cover image information for a record
+      properties:
+        url:
+          type: string
+          description: URL of the cover image
+          example: /maestro/static/thumbnail/default/thumbnail-1.png
+        position:
           type: integer
           format: int32
-          description: Count of records in this group
-          example: 3
+          description: Vertical position of the cover image
+          example: 0
+    CellValueDto:
+      type: object
+      description: A snapshot of a field value at a point in time
+      properties:
+        value:
+          description: The stored value of the field at the time of the change
+        fieldSnapshot:
+          $ref: '#/components/schemas/FieldSnapshotDto'
+          description: Snapshot of the field metadata at the time of the change
     CursorResponseHistoryEntryDto:
       type: object
       description: Cursor-paginated list of history entries
@@ -2247,31 +2220,38 @@ components:
         cursor:
           $ref: '#/components/schemas/CursorInfo'
           description: Cursor metadata for fetching subsequent pages
-    RecordBulkResultItemDtoObject:
+    FilterGroupDto:
+      allOf:
+      - $ref: '#/components/schemas/FilterNodeDto'
+      - type: object
+        properties:
+          operator:
+            $ref: '#/components/schemas/FilterOperator'
+            description: Logical operator to combine conditions
+          conditions:
+            type: array
+            description: 'List of filter nodes: leaf conditions or nested groups'
+            items:
+              $ref: '#/components/schemas/FilterNodeDto'
+            minItems: 1
+      description: A group of filter conditions combined with a logical operator (AND/OR). Supports recursive nesting for complex filter logic.
+      required:
+      - conditions
+      - operator
+    UserReferenceDto:
       type: object
-      description: Result for one input item in a bulk record operation.
+      description: Reference to a user with identifier and display name
       properties:
-        requestIndex:
-          type: integer
-          format: int32
-          description: Zero-based index of the input item.
-          example: 0
         id:
           type: string
-          description: Record ID for this item when available.
-          example: Rc69b2a78e63cd0d41a1bedf2e
-        status:
+          description: Unique identifier of the user
+          example: 1C341E7B682505430A494138@0bd0200063c87f9749412b.e
+          readOnly: true
+        name:
           type: string
-          description: Per-item operation status.
-          enum:
-          - success
-          - error
-        error:
-          $ref: '#/components/schemas/RecordBulkItemErrorDto'
-          description: Error payload. Present only when status is error.
-        record:
-          $ref: '#/components/schemas/RecordDto_2'
-          description: Record payload. Present on successful create, update, and patch items.
+          description: Display name of the user
+          example: Jane Doe
+          readOnly: true
     GroupDto:
       type: object
       description: Grouping specification
@@ -2290,49 +2270,99 @@ components:
           example: asc
       required:
       - fieldId
-    V2ProblemDetail:
+    PageableObject:
       type: object
-      description: RFC 7807 Problem Details error response for V2 endpoints.
       properties:
-        title:
-          type: string
-          description: Short, human-readable summary of the error type. Same for all occurrences of the same error.
-          example: Not found
-        status:
+        paged:
+          type: boolean
+        pageSize:
           type: integer
           format: int32
-          description: HTTP status code of the response.
-          example: 404
-        detail:
+        pageNumber:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int64
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        unpaged:
+          type: boolean
+    HistoryEntryDto:
+      type: object
+      description: A single record field change event
+      properties:
+        id:
           type: string
-          description: Human-readable, resource-specific explanation of this error occurrence. Always English.
-          example: Record type with ID 'Rt69b14f7e' was not found.
-        errorCode:
+          description: Unique identifier of this history entry
+        recordId:
           type: string
-          description: Machine-readable error code (enum name).
-          example: ENTITY_WITH_ATTRIBUTE_NOT_FOUND
-        messageArguments:
+          description: ID of the record this change belongs to
+        createdBy:
+          type: string
+          description: ID of the user who made the change
+        createdAt:
+          type: string
+          description: ISO-8601 timestamp of when the change occurred
+          example: '2026-01-15T10:30:00.000Z'
+        fieldId:
+          type: string
+          description: ID of the field that changed
+        before:
+          $ref: '#/components/schemas/CellValueDto'
+          description: Field state before the change
+        after:
+          $ref: '#/components/schemas/CellValueDto'
+          description: Field state after the change
+    RecordBaseDto:
+      type: object
+      description: Partial record data to update. Only provided fields will be updated.
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the record
+          example: Rc69b2a78e63cd0d41a1bedf2e
+          readOnly: true
+        createdBy:
+          $ref: '#/components/schemas/UserReferenceDto'
+          description: User who created this entity
+          readOnly: true
+        createdAt:
+          type: string
+          description: Date/time when this entity was created
+          example: '2026-01-15T10:30:00.000Z'
+          pattern: yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
+          readOnly: true
+        updatedBy:
+          $ref: '#/components/schemas/UserReferenceDto'
+          description: User who last updated this entity
+          readOnly: true
+        updatedAt:
+          type: string
+          description: Date/time when this entity was last updated
+          example: '2026-01-15T14:45:00.000Z'
+          pattern: yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
+          readOnly: true
+        recordTypeId:
+          type: string
+          description: ID of the record type this record belongs to
+          example: Rt69b14f7e0e38f35f28c3ccee
+        data:
           type: object
-          additionalProperties:
-            type: string
-          description: Named parameters used to compose the detail message. Values are always strings.
+          additionalProperties: {}
+          description: Field data for the record as key-value pairs where keys are field IDs
           example:
-            recordTypeId: Rt69b14f7e
-        requestId:
+            F693ab1c96f11ea3f4175e710: Campaign Name
+            F693ab1c96f11ea3f4175e711: '2026-03-15'
+        thumbnailUrl:
           type: string
-          description: Request correlation ID for tracing and support.
-          example: 5b1f7a8c-2c0e-4a8f-9c4f-2a3b1c0e4d5f
-        errors:
-          type: array
-          description: Field-level or per-item error details. Present for validation, business-rule, or batch failures.
-          items:
-            $ref: '#/components/schemas/V2FieldError'
-      required:
-      - detail
-      - errorCode
-      - requestId
-      - status
-      - title
+          description: URL of the record thumbnail image
+          example: /maestro/static/thumbnail/default/thumbnail-1.png
+          readOnly: true
+        coverImage:
+          $ref: '#/components/schemas/CoverImageDto'
+          description: Cover image information for the record
+          readOnly: true
     FilterCondition:
       type: string
       description: Supported filter conditions for record search
@@ -2357,47 +2387,29 @@ components:
       - HAS_ALL_OF
       - HAS_NONE_OF
       - IS_EXACTLY
-    MoveRecordsRequestDto:
-      type: object
-      description: Move request specifying which records to move and where
-      properties:
-        recordIds:
-          type: array
-          description: IDs of the records to move, in the order they should appear at the destination.
-          example:
-          - Rc6796...01
-          - Rc6796...02
-          items:
+    FilterConditionDto:
+      allOf:
+      - $ref: '#/components/schemas/FilterNodeDto'
+      - type: object
+        properties:
+          fieldId:
             type: string
+            description: ID or alias of the field to filter on
+            example: F693ab1c96f11ea3f4175e710
             minLength: 1
-          maxItems: 100
-          minItems: 0
-        putAfterRecordId:
-          type: string
-          description: Place the moved records immediately AFTER this record. Mutually exclusive with putBeforeRecordId.
-          example: Rc67a1...
-        putBeforeRecordId:
-          type: string
-          description: Place the moved records immediately BEFORE this record. Mutually exclusive with putAfterRecordId.
-          example: Rc67a2...
+          condition:
+            $ref: '#/components/schemas/FilterCondition'
+            description: Filter condition to apply
+          value:
+            description: Value to compare against. Omit for unary conditions (IS_EMPTY, IS_NOT_EMPTY). Use an array for range conditions (IS_BETWEEN) or multi-value conditions (IS_ANY_OF). For People fields (USER, CREATED_BY, UPDATED_BY, APPROVED_BY), by default plain string values are interpreted as Adobe IMS user IDs when the customer is IMS-migrated; otherwise they are interpreted as Workfront user IDs. To explicitly set the ID type and avoid ambiguity, pass a typed object such as {"id":"63e3b13000078c1795146248182d15dc","idType":"WF"} (use "idType":"IMS" for Adobe IMS IDs).
+            example: Active
+          matchExternalId:
+            type: boolean
+            description: When true, values for REFERENCE fields are treated as external connection IDs and resolved to internal record IDs before the search executes. Only valid for external REFERENCE fields (isExternal=true).
+      description: A leaf filter condition applied to a single field
       required:
-      - recordIds
-    BulkDeleteRequestDto:
-      type: object
-      description: List of record IDs to delete
-      properties:
-        ids:
-          type: array
-          description: List of record IDs to delete (max 100)
-          example:
-          - r1
-          - r2
-          items:
-            type: string
-          maxItems: 100
-          minItems: 0
-      required:
-      - ids
+      - condition
+      - fieldId
 x-refined-from:
 - workfront-planning-v1-openapi.json
 - workfront-planning-v2-openapi.json

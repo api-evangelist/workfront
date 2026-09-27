@@ -55,7 +55,7 @@ tags:
 - Collaboration
 - Approvals
 - Resource Management
-- Workflow-Automation
+- Workflow Automation
 - Enterprise Software
 - Adobe
 - MCP
@@ -72,6 +72,7 @@ tags_raw:
 - Enterprise Software
 - Adobe
 - Model Context Protocol
+- Workflow-Automation
 apis:
 - aid: workfront:workfront-api
   name: Adobe Workfront API

@@ -88,7 +88,7 @@ paths:
       - Record Types
       summary: Get Record Type
       description: Retrieve a record type by its ID.
-      operationId: getRecordType
+      operationId: getV2RecordTypesById
       parameters:
       - name: id
         in: path
@@ -133,6 +133,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/V2ProblemDetail'
+      x-operation-id-source: normalized
+      x-operation-id-original: getRecordType
     put:
       tags:
       - Record Types
@@ -557,15 +559,35 @@ paths:
       description: Workfront Planning Service Url
 components:
   schemas:
-    FieldOptionDto:
+    FieldFormulaOptionsDto:
       type: object
       properties:
-        name:
+        formula:
           type: string
-        displayName:
+    FieldUserOptionsDto:
+      type: object
+      properties:
+        multipleUsersAllowed:
+          type: boolean
+    FieldReferenceOptionsDto:
+      type: object
+      properties:
+        multiple:
+          type: boolean
+        recordTypeId:
           type: string
-        color:
-          type: string
+        isExternal:
+          type: boolean
+        externalOptions:
+          $ref: '#/components/schemas/FieldReferenceExternalOptionsDto'
+        filters:
+          type: object
+          additionalProperties:
+            type: object
+        lookupFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldReferenceLookupFieldDto'
     RecordTypeDto:
       type: object
       properties:
@@ -610,17 +632,6 @@ components:
           type: boolean
         externalOptions:
           $ref: '#/components/schemas/RecordTypeExternalOptionsDto'
-    RecordTypeExternalOptionsDto:
-      type: object
-      properties:
-        connectionName:
-          type: string
-        objectName:
-          type: string
-        fields:
-          type: object
-          additionalProperties:
-            type: string
     FieldNumberOptionsDto:
       type: object
       properties:
@@ -784,56 +795,12 @@ components:
           type: string
         sourceField:
           $ref: '#/components/schemas/FieldDto'
-    FieldDateOptionsDto:
+    FieldReferenceLookupFieldDto:
       type: object
       properties:
-        dateFormat:
+        fieldId:
           type: string
-          enum:
-          - locale
-          - standard
-          - friendly
-          - european
-          - iso
-        timeFormat:
-          type: string
-          enum:
-          - h12
-          - h24
-    FieldReferenceOptionsDto:
-      type: object
-      properties:
-        multiple:
-          type: boolean
-        recordTypeId:
-          type: string
-        isExternal:
-          type: boolean
-        externalOptions:
-          $ref: '#/components/schemas/FieldReferenceExternalOptionsDto'
-        filters:
-          type: object
-          additionalProperties:
-            type: object
-        lookupFields:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldReferenceLookupFieldDto'
-    FieldReferenceExternalOptionsDto:
-      type: object
-      properties:
-        connectionName:
-          type: string
-        objectName:
-          type: string
-        connectionOptions:
-          type: object
-          additionalProperties:
-            type: string
-    FieldFormulaOptionsDto:
-      type: object
-      properties:
-        formula:
+        rollup:
           type: string
     FieldDto:
       type: object
@@ -880,18 +847,81 @@ components:
           $ref: '#/components/schemas/FieldUserOptionsDto'
         hasError:
           type: boolean
-    FieldReferenceLookupFieldDto:
+    FieldDateOptionsDto:
       type: object
       properties:
-        fieldId:
+        dateFormat:
           type: string
-        rollup:
+          enum:
+          - locale
+          - standard
+          - friendly
+          - european
+          - iso
+        timeFormat:
           type: string
-    FieldUserOptionsDto:
+          enum:
+          - h12
+          - h24
+    FieldOptionDto:
       type: object
       properties:
-        multipleUsersAllowed:
-          type: boolean
+        name:
+          type: string
+        displayName:
+          type: string
+        color:
+          type: string
+    FieldReferenceExternalOptionsDto:
+      type: object
+      properties:
+        connectionName:
+          type: string
+        objectName:
+          type: string
+        connectionOptions:
+          type: object
+          additionalProperties:
+            type: string
+    RecordTypeExternalOptionsDto:
+      type: object
+      properties:
+        connectionName:
+          type: string
+        objectName:
+          type: string
+        fields:
+          type: object
+          additionalProperties:
+            type: string
+    V2FieldError:
+      type: object
+      description: Field-level error detail used in validation errors and per-item batch failures.
+      properties:
+        field:
+          type: string
+          description: Name of the field or path that caused the error.
+          example: name
+        message:
+          type: string
+          description: Human-readable explanation of the error for this field.
+          example: Workspace name can not be blank
+        code:
+          type: string
+          description: Machine-readable code identifying the validation rule that failed.
+          example: NotBlank
+    CursorResponseRecordTypeDto:
+      type: object
+      description: Cursor-paginated list of record types
+      properties:
+        content:
+          type: array
+          description: List of record types in the current page
+          items:
+            $ref: '#/components/schemas/RecordTypeBaseDto'
+        cursor:
+          $ref: '#/components/schemas/CursorInfo'
+          description: Cursor metadata for fetching subsequent pages
     RecordTypeDto_2:
       type: object
       description: Complete record type data including linkability settings and external options
@@ -1002,22 +1032,6 @@ components:
           readOnly: true
       required:
       - displayName
-    V2FieldError:
-      type: object
-      description: Field-level error detail used in validation errors and per-item batch failures.
-      properties:
-        field:
-          type: string
-          description: Name of the field or path that caused the error.
-          example: name
-        message:
-          type: string
-          description: Human-readable explanation of the error for this field.
-          example: Workspace name can not be blank
-        code:
-          type: string
-          description: Machine-readable code identifying the validation rule that failed.
-          example: NotBlank
     AuthzSubjectDtoV2:
       type: object
       description: Authorization subject reference (user, group, team, etc.)
@@ -1047,38 +1061,6 @@ components:
           type: string
           description: ID of the authorization subject
           example: U123abc
-    RecordTypeExternalOptionsDto_2:
-      type: object
-      description: External options for external record types
-      properties:
-        connection:
-          type: string
-          description: External connection type
-          enum:
-          - WORKFRONT
-          - BRAND
-          - AEM
-          - INTAKE
-          example: WORKFRONT
-        object:
-          type: string
-          description: External object type
-          enum:
-          - PROJECT
-          - PORTFOLIO
-          - PROGRAM
-          - COMPANY
-          - GROUP
-          - TEMPLATE
-          - ASSET
-          - BRAND
-          - ORIGINAL_REQUEST
-          example: PROJECT
-        fields:
-          type: object
-          additionalProperties:
-            type: string
-          description: Field mappings between external and internal fields
     UserReferenceDto:
       type: object
       description: Reference to a user with identifier and display name
@@ -1093,24 +1075,87 @@ components:
           description: Display name of the user
           example: Jane Doe
           readOnly: true
-    RecordTypePermissionSettingsDto:
+    CursorInfo:
       type: object
-      description: Default record-level permission rule for a record type
+      description: Cursor pagination metadata
       properties:
-        mode:
+        nextCursor:
           type: string
-          description: OPEN (all workspace contributors can edit new records) or RESTRICTED (only the creator + selected subjects can edit; inheritance of edit access disabled)
+          description: Opaque cursor for fetching the next page. Absent when there are no more pages.
+          example: UnQ2OWIxNGY3ZTBlMzhmMzVmMjhjM2NjZWU=
+        hasMore:
+          type: boolean
+          description: Whether more items exist beyond this page
+    PermissionSubjectDto:
+      type: object
+      description: A subject (user/group/team/role/company) granted explicit edit access in a RESTRICTED rule
+      properties:
+        id:
+          type: string
+          description: Identifier of the subject
+          example: 642f1c0a0e38f35f28c3ccee
+          minLength: 1
+        type:
+          type: string
+          description: Type of the subject
           enum:
-          - OPEN
-          - RESTRICTED
-          example: RESTRICTED
-        subjects:
-          type: array
-          description: Subjects with explicit edit access in RESTRICTED mode. Retained across mode toggles so a prior selection is restored when switching back to RESTRICTED.
-          items:
-            $ref: '#/components/schemas/PermissionSubjectDto'
+          - USER
+          - GROUP
+          - TEAM
+          - ROLE
+          - COMPANY
+          example: USER
+        displayName:
+          type: string
+          description: Display name of the subject, resolved from Redrock at read time
+          example: Jane Doe
+          readOnly: true
       required:
-      - mode
+      - id
+      - type
+    V2ProblemDetail:
+      type: object
+      description: RFC 7807 Problem Details error response for V2 endpoints.
+      properties:
+        title:
+          type: string
+          description: Short, human-readable summary of the error type. Same for all occurrences of the same error.
+          example: Not found
+        status:
+          type: integer
+          format: int32
+          description: HTTP status code of the response.
+          example: 404
+        detail:
+          type: string
+          description: Human-readable, resource-specific explanation of this error occurrence. Always English.
+          example: Record type with ID 'Rt69b14f7e' was not found.
+        errorCode:
+          type: string
+          description: Machine-readable error code (enum name).
+          example: ENTITY_WITH_ATTRIBUTE_NOT_FOUND
+        messageArguments:
+          type: object
+          additionalProperties:
+            type: string
+          description: Named parameters used to compose the detail message. Values are always strings.
+          example:
+            recordTypeId: Rt69b14f7e
+        requestId:
+          type: string
+          description: Request correlation ID for tracing and support.
+          example: 5b1f7a8c-2c0e-4a8f-9c4f-2a3b1c0e4d5f
+        errors:
+          type: array
+          description: Field-level or per-item error details. Present for validation, business-rule, or batch failures.
+          items:
+            $ref: '#/components/schemas/V2FieldError'
+      required:
+      - detail
+      - errorCode
+      - requestId
+      - status
+      - title
     RecordTypeBaseDto:
       type: object
       description: Base record type data containing common record type properties
@@ -1183,99 +1228,56 @@ components:
           description: Default record-level permission rule for this record type. On read, the resolved rule for the current workspace context (defaulted to OPEN when never configured); omitted when the default-record-permissions feature is disabled. On PATCH/PUT, set this to configure the rule — for global record types it applies to the workspace given by the scopeWorkspaceId query param (defaulting to the primary workspace).
       required:
       - displayName
-    V2ProblemDetail:
+    RecordTypePermissionSettingsDto:
       type: object
-      description: RFC 7807 Problem Details error response for V2 endpoints.
+      description: Default record-level permission rule for a record type
       properties:
-        title:
+        mode:
           type: string
-          description: Short, human-readable summary of the error type. Same for all occurrences of the same error.
-          example: Not found
-        status:
-          type: integer
-          format: int32
-          description: HTTP status code of the response.
-          example: 404
-        detail:
+          description: OPEN (all workspace contributors can edit new records) or RESTRICTED (only the creator + selected subjects can edit; inheritance of edit access disabled)
+          enum:
+          - OPEN
+          - RESTRICTED
+          example: RESTRICTED
+        subjects:
+          type: array
+          description: Subjects with explicit edit access in RESTRICTED mode. Retained across mode toggles so a prior selection is restored when switching back to RESTRICTED.
+          items:
+            $ref: '#/components/schemas/PermissionSubjectDto'
+      required:
+      - mode
+    RecordTypeExternalOptionsDto_2:
+      type: object
+      description: External options for external record types
+      properties:
+        connection:
           type: string
-          description: Human-readable, resource-specific explanation of this error occurrence. Always English.
-          example: Record type with ID 'Rt69b14f7e' was not found.
-        errorCode:
+          description: External connection type
+          enum:
+          - WORKFRONT
+          - BRAND
+          - AEM
+          - INTAKE
+          example: WORKFRONT
+        object:
           type: string
-          description: Machine-readable error code (enum name).
-          example: ENTITY_WITH_ATTRIBUTE_NOT_FOUND
-        messageArguments:
+          description: External object type
+          enum:
+          - PROJECT
+          - PORTFOLIO
+          - PROGRAM
+          - COMPANY
+          - GROUP
+          - TEMPLATE
+          - ASSET
+          - BRAND
+          - ORIGINAL_REQUEST
+          example: PROJECT
+        fields:
           type: object
           additionalProperties:
             type: string
-          description: Named parameters used to compose the detail message. Values are always strings.
-          example:
-            recordTypeId: Rt69b14f7e
-        requestId:
-          type: string
-          description: Request correlation ID for tracing and support.
-          example: 5b1f7a8c-2c0e-4a8f-9c4f-2a3b1c0e4d5f
-        errors:
-          type: array
-          description: Field-level or per-item error details. Present for validation, business-rule, or batch failures.
-          items:
-            $ref: '#/components/schemas/V2FieldError'
-      required:
-      - detail
-      - errorCode
-      - requestId
-      - status
-      - title
-    CursorInfo:
-      type: object
-      description: Cursor pagination metadata
-      properties:
-        nextCursor:
-          type: string
-          description: Opaque cursor for fetching the next page. Absent when there are no more pages.
-          example: UnQ2OWIxNGY3ZTBlMzhmMzVmMjhjM2NjZWU=
-        hasMore:
-          type: boolean
-          description: Whether more items exist beyond this page
-    CursorResponseRecordTypeDto:
-      type: object
-      description: Cursor-paginated list of record types
-      properties:
-        content:
-          type: array
-          description: List of record types in the current page
-          items:
-            $ref: '#/components/schemas/RecordTypeBaseDto'
-        cursor:
-          $ref: '#/components/schemas/CursorInfo'
-          description: Cursor metadata for fetching subsequent pages
-    PermissionSubjectDto:
-      type: object
-      description: A subject (user/group/team/role/company) granted explicit edit access in a RESTRICTED rule
-      properties:
-        id:
-          type: string
-          description: Identifier of the subject
-          example: 642f1c0a0e38f35f28c3ccee
-          minLength: 1
-        type:
-          type: string
-          description: Type of the subject
-          enum:
-          - USER
-          - GROUP
-          - TEAM
-          - ROLE
-          - COMPANY
-          example: USER
-        displayName:
-          type: string
-          description: Display name of the subject, resolved from Redrock at read time
-          example: Jane Doe
-          readOnly: true
-      required:
-      - id
-      - type
+          description: Field mappings between external and internal fields
 x-refined-from:
 - workfront-planning-v1-openapi.json
 - workfront-planning-v2-openapi.json

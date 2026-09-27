@@ -375,25 +375,6 @@ paths:
                 $ref: '#/components/schemas/V2ProblemDetail'
 components:
   schemas:
-    InheritanceDto:
-      type: object
-      description: Workspace-member inheritance setting for a record type
-      properties:
-        inherited:
-          type: boolean
-          description: When true, workspace members inherit their workspace-level access on this record type. When false, workspace members are restricted to view-only.
-    DeleteAccessRequestsDto:
-      type: object
-      description: Request body for dismissing access requests
-      properties:
-        requestIds:
-          type: array
-          description: IDs of access requests to dismiss
-          items:
-            type: string
-          minItems: 1
-      required:
-      - requestIds
     MemberRevokeDto:
       type: object
       description: A subject to revoke permissions from
@@ -430,15 +411,44 @@ components:
           type: string
           description: Machine-readable code identifying the validation rule that failed.
           example: NotBlank
-    CreateAccessRequestDto:
+    DeleteAccessRequestsDto:
       type: object
-      description: Request body for creating an access request
+      description: Request body for dismissing access requests
       properties:
+        requestIds:
+          type: array
+          description: IDs of access requests to dismiss
+          items:
+            type: string
+          minItems: 1
+      required:
+      - requestIds
+    RequesterDto:
+      type: object
+      description: The user who submitted an access request
+      properties:
+        id:
+          type: string
+          description: User's external identifier
+        name:
+          type: string
+          description: User's display name
+        email:
+          type: string
+          description: User's email address
+    AccessRequestDto:
+      type: object
+      description: A pending access request for a resource
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the access request
         message:
           type: string
-          description: Optional message to include with the access request
-          maxLength: 2000
-          minLength: 0
+          description: Optional message from the requester
+        requester:
+          $ref: '#/components/schemas/RequesterDto'
+          description: User who submitted the request
     MemberGrantDto:
       type: object
       description: A subject and role to grant or update on a resource
@@ -467,47 +477,22 @@ components:
       - role
       - subjectId
       - subjectType
-    AccessRequestDto:
+    InheritanceDto:
       type: object
-      description: A pending access request for a resource
+      description: Workspace-member inheritance setting for a record type
       properties:
-        id:
-          type: string
-          description: Unique identifier of the access request
+        inherited:
+          type: boolean
+          description: When true, workspace members inherit their workspace-level access on this record type. When false, workspace members are restricted to view-only.
+    CreateAccessRequestDto:
+      type: object
+      description: Request body for creating an access request
+      properties:
         message:
           type: string
-          description: Optional message from the requester
-        requester:
-          $ref: '#/components/schemas/RequesterDto'
-          description: User who submitted the request
-    UpdateMembersRequestDto:
-      type: object
-      description: Bulk grant, update, and revoke operations for resource members
-      properties:
-        grant:
-          type: array
-          description: Members to grant new access to
-          items:
-            $ref: '#/components/schemas/MemberGrantDto'
-        update:
-          type: array
-          description: Members whose existing role should be changed
-          items:
-            $ref: '#/components/schemas/MemberGrantDto'
-        revoke:
-          type: array
-          description: Members to revoke all access from
-          items:
-            $ref: '#/components/schemas/MemberRevokeDto'
-        inheritViewOnly:
-          type: boolean
-          description: Set inheritance for a record-type (true=inherited, false=view-only). Only valid for record-types.
-        wildcard:
-          type: string
-          description: Set wildcard access mode for a record. Only valid for records.
-          enum:
-          - SELECTED_USERS_ONLY
-          - EVERYONE_IN_WORKSPACE
+          description: Optional message to include with the access request
+          maxLength: 2000
+          minLength: 0
     V2ProblemDetail:
       type: object
       description: RFC 7807 Problem Details error response for V2 endpoints.
@@ -551,6 +536,34 @@ components:
       - requestId
       - status
       - title
+    UpdateMembersRequestDto:
+      type: object
+      description: Bulk grant, update, and revoke operations for resource members
+      properties:
+        grant:
+          type: array
+          description: Members to grant new access to
+          items:
+            $ref: '#/components/schemas/MemberGrantDto'
+        update:
+          type: array
+          description: Members whose existing role should be changed
+          items:
+            $ref: '#/components/schemas/MemberGrantDto'
+        revoke:
+          type: array
+          description: Members to revoke all access from
+          items:
+            $ref: '#/components/schemas/MemberRevokeDto'
+        inheritViewOnly:
+          type: boolean
+          description: Set inheritance for a record-type (true=inherited, false=view-only). Only valid for record-types.
+        wildcard:
+          type: string
+          description: Set wildcard access mode for a record. Only valid for records.
+          enum:
+          - SELECTED_USERS_ONLY
+          - EVERYONE_IN_WORKSPACE
     MemberPermissionDto:
       type: object
       description: A subject (user, group, team, role, or company) with a role on a resource
@@ -596,16 +609,3 @@ components:
         canAdd:
           type: boolean
           description: Whether the user can add items to this resource
-    RequesterDto:
-      type: object
-      description: The user who submitted an access request
-      properties:
-        id:
-          type: string
-          description: User's external identifier
-        name:
-          type: string
-          description: User's display name
-        email:
-          type: string
-          description: User's email address
