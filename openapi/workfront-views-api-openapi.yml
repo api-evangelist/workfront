@@ -337,41 +337,171 @@ paths:
                 $ref: '#/components/schemas/V2ProblemDetail'
 components:
   schemas:
-    FilterOperator:
-      type: string
-      description: Logical operator for combining filter conditions
-      enum:
-      - AND
-      - OR
-    SortDto:
+    GroupColoring:
       type: object
-      description: Sort specification
+      properties:
+        selected:
+          type: string
+          enum:
+          - DEFAULT
+          - FIELD
+    Coloring:
+      type: object
+      properties:
+        record:
+          $ref: '#/components/schemas/RecordColoring'
+        group:
+          $ref: '#/components/schemas/GroupColoring'
+    FilterCondition:
+      type: string
+      description: Supported filter conditions for record search
+      enum:
+      - CONTAINS
+      - DOES_NOT_CONTAIN
+      - IS
+      - IS_NOT
+      - IS_EMPTY
+      - IS_NOT_EMPTY
+      - GREATER_THAN
+      - GREATER_THAN_OR_EQUAL
+      - LESS_THAN
+      - LESS_THAN_OR_EQUAL
+      - IS_AFTER
+      - IS_BEFORE
+      - IS_BETWEEN
+      - IS_NOT_BETWEEN
+      - IS_ANY_OF
+      - IS_NONE_OF
+      - HAS_ANY_OF
+      - HAS_ALL_OF
+      - HAS_NONE_OF
+      - IS_EXACTLY
+    GroupDto:
+      type: object
+      description: Grouping specification
       properties:
         fieldId:
           type: string
-          description: ID or alias of the field to sort by
+          description: ID or alias of the field to group by
           example: F693ab1c96f11ea3f4175e710
           minLength: 1
         direction:
           type: string
-          description: Sort direction (asc or desc). Defaults to asc if omitted.
+          description: Sort direction for the grouped values (asc or desc). Defaults to asc if omitted.
           enum:
           - asc
           - desc
           example: asc
       required:
       - fieldId
-    CursorInfo:
+    ViewMetadataDto:
       type: object
-      description: Cursor pagination metadata
+      description: View metadata containing view-type specific configuration
       properties:
-        nextCursor:
+        type:
           type: string
-          description: Opaque cursor for fetching the next page. Absent when there are no more pages.
-          example: UnQ2OWIxNGY3ZTBlMzhmMzVmMjhjM2NjZWU=
-        hasMore:
+          description: Type of the view metadata (should match view type)
+          example: TABLE
+        showThumbnail:
           type: boolean
-          description: Whether more items exist beyond this page
+          description: Whether to show thumbnail images in the view
+          example: true
+        showRecordColoring:
+          type: boolean
+          description: Whether to show record coloring in the view
+          example: false
+        columnMetadata:
+          type: array
+          description: Column metadata for table views (visibility and width)
+          items:
+            $ref: '#/components/schemas/ColumnMetadata'
+        newColumnMetadata:
+          type: array
+          description: New column metadata for table views (visible fields only)
+          items:
+            $ref: '#/components/schemas/ColumnMetadata'
+        rowOrder:
+          type: array
+          description: Custom row order for table views (deprecated)
+          items:
+            type: string
+        startDateKey:
+          type: string
+          description: Field ID of the start date field (required for timeline and calendar views)
+          example: F69b14f7e0e38f35f28c3ccee
+        endDateKey:
+          type: string
+          description: Field ID of the end date field (for timeline and calendar views)
+          example: F69b14f7e0e38f35f28c3ccef
+        timelineScale:
+          type: string
+          description: Timeline scale type for timeline views
+          enum:
+          - YEAR
+          - QUARTER
+          - MONTH
+          - WEEK
+        cardFieldIds:
+          type: array
+          description: Field IDs to display on timeline bars or calendar cards
+          items:
+            type: string
+        coloring:
+          $ref: '#/components/schemas/Coloring'
+          description: Coloring configuration for conditional formatting
+        rowHeight:
+          type: string
+          description: Row height setting for table and calendar views
+          enum:
+          - SHORT
+          - COMPACT
+          - MEDIUM
+          - TALL
+          - FIT_CONTENT
+        truncateRecordContent:
+          type: boolean
+          description: Whether to truncate record content in timeline views
+          example: false
+        timelineLayout:
+          type: string
+          description: 'Layout for timeline views: ''stacked'' or ''swimlane'''
+          enum:
+          - stacked
+          - swimlane
+          example: stacked
+        dynamicFieldMetadata:
+          $ref: '#/components/schemas/DynamicFieldMetadataDto'
+          description: Dynamic field metadata for global/dynamic record types
+    V2FieldError:
+      type: object
+      description: Field-level error detail used in validation errors and per-item batch failures.
+      properties:
+        field:
+          type: string
+          description: Name of the field or path that caused the error.
+          example: name
+        message:
+          type: string
+          description: Human-readable explanation of the error for this field.
+          example: Workspace name can not be blank
+        code:
+          type: string
+          description: Machine-readable code identifying the validation rule that failed.
+          example: NotBlank
+    UserReferenceDto:
+      type: object
+      description: Reference to a user with identifier and display name
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the user
+          example: 1C341E7B682505430A494138@0bd0200063c87f9749412b.e
+          readOnly: true
+        name:
+          type: string
+          description: Display name of the user
+          example: Jane Doe
+          readOnly: true
     ViewDto:
       type: object
       description: View data containing all view properties
@@ -459,6 +589,78 @@ components:
       required:
       - name
       - type
+    FilterNodeDto:
+      description: 'A node in the filter tree: either a leaf condition or a nested group'
+      oneOf:
+      - $ref: '#/components/schemas/FilterConditionDto'
+      - $ref: '#/components/schemas/FilterGroupDto'
+    ColumnMetadata:
+      type: object
+      properties:
+        width:
+          type: integer
+          format: int32
+        fieldId:
+          type: string
+        visibility:
+          type: boolean
+        aggregationFunction:
+          type: string
+          enum:
+          - SUM
+          - AVG
+          - MIN
+          - MAX
+    DynamicFieldMetadataDto:
+      type: object
+      description: Dynamic field metadata for global/dynamic record types
+      properties:
+        scopeWorkspaceId:
+          type: string
+          description: Workspace ID this view is scoped to
+          example: Ws69b14f7e0e38f35f28c3ccee
+        dynamicFieldIds:
+          type: array
+          description: Field IDs that are workspace-specific (dynamic) in this view
+          items:
+            type: string
+          uniqueItems: true
+    FilterOperator:
+      type: string
+      description: Logical operator for combining filter conditions
+      enum:
+      - AND
+      - OR
+    SortDto:
+      type: object
+      description: Sort specification
+      properties:
+        fieldId:
+          type: string
+          description: ID or alias of the field to sort by
+          example: F693ab1c96f11ea3f4175e710
+          minLength: 1
+        direction:
+          type: string
+          description: Sort direction (asc or desc). Defaults to asc if omitted.
+          enum:
+          - asc
+          - desc
+          example: asc
+      required:
+      - fieldId
+    CursorResponseViewDto:
+      type: object
+      description: Cursor-paginated list of views
+      properties:
+        content:
+          type: array
+          description: List of views in the current page
+          items:
+            $ref: '#/components/schemas/ViewDto'
+        cursor:
+          $ref: '#/components/schemas/CursorInfo'
+          description: Cursor metadata for fetching subsequent pages
     V2ProblemDetail:
       type: object
       description: RFC 7807 Problem Details error response for V2 endpoints.
@@ -502,186 +704,6 @@ components:
       - requestId
       - status
       - title
-    RecordColoring:
-      type: object
-      properties:
-        selected:
-          type: string
-          enum:
-          - RECORD_TYPE
-          - RECORD
-          - FIELD
-          - GROUP
-          - FILTER
-          - NONE
-        fieldId:
-          type: string
-        highlightFullRow:
-          type: boolean
-        filterColoringRules:
-          type: array
-          items:
-            $ref: '#/components/schemas/FilterColoringRule'
-    FilterNodeDto:
-      description: 'A node in the filter tree: either a leaf condition or a nested group'
-      oneOf:
-      - $ref: '#/components/schemas/FilterConditionDto'
-      - $ref: '#/components/schemas/FilterGroupDto'
-    DynamicFieldMetadataDto:
-      type: object
-      description: Dynamic field metadata for global/dynamic record types
-      properties:
-        scopeWorkspaceId:
-          type: string
-          description: Workspace ID this view is scoped to
-          example: Ws69b14f7e0e38f35f28c3ccee
-        dynamicFieldIds:
-          type: array
-          description: Field IDs that are workspace-specific (dynamic) in this view
-          items:
-            type: string
-          uniqueItems: true
-    ViewMetadataDto:
-      type: object
-      description: View metadata containing view-type specific configuration
-      properties:
-        type:
-          type: string
-          description: Type of the view metadata (should match view type)
-          example: TABLE
-        showThumbnail:
-          type: boolean
-          description: Whether to show thumbnail images in the view
-          example: true
-        showRecordColoring:
-          type: boolean
-          description: Whether to show record coloring in the view
-          example: false
-        columnMetadata:
-          type: array
-          description: Column metadata for table views (visibility and width)
-          items:
-            $ref: '#/components/schemas/ColumnMetadata'
-        newColumnMetadata:
-          type: array
-          description: New column metadata for table views (visible fields only)
-          items:
-            $ref: '#/components/schemas/ColumnMetadata'
-        rowOrder:
-          type: array
-          description: Custom row order for table views (deprecated)
-          items:
-            type: string
-        startDateKey:
-          type: string
-          description: Field ID of the start date field (required for timeline and calendar views)
-          example: F69b14f7e0e38f35f28c3ccee
-        endDateKey:
-          type: string
-          description: Field ID of the end date field (for timeline and calendar views)
-          example: F69b14f7e0e38f35f28c3ccef
-        timelineScale:
-          type: string
-          description: Timeline scale type for timeline views
-          enum:
-          - YEAR
-          - QUARTER
-          - MONTH
-          - WEEK
-        cardFieldIds:
-          type: array
-          description: Field IDs to display on timeline bars or calendar cards
-          items:
-            type: string
-        coloring:
-          $ref: '#/components/schemas/Coloring'
-          description: Coloring configuration for conditional formatting
-        rowHeight:
-          type: string
-          description: Row height setting for table and calendar views
-          enum:
-          - SHORT
-          - COMPACT
-          - MEDIUM
-          - TALL
-          - FIT_CONTENT
-        truncateRecordContent:
-          type: boolean
-          description: Whether to truncate record content in timeline views
-          example: false
-        timelineLayout:
-          type: string
-          description: 'Layout for timeline views: ''stacked'' or ''swimlane'''
-          enum:
-          - stacked
-          - swimlane
-          example: stacked
-        dynamicFieldMetadata:
-          $ref: '#/components/schemas/DynamicFieldMetadataDto'
-          description: Dynamic field metadata for global/dynamic record types
-    GroupColoring:
-      type: object
-      properties:
-        selected:
-          type: string
-          enum:
-          - DEFAULT
-          - FIELD
-    V2FieldError:
-      type: object
-      description: Field-level error detail used in validation errors and per-item batch failures.
-      properties:
-        field:
-          type: string
-          description: Name of the field or path that caused the error.
-          example: name
-        message:
-          type: string
-          description: Human-readable explanation of the error for this field.
-          example: Workspace name can not be blank
-        code:
-          type: string
-          description: Machine-readable code identifying the validation rule that failed.
-          example: NotBlank
-    FilterColoringRule:
-      type: object
-      properties:
-        id:
-          type: string
-        color:
-          type: string
-        appliedFilters:
-          type: array
-          items: {}
-    CursorResponseViewDto:
-      type: object
-      description: Cursor-paginated list of views
-      properties:
-        content:
-          type: array
-          description: List of views in the current page
-          items:
-            $ref: '#/components/schemas/ViewDto'
-        cursor:
-          $ref: '#/components/schemas/CursorInfo'
-          description: Cursor metadata for fetching subsequent pages
-    ColumnMetadata:
-      type: object
-      properties:
-        width:
-          type: integer
-          format: int32
-        fieldId:
-          type: string
-        visibility:
-          type: boolean
-        aggregationFunction:
-          type: string
-          enum:
-          - SUM
-          - AVG
-          - MIN
-          - MAX
     FilterGroupDto:
       allOf:
       - $ref: '#/components/schemas/FilterNodeDto'
@@ -700,69 +722,6 @@ components:
       required:
       - conditions
       - operator
-    UserReferenceDto:
-      type: object
-      description: Reference to a user with identifier and display name
-      properties:
-        id:
-          type: string
-          description: Unique identifier of the user
-          example: 1C341E7B682505430A494138@0bd0200063c87f9749412b.e
-          readOnly: true
-        name:
-          type: string
-          description: Display name of the user
-          example: Jane Doe
-          readOnly: true
-    GroupDto:
-      type: object
-      description: Grouping specification
-      properties:
-        fieldId:
-          type: string
-          description: ID or alias of the field to group by
-          example: F693ab1c96f11ea3f4175e710
-          minLength: 1
-        direction:
-          type: string
-          description: Sort direction for the grouped values (asc or desc). Defaults to asc if omitted.
-          enum:
-          - asc
-          - desc
-          example: asc
-      required:
-      - fieldId
-    Coloring:
-      type: object
-      properties:
-        record:
-          $ref: '#/components/schemas/RecordColoring'
-        group:
-          $ref: '#/components/schemas/GroupColoring'
-    FilterCondition:
-      type: string
-      description: Supported filter conditions for record search
-      enum:
-      - CONTAINS
-      - DOES_NOT_CONTAIN
-      - IS
-      - IS_NOT
-      - IS_EMPTY
-      - IS_NOT_EMPTY
-      - GREATER_THAN
-      - GREATER_THAN_OR_EQUAL
-      - LESS_THAN
-      - LESS_THAN_OR_EQUAL
-      - IS_AFTER
-      - IS_BEFORE
-      - IS_BETWEEN
-      - IS_NOT_BETWEEN
-      - IS_ANY_OF
-      - IS_NONE_OF
-      - HAS_ANY_OF
-      - HAS_ALL_OF
-      - HAS_NONE_OF
-      - IS_EXACTLY
     FilterConditionDto:
       allOf:
       - $ref: '#/components/schemas/FilterNodeDto'
@@ -786,3 +745,44 @@ components:
       required:
       - condition
       - fieldId
+    CursorInfo:
+      type: object
+      description: Cursor pagination metadata
+      properties:
+        nextCursor:
+          type: string
+          description: Opaque cursor for fetching the next page. Absent when there are no more pages.
+          example: UnQ2OWIxNGY3ZTBlMzhmMzVmMjhjM2NjZWU=
+        hasMore:
+          type: boolean
+          description: Whether more items exist beyond this page
+    FilterColoringRule:
+      type: object
+      properties:
+        id:
+          type: string
+        color:
+          type: string
+        appliedFilters:
+          type: array
+          items: {}
+    RecordColoring:
+      type: object
+      properties:
+        selected:
+          type: string
+          enum:
+          - RECORD_TYPE
+          - RECORD
+          - FIELD
+          - GROUP
+          - FILTER
+          - NONE
+        fieldId:
+          type: string
+        highlightFullRow:
+          type: boolean
+        filterColoringRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/FilterColoringRule'

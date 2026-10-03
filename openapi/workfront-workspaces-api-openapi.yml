@@ -387,104 +387,6 @@ paths:
       description: Workfront Planning Service Url
 components:
   schemas:
-    RecordTypeSectionDto:
-      type: object
-      properties:
-        name:
-          type: string
-        displayName:
-          type: string
-        recordTypeIds:
-          type: array
-          items:
-            type: string
-    FieldFormulaOptionsDto:
-      type: object
-      properties:
-        formula:
-          type: string
-    FieldUserOptionsDto:
-      type: object
-      properties:
-        multipleUsersAllowed:
-          type: boolean
-    WorkspaceListDto:
-      type: object
-      properties:
-        workspaces:
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkspaceDto'
-        permission:
-          type: string
-          enum:
-          - manage
-          - edit
-          - view
-          - none
-    FieldReferenceOptionsDto:
-      type: object
-      properties:
-        multiple:
-          type: boolean
-        recordTypeId:
-          type: string
-        isExternal:
-          type: boolean
-        externalOptions:
-          $ref: '#/components/schemas/FieldReferenceExternalOptionsDto'
-        filters:
-          type: object
-          additionalProperties:
-            type: object
-        lookupFields:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldReferenceLookupFieldDto'
-    RecordTypeDto:
-      type: object
-      properties:
-        id:
-          type: string
-        createdBy:
-          type: string
-        createdAt:
-          type: string
-        updatedBy:
-          type: string
-        updatedAt:
-          type: string
-        customerId:
-          type: string
-        imsOrgId:
-          type: string
-        alias:
-          type: string
-        displayName:
-          type: string
-        permission:
-          type: string
-          enum:
-          - manage
-          - edit
-          - view
-          - none
-        primaryFieldId:
-          type: string
-        icon:
-          type: string
-        description:
-          type: string
-        color:
-          type: string
-        fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldDto'
-        isExternal:
-          type: boolean
-        externalOptions:
-          $ref: '#/components/schemas/RecordTypeExternalOptionsDto'
     FieldNumberOptionsDto:
       type: object
       properties:
@@ -639,22 +541,99 @@ components:
           - ZAR
           - ZMK
           - ZWD
-    FieldLookupOptionsDto:
+    FieldFormulaOptionsDto:
       type: object
       properties:
-        referenceFieldId:
+        formula:
           type: string
-        rollup:
-          type: string
-        sourceField:
-          $ref: '#/components/schemas/FieldDto'
-    FieldReferenceLookupFieldDto:
+    WorkspaceDto:
       type: object
       properties:
-        fieldId:
+        id:
           type: string
-        rollup:
+        createdBy:
           type: string
+        createdAt:
+          type: string
+        updatedBy:
+          type: string
+        updatedAt:
+          type: string
+        customerId:
+          type: string
+        imsOrgId:
+          type: string
+        alias:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        color:
+          type: string
+        permission:
+          type: string
+          enum:
+          - manage
+          - edit
+          - view
+          - none
+        icon:
+          type: string
+        recordTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecordTypeDto'
+        recordTypeSections:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecordTypeSectionDto'
+    WorkspaceListDto:
+      type: object
+      properties:
+        workspaces:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkspaceDto'
+        permission:
+          type: string
+          enum:
+          - manage
+          - edit
+          - view
+          - none
+    RecordTypeExternalOptionsDto:
+      type: object
+      properties:
+        connectionName:
+          type: string
+        objectName:
+          type: string
+        fields:
+          type: object
+          additionalProperties:
+            type: string
+    FieldDateOptionsDto:
+      type: object
+      properties:
+        dateFormat:
+          type: string
+          enum:
+          - locale
+          - standard
+          - friendly
+          - european
+          - iso
+        timeFormat:
+          type: string
+          enum:
+          - h12
+          - h24
+    FieldUserOptionsDto:
+      type: object
+      properties:
+        multipleUsersAllowed:
+          type: boolean
     FieldDto:
       type: object
       properties:
@@ -700,22 +679,47 @@ components:
           $ref: '#/components/schemas/FieldUserOptionsDto'
         hasError:
           type: boolean
-    FieldDateOptionsDto:
+    FieldReferenceExternalOptionsDto:
       type: object
       properties:
-        dateFormat:
+        connectionName:
           type: string
-          enum:
-          - locale
-          - standard
-          - friendly
-          - european
-          - iso
-        timeFormat:
+        objectName:
           type: string
-          enum:
-          - h12
-          - h24
+        connectionOptions:
+          type: object
+          additionalProperties:
+            type: string
+    RecordTypeSectionDto:
+      type: object
+      properties:
+        name:
+          type: string
+        displayName:
+          type: string
+        recordTypeIds:
+          type: array
+          items:
+            type: string
+    FieldReferenceOptionsDto:
+      type: object
+      properties:
+        multiple:
+          type: boolean
+        recordTypeId:
+          type: string
+        isExternal:
+          type: boolean
+        externalOptions:
+          $ref: '#/components/schemas/FieldReferenceExternalOptionsDto'
+        filters:
+          type: object
+          additionalProperties:
+            type: object
+        lookupFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldReferenceLookupFieldDto'
     FieldOptionDto:
       type: object
       properties:
@@ -725,7 +729,23 @@ components:
           type: string
         color:
           type: string
-    WorkspaceDto:
+    FieldLookupOptionsDto:
+      type: object
+      properties:
+        referenceFieldId:
+          type: string
+        rollup:
+          type: string
+        sourceField:
+          $ref: '#/components/schemas/FieldDto'
+    FieldReferenceLookupFieldDto:
+      type: object
+      properties:
+        fieldId:
+          type: string
+        rollup:
+          type: string
+    RecordTypeDto:
       type: object
       properties:
         id:
@@ -744,11 +764,7 @@ components:
           type: string
         alias:
           type: string
-        name:
-          type: string
-        description:
-          type: string
-        color:
+        displayName:
           type: string
         permission:
           type: string
@@ -757,71 +773,77 @@ components:
           - edit
           - view
           - none
+        primaryFieldId:
+          type: string
         icon:
           type: string
-        recordTypes:
-          type: array
-          items:
-            $ref: '#/components/schemas/RecordTypeDto'
-        recordTypeSections:
-          type: array
-          items:
-            $ref: '#/components/schemas/RecordTypeSectionDto'
-    FieldReferenceExternalOptionsDto:
-      type: object
-      properties:
-        connectionName:
+        description:
           type: string
-        objectName:
-          type: string
-        connectionOptions:
-          type: object
-          additionalProperties:
-            type: string
-    RecordTypeExternalOptionsDto:
-      type: object
-      properties:
-        connectionName:
-          type: string
-        objectName:
+        color:
           type: string
         fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldDto'
+        isExternal:
+          type: boolean
+        externalOptions:
+          $ref: '#/components/schemas/RecordTypeExternalOptionsDto'
+    V2ProblemDetail:
+      type: object
+      description: RFC 7807 Problem Details error response for V2 endpoints.
+      properties:
+        title:
+          type: string
+          description: Short, human-readable summary of the error type. Same for all occurrences of the same error.
+          example: Not found
+        status:
+          type: integer
+          format: int32
+          description: HTTP status code of the response.
+          example: 404
+        detail:
+          type: string
+          description: Human-readable, resource-specific explanation of this error occurrence. Always English.
+          example: Record type with ID 'Rt69b14f7e' was not found.
+        errorCode:
+          type: string
+          description: Machine-readable error code (enum name).
+          example: ENTITY_WITH_ATTRIBUTE_NOT_FOUND
+        messageArguments:
           type: object
           additionalProperties:
             type: string
-    RecordTypeSectionDto_2:
-      type: object
-      description: Section for organizing and grouping record types within a workspace. Sections are ordered by their position in the array.
-      properties:
-        displayName:
+          description: Named parameters used to compose the detail message. Values are always strings.
+          example:
+            recordTypeId: Rt69b14f7e
+        requestId:
           type: string
-          description: Display name of the record type section
-          example: Marketing
-          maxLength: 256
-          minLength: 0
-        recordTypeIds:
+          description: Request correlation ID for tracing and support.
+          example: 5b1f7a8c-2c0e-4a8f-9c4f-2a3b1c0e4d5f
+        errors:
           type: array
-          description: List of record type IDs included in this section
+          description: Field-level or per-item error details. Present for validation, business-rule, or batch failures.
           items:
-            type: string
+            $ref: '#/components/schemas/V2FieldError'
       required:
-      - displayName
-    V2FieldError:
+      - detail
+      - errorCode
+      - requestId
+      - status
+      - title
+    CursorResponseWorkspaceDto:
       type: object
-      description: Field-level error detail used in validation errors and per-item batch failures.
+      description: Cursor-paginated list of workspaces
       properties:
-        field:
-          type: string
-          description: Name of the field or path that caused the error.
-          example: name
-        message:
-          type: string
-          description: Human-readable explanation of the error for this field.
-          example: Workspace name can not be blank
-        code:
-          type: string
-          description: Machine-readable code identifying the validation rule that failed.
-          example: NotBlank
+        content:
+          type: array
+          description: List of workspaces in the current page
+          items:
+            $ref: '#/components/schemas/WorkspaceBaseDto'
+        cursor:
+          $ref: '#/components/schemas/CursorInfo'
+          description: Cursor metadata for fetching subsequent pages
     WorkspaceBaseDto:
       type: object
       description: Base class for Workspace DTOs containing common workspace properties
@@ -886,6 +908,50 @@ components:
           description: List of record type sections for organizing record types
           items:
             $ref: '#/components/schemas/RecordTypeSectionDto_2'
+    RecordTypeSectionDto_2:
+      type: object
+      description: Section for organizing and grouping record types within a workspace. Sections are ordered by their position in the array.
+      properties:
+        displayName:
+          type: string
+          description: Display name of the record type section
+          example: Marketing
+          maxLength: 256
+          minLength: 0
+        recordTypeIds:
+          type: array
+          description: List of record type IDs included in this section
+          items:
+            type: string
+      required:
+      - displayName
+    CursorInfo:
+      type: object
+      description: Cursor pagination metadata
+      properties:
+        nextCursor:
+          type: string
+          description: Opaque cursor for fetching the next page. Absent when there are no more pages.
+          example: UnQ2OWIxNGY3ZTBlMzhmMzVmMjhjM2NjZWU=
+        hasMore:
+          type: boolean
+          description: Whether more items exist beyond this page
+    V2FieldError:
+      type: object
+      description: Field-level error detail used in validation errors and per-item batch failures.
+      properties:
+        field:
+          type: string
+          description: Name of the field or path that caused the error.
+          example: name
+        message:
+          type: string
+          description: Human-readable explanation of the error for this field.
+          example: Workspace name can not be blank
+        code:
+          type: string
+          description: Machine-readable code identifying the validation rule that failed.
+          example: NotBlank
     UserReferenceDto:
       type: object
       description: Reference to a user with identifier and display name
@@ -900,72 +966,6 @@ components:
           description: Display name of the user
           example: Jane Doe
           readOnly: true
-    CursorInfo:
-      type: object
-      description: Cursor pagination metadata
-      properties:
-        nextCursor:
-          type: string
-          description: Opaque cursor for fetching the next page. Absent when there are no more pages.
-          example: UnQ2OWIxNGY3ZTBlMzhmMzVmMjhjM2NjZWU=
-        hasMore:
-          type: boolean
-          description: Whether more items exist beyond this page
-    V2ProblemDetail:
-      type: object
-      description: RFC 7807 Problem Details error response for V2 endpoints.
-      properties:
-        title:
-          type: string
-          description: Short, human-readable summary of the error type. Same for all occurrences of the same error.
-          example: Not found
-        status:
-          type: integer
-          format: int32
-          description: HTTP status code of the response.
-          example: 404
-        detail:
-          type: string
-          description: Human-readable, resource-specific explanation of this error occurrence. Always English.
-          example: Record type with ID 'Rt69b14f7e' was not found.
-        errorCode:
-          type: string
-          description: Machine-readable error code (enum name).
-          example: ENTITY_WITH_ATTRIBUTE_NOT_FOUND
-        messageArguments:
-          type: object
-          additionalProperties:
-            type: string
-          description: Named parameters used to compose the detail message. Values are always strings.
-          example:
-            recordTypeId: Rt69b14f7e
-        requestId:
-          type: string
-          description: Request correlation ID for tracing and support.
-          example: 5b1f7a8c-2c0e-4a8f-9c4f-2a3b1c0e4d5f
-        errors:
-          type: array
-          description: Field-level or per-item error details. Present for validation, business-rule, or batch failures.
-          items:
-            $ref: '#/components/schemas/V2FieldError'
-      required:
-      - detail
-      - errorCode
-      - requestId
-      - status
-      - title
-    CursorResponseWorkspaceDto:
-      type: object
-      description: Cursor-paginated list of workspaces
-      properties:
-        content:
-          type: array
-          description: List of workspaces in the current page
-          items:
-            $ref: '#/components/schemas/WorkspaceBaseDto'
-        cursor:
-          $ref: '#/components/schemas/CursorInfo'
-          description: Cursor metadata for fetching subsequent pages
 x-refined-from:
 - workfront-planning-v1-openapi.json
 - workfront-planning-v2-openapi.json

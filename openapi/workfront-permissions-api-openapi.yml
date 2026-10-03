@@ -375,124 +375,6 @@ paths:
                 $ref: '#/components/schemas/V2ProblemDetail'
 components:
   schemas:
-    MemberRevokeDto:
-      type: object
-      description: A subject to revoke permissions from
-      properties:
-        subjectId:
-          type: string
-          description: ID of the subject to revoke access from
-          minLength: 1
-        subjectType:
-          type: string
-          description: Type of the subject
-          enum:
-          - user
-          - group
-          - team
-          - role
-          - company
-      required:
-      - subjectId
-      - subjectType
-    V2FieldError:
-      type: object
-      description: Field-level error detail used in validation errors and per-item batch failures.
-      properties:
-        field:
-          type: string
-          description: Name of the field or path that caused the error.
-          example: name
-        message:
-          type: string
-          description: Human-readable explanation of the error for this field.
-          example: Workspace name can not be blank
-        code:
-          type: string
-          description: Machine-readable code identifying the validation rule that failed.
-          example: NotBlank
-    DeleteAccessRequestsDto:
-      type: object
-      description: Request body for dismissing access requests
-      properties:
-        requestIds:
-          type: array
-          description: IDs of access requests to dismiss
-          items:
-            type: string
-          minItems: 1
-      required:
-      - requestIds
-    RequesterDto:
-      type: object
-      description: The user who submitted an access request
-      properties:
-        id:
-          type: string
-          description: User's external identifier
-        name:
-          type: string
-          description: User's display name
-        email:
-          type: string
-          description: User's email address
-    AccessRequestDto:
-      type: object
-      description: A pending access request for a resource
-      properties:
-        id:
-          type: string
-          description: Unique identifier of the access request
-        message:
-          type: string
-          description: Optional message from the requester
-        requester:
-          $ref: '#/components/schemas/RequesterDto'
-          description: User who submitted the request
-    MemberGrantDto:
-      type: object
-      description: A subject and role to grant or update on a resource
-      properties:
-        subjectId:
-          type: string
-          description: ID of the user, group, team, role, or company
-          minLength: 1
-        subjectType:
-          type: string
-          description: Type of the subject
-          enum:
-          - user
-          - group
-          - team
-          - role
-          - company
-        role:
-          type: string
-          description: Role to assign to the subject
-          enum:
-          - viewer
-          - editor
-          - manager
-      required:
-      - role
-      - subjectId
-      - subjectType
-    InheritanceDto:
-      type: object
-      description: Workspace-member inheritance setting for a record type
-      properties:
-        inherited:
-          type: boolean
-          description: When true, workspace members inherit their workspace-level access on this record type. When false, workspace members are restricted to view-only.
-    CreateAccessRequestDto:
-      type: object
-      description: Request body for creating an access request
-      properties:
-        message:
-          type: string
-          description: Optional message to include with the access request
-          maxLength: 2000
-          minLength: 0
     V2ProblemDetail:
       type: object
       description: RFC 7807 Problem Details error response for V2 endpoints.
@@ -536,6 +418,46 @@ components:
       - requestId
       - status
       - title
+    MemberGrantDto:
+      type: object
+      description: A subject and role to grant or update on a resource
+      properties:
+        subjectId:
+          type: string
+          description: ID of the user, group, team, role, or company
+          minLength: 1
+        subjectType:
+          type: string
+          description: Type of the subject
+          enum:
+          - user
+          - group
+          - team
+          - role
+          - company
+        role:
+          type: string
+          description: Role to assign to the subject
+          enum:
+          - viewer
+          - editor
+          - manager
+      required:
+      - role
+      - subjectId
+      - subjectType
+    DeleteAccessRequestsDto:
+      type: object
+      description: Request body for dismissing access requests
+      properties:
+        requestIds:
+          type: array
+          description: IDs of access requests to dismiss
+          items:
+            type: string
+          minItems: 1
+      required:
+      - requestIds
     UpdateMembersRequestDto:
       type: object
       description: Bulk grant, update, and revoke operations for resource members
@@ -564,6 +486,39 @@ components:
           enum:
           - SELECTED_USERS_ONLY
           - EVERYONE_IN_WORKSPACE
+    AccessRequestDto:
+      type: object
+      description: A pending access request for a resource
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the access request
+        message:
+          type: string
+          description: Optional message from the requester
+        requester:
+          $ref: '#/components/schemas/RequesterDto'
+          description: User who submitted the request
+    RequesterDto:
+      type: object
+      description: The user who submitted an access request
+      properties:
+        id:
+          type: string
+          description: User's external identifier
+        name:
+          type: string
+          description: User's display name
+        email:
+          type: string
+          description: User's email address
+    InheritanceDto:
+      type: object
+      description: Workspace-member inheritance setting for a record type
+      properties:
+        inherited:
+          type: boolean
+          description: When true, workspace members inherit their workspace-level access on this record type. When false, workspace members are restricted to view-only.
     MemberPermissionDto:
       type: object
       description: A subject (user, group, team, role, or company) with a role on a resource
@@ -609,3 +564,48 @@ components:
         canAdd:
           type: boolean
           description: Whether the user can add items to this resource
+    MemberRevokeDto:
+      type: object
+      description: A subject to revoke permissions from
+      properties:
+        subjectId:
+          type: string
+          description: ID of the subject to revoke access from
+          minLength: 1
+        subjectType:
+          type: string
+          description: Type of the subject
+          enum:
+          - user
+          - group
+          - team
+          - role
+          - company
+      required:
+      - subjectId
+      - subjectType
+    CreateAccessRequestDto:
+      type: object
+      description: Request body for creating an access request
+      properties:
+        message:
+          type: string
+          description: Optional message to include with the access request
+          maxLength: 2000
+          minLength: 0
+    V2FieldError:
+      type: object
+      description: Field-level error detail used in validation errors and per-item batch failures.
+      properties:
+        field:
+          type: string
+          description: Name of the field or path that caused the error.
+          example: name
+        message:
+          type: string
+          description: Human-readable explanation of the error for this field.
+          example: Workspace name can not be blank
+        code:
+          type: string
+          description: Machine-readable code identifying the validation rule that failed.
+          example: NotBlank

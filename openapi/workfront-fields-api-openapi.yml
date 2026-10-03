@@ -337,122 +337,6 @@ paths:
                 $ref: '#/components/schemas/V2ProblemDetail'
 components:
   schemas:
-    FieldUserOptionsDto:
-      type: object
-      description: User field options
-      properties:
-        multipleUsersAllowed:
-          type: boolean
-          description: Whether multiple users can be selected
-    FieldDateOptions:
-      type: object
-      properties:
-        dateFormat:
-          type: string
-          enum:
-          - locale
-          - standard
-          - friendly
-          - european
-          - iso
-          - short
-          - medium
-          - long
-        timeFormat:
-          type: string
-          enum:
-          - h12
-          - h24
-        useSameTimezoneForAllCollaborators:
-          type: boolean
-        timezoneId:
-          type: string
-    FieldAttachmentOptionsDto:
-      type: object
-      description: Attachment field options
-      properties:
-        showThumbnail:
-          type: boolean
-          description: Whether to display attachment thumbnails
-        showTitle:
-          type: boolean
-          description: Whether to display attachment titles
-    CursorInfo:
-      type: object
-      description: Cursor pagination metadata
-      properties:
-        nextCursor:
-          type: string
-          description: Opaque cursor for fetching the next page. Absent when there are no more pages.
-          example: UnQ2OWIxNGY3ZTBlMzhmMzVmMjhjM2NjZWU=
-        hasMore:
-          type: boolean
-          description: Whether more items exist beyond this page
-    FieldDateOptionsDto:
-      type: object
-      description: Date field options
-      properties:
-        dateFormat:
-          type: string
-          description: Date format
-          enum:
-          - locale
-          - standard
-          - friendly
-          - european
-          - iso
-          - short
-          - medium
-          - long
-        timeFormat:
-          type: string
-          description: Time format
-          enum:
-          - h12
-          - h24
-    V2ProblemDetail:
-      type: object
-      description: RFC 7807 Problem Details error response for V2 endpoints.
-      properties:
-        title:
-          type: string
-          description: Short, human-readable summary of the error type. Same for all occurrences of the same error.
-          example: Not found
-        status:
-          type: integer
-          format: int32
-          description: HTTP status code of the response.
-          example: 404
-        detail:
-          type: string
-          description: Human-readable, resource-specific explanation of this error occurrence. Always English.
-          example: Record type with ID 'Rt69b14f7e' was not found.
-        errorCode:
-          type: string
-          description: Machine-readable error code (enum name).
-          example: ENTITY_WITH_ATTRIBUTE_NOT_FOUND
-        messageArguments:
-          type: object
-          additionalProperties:
-            type: string
-          description: Named parameters used to compose the detail message. Values are always strings.
-          example:
-            recordTypeId: Rt69b14f7e
-        requestId:
-          type: string
-          description: Request correlation ID for tracing and support.
-          example: 5b1f7a8c-2c0e-4a8f-9c4f-2a3b1c0e4d5f
-        errors:
-          type: array
-          description: Field-level or per-item error details. Present for validation, business-rule, or batch failures.
-          items:
-            $ref: '#/components/schemas/V2FieldError'
-      required:
-      - detail
-      - errorCode
-      - requestId
-      - status
-      - title
     FieldFormulaOptionsDto:
       type: object
       description: Formula field options
@@ -477,54 +361,13 @@ components:
         dateOptions:
           $ref: '#/components/schemas/FieldDateOptions'
           description: Date options for date-type formulas
-    FieldReferenceOptionsDto:
+    FieldUserOptionsDto:
       type: object
-      description: Reference field options
+      description: User field options
       properties:
-        multiple:
+        multipleUsersAllowed:
           type: boolean
-          description: Whether multiple records can be selected
-        showThumbnail:
-          type: boolean
-          description: Whether to show thumbnail
-        showTitle:
-          type: boolean
-          description: Whether to show title
-        showColor:
-          type: boolean
-          description: Whether to show color
-        recordTypeId:
-          type: string
-          description: Referenced record type ID
-        isExternal:
-          type: boolean
-          description: Whether the reference is external
-        createBackReference:
-          type: boolean
-          description: Whether to create a back reference
-        backField:
-          $ref: '#/components/schemas/FieldDto'
-          description: Back reference field
-        externalOptions:
-          $ref: '#/components/schemas/FieldReferenceExternalOptionsDto'
-          description: External options for external references
-        filters:
-          type: object
-          additionalProperties: {}
-          description: Filters for the reference field
-        lookupFields:
-          type: array
-          description: Lookup fields for the reference
-          items:
-            $ref: '#/components/schemas/FieldReferenceLookupFieldDto'
-        scopeWorkspaceIds:
-          type: array
-          description: Scope workspace IDs for global record types
-          items:
-            type: string
-        globalRecordTypeWorkspaceFieldId:
-          type: string
-          description: Global record type workspace field ID
+          description: Whether multiple users can be selected
     FieldReferenceLookupFieldDto:
       type: object
       description: Lookup field configuration for reference fields
@@ -535,6 +378,133 @@ components:
         rollup:
           type: string
           description: 'Optional aggregation function: sum, avg, min, max, or dist'
+    V2FieldError:
+      type: object
+      description: Field-level error detail used in validation errors and per-item batch failures.
+      properties:
+        field:
+          type: string
+          description: Name of the field or path that caused the error.
+          example: name
+        message:
+          type: string
+          description: Human-readable explanation of the error for this field.
+          example: Workspace name can not be blank
+        code:
+          type: string
+          description: Machine-readable code identifying the validation rule that failed.
+          example: NotBlank
+    UserReferenceDto:
+      type: object
+      description: Reference to a user with identifier and display name
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the user
+          example: 1C341E7B682505430A494138@0bd0200063c87f9749412b.e
+          readOnly: true
+        name:
+          type: string
+          description: Display name of the user
+          example: Jane Doe
+          readOnly: true
+    FieldMetadataDto:
+      type: object
+      description: Field metadata
+      properties:
+        originType:
+          type: string
+          description: Origin type of the field
+        extendedRollup:
+          type: string
+          description: Extended rollup information
+    CursorResponseFieldDto:
+      type: object
+      description: Cursor-paginated list of fields
+      properties:
+        content:
+          type: array
+          description: List of fields in the current page
+          items:
+            $ref: '#/components/schemas/FieldDto'
+        cursor:
+          $ref: '#/components/schemas/CursorInfo'
+          description: Cursor metadata for fetching subsequent pages
+    FieldDateOptions:
+      type: object
+      properties:
+        dateFormat:
+          type: string
+          enum:
+          - locale
+          - standard
+          - friendly
+          - european
+          - iso
+          - short
+          - medium
+          - long
+        timeFormat:
+          type: string
+          enum:
+          - h12
+          - h24
+        useSameTimezoneForAllCollaborators:
+          type: boolean
+        timezoneId:
+          type: string
+    FieldReferenceExternalOptionsDto:
+      type: object
+      description: External reference options for external connections
+      properties:
+        connectionName:
+          type: string
+          description: Connection name
+        objectName:
+          type: string
+          description: Object name in the external system
+        connectionOptions:
+          type: object
+          additionalProperties:
+            type: string
+          description: Connection-specific options
+    FieldOptionDto:
+      type: object
+      description: Field option for single-select and multi-select fields
+      properties:
+        name:
+          description: Name identifier for the option
+        displayName:
+          type: string
+          description: Display name for the option
+        color:
+          type: string
+          description: Color code for the option
+        groupId:
+          type: string
+          description: Group ID for grouped options
+    FieldDateOptionsDto:
+      type: object
+      description: Date field options
+      properties:
+        dateFormat:
+          type: string
+          description: Date format
+          enum:
+          - locale
+          - standard
+          - friendly
+          - european
+          - iso
+          - short
+          - medium
+          - long
+        timeFormat:
+          type: string
+          description: Time format
+          enum:
+          - h12
+          - h24
     FieldDto:
       type: object
       description: Field data for record types
@@ -646,34 +616,29 @@ components:
         metadata:
           $ref: '#/components/schemas/FieldMetadataDto'
           description: Field metadata
-    CursorResponseFieldDto:
+    FieldLookupOptionsDto:
       type: object
-      description: Cursor-paginated list of fields
+      description: Lookup field options
       properties:
-        content:
-          type: array
-          description: List of fields in the current page
-          items:
-            $ref: '#/components/schemas/FieldDto'
-        cursor:
-          $ref: '#/components/schemas/CursorInfo'
-          description: Cursor metadata for fetching subsequent pages
-    V2FieldError:
+        referenceFieldId:
+          type: string
+          description: Reference field ID
+        rollup:
+          type: string
+          description: Rollup function (e.g., SUM, AVG, COUNT)
+        sourceField:
+          $ref: '#/components/schemas/FieldDto'
+          description: Source field being looked up
+    FieldAttachmentOptionsDto:
       type: object
-      description: Field-level error detail used in validation errors and per-item batch failures.
+      description: Attachment field options
       properties:
-        field:
-          type: string
-          description: Name of the field or path that caused the error.
-          example: name
-        message:
-          type: string
-          description: Human-readable explanation of the error for this field.
-          example: Workspace name can not be blank
-        code:
-          type: string
-          description: Machine-readable code identifying the validation rule that failed.
-          example: NotBlank
+        showThumbnail:
+          type: boolean
+          description: Whether to display attachment thumbnails
+        showTitle:
+          type: boolean
+          description: Whether to display attachment titles
     FieldNumberOptionsDto:
       type: object
       description: Number field options for number, percentage, and currency fields
@@ -839,49 +804,49 @@ components:
           - TEXT
           - PROGRESS_BAR
           - PROGRESS_CIRCLE
-    FieldOptionDto:
+    V2ProblemDetail:
       type: object
-      description: Field option for single-select and multi-select fields
+      description: RFC 7807 Problem Details error response for V2 endpoints.
       properties:
-        name:
-          description: Name identifier for the option
-        displayName:
+        title:
           type: string
-          description: Display name for the option
-        color:
+          description: Short, human-readable summary of the error type. Same for all occurrences of the same error.
+          example: Not found
+        status:
+          type: integer
+          format: int32
+          description: HTTP status code of the response.
+          example: 404
+        detail:
           type: string
-          description: Color code for the option
-        groupId:
+          description: Human-readable, resource-specific explanation of this error occurrence. Always English.
+          example: Record type with ID 'Rt69b14f7e' was not found.
+        errorCode:
           type: string
-          description: Group ID for grouped options
-    FieldReferenceExternalOptionsDto:
-      type: object
-      description: External reference options for external connections
-      properties:
-        connectionName:
-          type: string
-          description: Connection name
-        objectName:
-          type: string
-          description: Object name in the external system
-        connectionOptions:
+          description: Machine-readable error code (enum name).
+          example: ENTITY_WITH_ATTRIBUTE_NOT_FOUND
+        messageArguments:
           type: object
           additionalProperties:
             type: string
-          description: Connection-specific options
-    FieldLookupOptionsDto:
-      type: object
-      description: Lookup field options
-      properties:
-        referenceFieldId:
+          description: Named parameters used to compose the detail message. Values are always strings.
+          example:
+            recordTypeId: Rt69b14f7e
+        requestId:
           type: string
-          description: Reference field ID
-        rollup:
-          type: string
-          description: Rollup function (e.g., SUM, AVG, COUNT)
-        sourceField:
-          $ref: '#/components/schemas/FieldDto'
-          description: Source field being looked up
+          description: Request correlation ID for tracing and support.
+          example: 5b1f7a8c-2c0e-4a8f-9c4f-2a3b1c0e4d5f
+        errors:
+          type: array
+          description: Field-level or per-item error details. Present for validation, business-rule, or batch failures.
+          items:
+            $ref: '#/components/schemas/V2FieldError'
+      required:
+      - detail
+      - errorCode
+      - requestId
+      - status
+      - title
     FieldNumberOptions:
       type: object
       properties:
@@ -1042,27 +1007,62 @@ components:
           - TEXT
           - PROGRESS_BAR
           - PROGRESS_CIRCLE
-    UserReferenceDto:
+    FieldReferenceOptionsDto:
       type: object
-      description: Reference to a user with identifier and display name
+      description: Reference field options
       properties:
-        id:
+        multiple:
+          type: boolean
+          description: Whether multiple records can be selected
+        showThumbnail:
+          type: boolean
+          description: Whether to show thumbnail
+        showTitle:
+          type: boolean
+          description: Whether to show title
+        showColor:
+          type: boolean
+          description: Whether to show color
+        recordTypeId:
           type: string
-          description: Unique identifier of the user
-          example: 1C341E7B682505430A494138@0bd0200063c87f9749412b.e
-          readOnly: true
-        name:
+          description: Referenced record type ID
+        isExternal:
+          type: boolean
+          description: Whether the reference is external
+        createBackReference:
+          type: boolean
+          description: Whether to create a back reference
+        backField:
+          $ref: '#/components/schemas/FieldDto'
+          description: Back reference field
+        externalOptions:
+          $ref: '#/components/schemas/FieldReferenceExternalOptionsDto'
+          description: External options for external references
+        filters:
+          type: object
+          additionalProperties: {}
+          description: Filters for the reference field
+        lookupFields:
+          type: array
+          description: Lookup fields for the reference
+          items:
+            $ref: '#/components/schemas/FieldReferenceLookupFieldDto'
+        scopeWorkspaceIds:
+          type: array
+          description: Scope workspace IDs for global record types
+          items:
+            type: string
+        globalRecordTypeWorkspaceFieldId:
           type: string
-          description: Display name of the user
-          example: Jane Doe
-          readOnly: true
-    FieldMetadataDto:
+          description: Global record type workspace field ID
+    CursorInfo:
       type: object
-      description: Field metadata
+      description: Cursor pagination metadata
       properties:
-        originType:
+        nextCursor:
           type: string
-          description: Origin type of the field
-        extendedRollup:
-          type: string
-          description: Extended rollup information
+          description: Opaque cursor for fetching the next page. Absent when there are no more pages.
+          example: UnQ2OWIxNGY3ZTBlMzhmMzVmMjhjM2NjZWU=
+        hasMore:
+          type: boolean
+          description: Whether more items exist beyond this page
