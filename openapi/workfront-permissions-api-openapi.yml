@@ -418,74 +418,13 @@ components:
       - requestId
       - status
       - title
-    MemberGrantDto:
+    InheritanceDto:
       type: object
-      description: A subject and role to grant or update on a resource
+      description: Workspace-member inheritance setting for a record type
       properties:
-        subjectId:
-          type: string
-          description: ID of the user, group, team, role, or company
-          minLength: 1
-        subjectType:
-          type: string
-          description: Type of the subject
-          enum:
-          - user
-          - group
-          - team
-          - role
-          - company
-        role:
-          type: string
-          description: Role to assign to the subject
-          enum:
-          - viewer
-          - editor
-          - manager
-      required:
-      - role
-      - subjectId
-      - subjectType
-    DeleteAccessRequestsDto:
-      type: object
-      description: Request body for dismissing access requests
-      properties:
-        requestIds:
-          type: array
-          description: IDs of access requests to dismiss
-          items:
-            type: string
-          minItems: 1
-      required:
-      - requestIds
-    UpdateMembersRequestDto:
-      type: object
-      description: Bulk grant, update, and revoke operations for resource members
-      properties:
-        grant:
-          type: array
-          description: Members to grant new access to
-          items:
-            $ref: '#/components/schemas/MemberGrantDto'
-        update:
-          type: array
-          description: Members whose existing role should be changed
-          items:
-            $ref: '#/components/schemas/MemberGrantDto'
-        revoke:
-          type: array
-          description: Members to revoke all access from
-          items:
-            $ref: '#/components/schemas/MemberRevokeDto'
-        inheritViewOnly:
+        inherited:
           type: boolean
-          description: Set inheritance for a record-type (true=inherited, false=view-only). Only valid for record-types.
-        wildcard:
-          type: string
-          description: Set wildcard access mode for a record. Only valid for records.
-          enum:
-          - SELECTED_USERS_ONLY
-          - EVERYONE_IN_WORKSPACE
+          description: When true, workspace members inherit their workspace-level access on this record type. When false, workspace members are restricted to view-only.
     AccessRequestDto:
       type: object
       description: A pending access request for a resource
@@ -499,26 +438,31 @@ components:
         requester:
           $ref: '#/components/schemas/RequesterDto'
           description: User who submitted the request
-    RequesterDto:
+    CreateAccessRequestDto:
       type: object
-      description: The user who submitted an access request
+      description: Request body for creating an access request
       properties:
-        id:
+        message:
           type: string
-          description: User's external identifier
-        name:
-          type: string
-          description: User's display name
-        email:
-          type: string
-          description: User's email address
-    InheritanceDto:
+          description: Optional message to include with the access request
+          maxLength: 2000
+          minLength: 0
+    V2FieldError:
       type: object
-      description: Workspace-member inheritance setting for a record type
+      description: Field-level error detail used in validation errors and per-item batch failures.
       properties:
-        inherited:
-          type: boolean
-          description: When true, workspace members inherit their workspace-level access on this record type. When false, workspace members are restricted to view-only.
+        field:
+          type: string
+          description: Name of the field or path that caused the error.
+          example: name
+        message:
+          type: string
+          description: Human-readable explanation of the error for this field.
+          example: Workspace name can not be blank
+        code:
+          type: string
+          description: Machine-readable code identifying the validation rule that failed.
+          example: NotBlank
     MemberPermissionDto:
       type: object
       description: A subject (user, group, team, role, or company) with a role on a resource
@@ -548,6 +492,87 @@ components:
           - viewer
           - editor
           - manager
+    UpdateMembersRequestDto:
+      type: object
+      description: Bulk grant, update, and revoke operations for resource members
+      properties:
+        grant:
+          type: array
+          description: Members to grant new access to
+          items:
+            $ref: '#/components/schemas/MemberGrantDto'
+        update:
+          type: array
+          description: Members whose existing role should be changed
+          items:
+            $ref: '#/components/schemas/MemberGrantDto'
+        revoke:
+          type: array
+          description: Members to revoke all access from
+          items:
+            $ref: '#/components/schemas/MemberRevokeDto'
+        inheritViewOnly:
+          type: boolean
+          description: Set inheritance for a record-type (true=inherited, false=view-only). Only valid for record-types.
+        wildcard:
+          type: string
+          description: Set wildcard access mode for a record. Only valid for records.
+          enum:
+          - SELECTED_USERS_ONLY
+          - EVERYONE_IN_WORKSPACE
+    DeleteAccessRequestsDto:
+      type: object
+      description: Request body for dismissing access requests
+      properties:
+        requestIds:
+          type: array
+          description: IDs of access requests to dismiss
+          items:
+            type: string
+          minItems: 1
+      required:
+      - requestIds
+    MemberGrantDto:
+      type: object
+      description: A subject and role to grant or update on a resource
+      properties:
+        subjectId:
+          type: string
+          description: ID of the user, group, team, role, or company
+          minLength: 1
+        subjectType:
+          type: string
+          description: Type of the subject
+          enum:
+          - user
+          - group
+          - team
+          - role
+          - company
+        role:
+          type: string
+          description: Role to assign to the subject
+          enum:
+          - viewer
+          - editor
+          - manager
+      required:
+      - role
+      - subjectId
+      - subjectType
+    RequesterDto:
+      type: object
+      description: The user who submitted an access request
+      properties:
+        id:
+          type: string
+          description: User's external identifier
+        name:
+          type: string
+          description: User's display name
+        email:
+          type: string
+          description: User's email address
     PermissionDto:
       type: object
       description: Current user's effective permissions on a resource
@@ -584,28 +609,3 @@ components:
       required:
       - subjectId
       - subjectType
-    CreateAccessRequestDto:
-      type: object
-      description: Request body for creating an access request
-      properties:
-        message:
-          type: string
-          description: Optional message to include with the access request
-          maxLength: 2000
-          minLength: 0
-    V2FieldError:
-      type: object
-      description: Field-level error detail used in validation errors and per-item batch failures.
-      properties:
-        field:
-          type: string
-          description: Name of the field or path that caused the error.
-          example: name
-        message:
-          type: string
-          description: Human-readable explanation of the error for this field.
-          example: Workspace name can not be blank
-        code:
-          type: string
-          description: Machine-readable code identifying the validation rule that failed.
-          example: NotBlank

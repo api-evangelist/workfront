@@ -337,45 +337,24 @@ paths:
                 $ref: '#/components/schemas/V2ProblemDetail'
 components:
   schemas:
-    GroupColoring:
-      type: object
-      properties:
-        selected:
-          type: string
-          enum:
-          - DEFAULT
-          - FIELD
-    Coloring:
-      type: object
-      properties:
-        record:
-          $ref: '#/components/schemas/RecordColoring'
-        group:
-          $ref: '#/components/schemas/GroupColoring'
-    FilterCondition:
-      type: string
-      description: Supported filter conditions for record search
-      enum:
-      - CONTAINS
-      - DOES_NOT_CONTAIN
-      - IS
-      - IS_NOT
-      - IS_EMPTY
-      - IS_NOT_EMPTY
-      - GREATER_THAN
-      - GREATER_THAN_OR_EQUAL
-      - LESS_THAN
-      - LESS_THAN_OR_EQUAL
-      - IS_AFTER
-      - IS_BEFORE
-      - IS_BETWEEN
-      - IS_NOT_BETWEEN
-      - IS_ANY_OF
-      - IS_NONE_OF
-      - HAS_ANY_OF
-      - HAS_ALL_OF
-      - HAS_NONE_OF
-      - IS_EXACTLY
+    FilterGroupDto:
+      allOf:
+      - $ref: '#/components/schemas/FilterNodeDto'
+      - type: object
+        properties:
+          operator:
+            $ref: '#/components/schemas/FilterOperator'
+            description: Logical operator to combine conditions
+          conditions:
+            type: array
+            description: 'List of filter nodes: leaf conditions or nested groups'
+            items:
+              $ref: '#/components/schemas/FilterNodeDto'
+            minItems: 1
+      description: A group of filter conditions combined with a logical operator (AND/OR). Supports recursive nesting for complex filter logic.
+      required:
+      - conditions
+      - operator
     GroupDto:
       type: object
       description: Grouping specification
@@ -394,6 +373,72 @@ components:
           example: asc
       required:
       - fieldId
+    UserReferenceDto:
+      type: object
+      description: Reference to a user with identifier and display name
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the user
+          example: 1C341E7B682505430A494138@0bd0200063c87f9749412b.e
+          readOnly: true
+        name:
+          type: string
+          description: Display name of the user
+          example: Jane Doe
+          readOnly: true
+    DynamicFieldMetadataDto:
+      type: object
+      description: Dynamic field metadata for global/dynamic record types
+      properties:
+        scopeWorkspaceId:
+          type: string
+          description: Workspace ID this view is scoped to
+          example: Ws69b14f7e0e38f35f28c3ccee
+        dynamicFieldIds:
+          type: array
+          description: Field IDs that are workspace-specific (dynamic) in this view
+          items:
+            type: string
+          uniqueItems: true
+    SortDto:
+      type: object
+      description: Sort specification
+      properties:
+        fieldId:
+          type: string
+          description: ID or alias of the field to sort by
+          example: F693ab1c96f11ea3f4175e710
+          minLength: 1
+        direction:
+          type: string
+          description: Sort direction (asc or desc). Defaults to asc if omitted.
+          enum:
+          - asc
+          - desc
+          example: asc
+      required:
+      - fieldId
+    RecordColoring:
+      type: object
+      properties:
+        selected:
+          type: string
+          enum:
+          - RECORD_TYPE
+          - RECORD
+          - FIELD
+          - GROUP
+          - FILTER
+          - NONE
+        fieldId:
+          type: string
+        highlightFullRow:
+          type: boolean
+        filterColoringRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/FilterColoringRule'
     ViewMetadataDto:
       type: object
       description: View metadata containing view-type specific configuration
@@ -472,36 +517,63 @@ components:
         dynamicFieldMetadata:
           $ref: '#/components/schemas/DynamicFieldMetadataDto'
           description: Dynamic field metadata for global/dynamic record types
-    V2FieldError:
+    FilterOperator:
+      type: string
+      description: Logical operator for combining filter conditions
+      enum:
+      - AND
+      - OR
+    GroupColoring:
       type: object
-      description: Field-level error detail used in validation errors and per-item batch failures.
       properties:
-        field:
+        selected:
           type: string
-          description: Name of the field or path that caused the error.
-          example: name
-        message:
-          type: string
-          description: Human-readable explanation of the error for this field.
-          example: Workspace name can not be blank
-        code:
-          type: string
-          description: Machine-readable code identifying the validation rule that failed.
-          example: NotBlank
-    UserReferenceDto:
+          enum:
+          - DEFAULT
+          - FIELD
+    V2ProblemDetail:
       type: object
-      description: Reference to a user with identifier and display name
+      description: RFC 7807 Problem Details error response for V2 endpoints.
       properties:
-        id:
+        title:
           type: string
-          description: Unique identifier of the user
-          example: 1C341E7B682505430A494138@0bd0200063c87f9749412b.e
-          readOnly: true
-        name:
+          description: Short, human-readable summary of the error type. Same for all occurrences of the same error.
+          example: Not found
+        status:
+          type: integer
+          format: int32
+          description: HTTP status code of the response.
+          example: 404
+        detail:
           type: string
-          description: Display name of the user
-          example: Jane Doe
-          readOnly: true
+          description: Human-readable, resource-specific explanation of this error occurrence. Always English.
+          example: Record type with ID 'Rt69b14f7e' was not found.
+        errorCode:
+          type: string
+          description: Machine-readable error code (enum name).
+          example: ENTITY_WITH_ATTRIBUTE_NOT_FOUND
+        messageArguments:
+          type: object
+          additionalProperties:
+            type: string
+          description: Named parameters used to compose the detail message. Values are always strings.
+          example:
+            recordTypeId: Rt69b14f7e
+        requestId:
+          type: string
+          description: Request correlation ID for tracing and support.
+          example: 5b1f7a8c-2c0e-4a8f-9c4f-2a3b1c0e4d5f
+        errors:
+          type: array
+          description: Field-level or per-item error details. Present for validation, business-rule, or batch failures.
+          items:
+            $ref: '#/components/schemas/V2FieldError'
+      required:
+      - detail
+      - errorCode
+      - requestId
+      - status
+      - title
     ViewDto:
       type: object
       description: View data containing all view properties
@@ -589,11 +661,55 @@ components:
       required:
       - name
       - type
+    V2FieldError:
+      type: object
+      description: Field-level error detail used in validation errors and per-item batch failures.
+      properties:
+        field:
+          type: string
+          description: Name of the field or path that caused the error.
+          example: name
+        message:
+          type: string
+          description: Human-readable explanation of the error for this field.
+          example: Workspace name can not be blank
+        code:
+          type: string
+          description: Machine-readable code identifying the validation rule that failed.
+          example: NotBlank
     FilterNodeDto:
       description: 'A node in the filter tree: either a leaf condition or a nested group'
       oneOf:
       - $ref: '#/components/schemas/FilterConditionDto'
       - $ref: '#/components/schemas/FilterGroupDto'
+    Coloring:
+      type: object
+      properties:
+        record:
+          $ref: '#/components/schemas/RecordColoring'
+        group:
+          $ref: '#/components/schemas/GroupColoring'
+    CursorInfo:
+      type: object
+      description: Cursor pagination metadata
+      properties:
+        nextCursor:
+          type: string
+          description: Opaque cursor for fetching the next page. Absent when there are no more pages.
+          example: UnQ2OWIxNGY3ZTBlMzhmMzVmMjhjM2NjZWU=
+        hasMore:
+          type: boolean
+          description: Whether more items exist beyond this page
+    FilterColoringRule:
+      type: object
+      properties:
+        id:
+          type: string
+        color:
+          type: string
+        appliedFilters:
+          type: array
+          items: {}
     ColumnMetadata:
       type: object
       properties:
@@ -611,44 +727,6 @@ components:
           - AVG
           - MIN
           - MAX
-    DynamicFieldMetadataDto:
-      type: object
-      description: Dynamic field metadata for global/dynamic record types
-      properties:
-        scopeWorkspaceId:
-          type: string
-          description: Workspace ID this view is scoped to
-          example: Ws69b14f7e0e38f35f28c3ccee
-        dynamicFieldIds:
-          type: array
-          description: Field IDs that are workspace-specific (dynamic) in this view
-          items:
-            type: string
-          uniqueItems: true
-    FilterOperator:
-      type: string
-      description: Logical operator for combining filter conditions
-      enum:
-      - AND
-      - OR
-    SortDto:
-      type: object
-      description: Sort specification
-      properties:
-        fieldId:
-          type: string
-          description: ID or alias of the field to sort by
-          example: F693ab1c96f11ea3f4175e710
-          minLength: 1
-        direction:
-          type: string
-          description: Sort direction (asc or desc). Defaults to asc if omitted.
-          enum:
-          - asc
-          - desc
-          example: asc
-      required:
-      - fieldId
     CursorResponseViewDto:
       type: object
       description: Cursor-paginated list of views
@@ -661,67 +739,30 @@ components:
         cursor:
           $ref: '#/components/schemas/CursorInfo'
           description: Cursor metadata for fetching subsequent pages
-    V2ProblemDetail:
-      type: object
-      description: RFC 7807 Problem Details error response for V2 endpoints.
-      properties:
-        title:
-          type: string
-          description: Short, human-readable summary of the error type. Same for all occurrences of the same error.
-          example: Not found
-        status:
-          type: integer
-          format: int32
-          description: HTTP status code of the response.
-          example: 404
-        detail:
-          type: string
-          description: Human-readable, resource-specific explanation of this error occurrence. Always English.
-          example: Record type with ID 'Rt69b14f7e' was not found.
-        errorCode:
-          type: string
-          description: Machine-readable error code (enum name).
-          example: ENTITY_WITH_ATTRIBUTE_NOT_FOUND
-        messageArguments:
-          type: object
-          additionalProperties:
-            type: string
-          description: Named parameters used to compose the detail message. Values are always strings.
-          example:
-            recordTypeId: Rt69b14f7e
-        requestId:
-          type: string
-          description: Request correlation ID for tracing and support.
-          example: 5b1f7a8c-2c0e-4a8f-9c4f-2a3b1c0e4d5f
-        errors:
-          type: array
-          description: Field-level or per-item error details. Present for validation, business-rule, or batch failures.
-          items:
-            $ref: '#/components/schemas/V2FieldError'
-      required:
-      - detail
-      - errorCode
-      - requestId
-      - status
-      - title
-    FilterGroupDto:
-      allOf:
-      - $ref: '#/components/schemas/FilterNodeDto'
-      - type: object
-        properties:
-          operator:
-            $ref: '#/components/schemas/FilterOperator'
-            description: Logical operator to combine conditions
-          conditions:
-            type: array
-            description: 'List of filter nodes: leaf conditions or nested groups'
-            items:
-              $ref: '#/components/schemas/FilterNodeDto'
-            minItems: 1
-      description: A group of filter conditions combined with a logical operator (AND/OR). Supports recursive nesting for complex filter logic.
-      required:
-      - conditions
-      - operator
+    FilterCondition:
+      type: string
+      description: Supported filter conditions for record search
+      enum:
+      - CONTAINS
+      - DOES_NOT_CONTAIN
+      - IS
+      - IS_NOT
+      - IS_EMPTY
+      - IS_NOT_EMPTY
+      - GREATER_THAN
+      - GREATER_THAN_OR_EQUAL
+      - LESS_THAN
+      - LESS_THAN_OR_EQUAL
+      - IS_AFTER
+      - IS_BEFORE
+      - IS_BETWEEN
+      - IS_NOT_BETWEEN
+      - IS_ANY_OF
+      - IS_NONE_OF
+      - HAS_ANY_OF
+      - HAS_ALL_OF
+      - HAS_NONE_OF
+      - IS_EXACTLY
     FilterConditionDto:
       allOf:
       - $ref: '#/components/schemas/FilterNodeDto'
@@ -745,44 +786,3 @@ components:
       required:
       - condition
       - fieldId
-    CursorInfo:
-      type: object
-      description: Cursor pagination metadata
-      properties:
-        nextCursor:
-          type: string
-          description: Opaque cursor for fetching the next page. Absent when there are no more pages.
-          example: UnQ2OWIxNGY3ZTBlMzhmMzVmMjhjM2NjZWU=
-        hasMore:
-          type: boolean
-          description: Whether more items exist beyond this page
-    FilterColoringRule:
-      type: object
-      properties:
-        id:
-          type: string
-        color:
-          type: string
-        appliedFilters:
-          type: array
-          items: {}
-    RecordColoring:
-      type: object
-      properties:
-        selected:
-          type: string
-          enum:
-          - RECORD_TYPE
-          - RECORD
-          - FIELD
-          - GROUP
-          - FILTER
-          - NONE
-        fieldId:
-          type: string
-        highlightFullRow:
-          type: boolean
-        filterColoringRules:
-          type: array
-          items:
-            $ref: '#/components/schemas/FilterColoringRule'
