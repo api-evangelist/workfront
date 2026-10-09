@@ -546,3 +546,36 @@ deployment:
   probe: gated
   checked: '2026-08-12'
   source: catalog MCP census
+rfc9728:
+  endpoint: https://mcp.workfront.adobe.com/mcp/v1/workfront
+  metadata_url: https://mcp.workfront.adobe.com/mcp/v1/workfront/.well-known/oauth-protected-resource
+  discovered_via: WWW-Authenticate resource_metadata on an anonymous POST initialize
+  fetched: '2026-09-25'
+  http_status: 200
+  content_type: application/json
+  document:
+    resource: https://mcp.workfront.adobe.com/mcp/v1/workfront
+    authorization_servers:
+    - https://mcp.workfront.adobe.com/mcp/v1/workfront
+    scopes_supported:
+    - AdobeID
+    - openid
+    - profile
+    - email
+    - additional_info.projectedProductContext
+    - read_pc.workfront
+    - read_organizations
+    - aem.folders
+    - aem.assets.author
+    - aem.assets.delivery
+    - ab.manage
+    - accounts.read
+    - creative_cloud
+    - org.read
+    - read_pc
+    - read_pc.acp
+    - read_pc.dma_tartan
+    - session
+    bearer_methods_supported:
+    - header
+    resource_name: 'Workfront MCP: v1'
