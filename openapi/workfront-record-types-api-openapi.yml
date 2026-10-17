@@ -559,33 +559,69 @@ paths:
       description: Workfront Planning Service Url
 components:
   schemas:
+    FieldReferenceOptionsDto:
+      type: object
+      properties:
+        multiple:
+          type: boolean
+        recordTypeId:
+          type: string
+        isExternal:
+          type: boolean
+        externalOptions:
+          $ref: '#/components/schemas/FieldReferenceExternalOptionsDto'
+        filters:
+          type: object
+          additionalProperties:
+            type: object
+        lookupFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldReferenceLookupFieldDto'
+    FieldLookupOptionsDto:
+      type: object
+      properties:
+        referenceFieldId:
+          type: string
+        rollup:
+          type: string
+        sourceField:
+          $ref: '#/components/schemas/FieldDto'
     FieldUserOptionsDto:
       type: object
       properties:
         multipleUsersAllowed:
           type: boolean
-    RecordTypeExternalOptionsDto:
+    FieldFormulaOptionsDto:
       type: object
       properties:
-        connectionName:
+        formula:
           type: string
-        objectName:
-          type: string
-        fields:
-          type: object
-          additionalProperties:
-            type: string
-    FieldReferenceExternalOptionsDto:
+    FieldOptionDto:
       type: object
       properties:
-        connectionName:
+        name:
           type: string
-        objectName:
+        displayName:
           type: string
-        connectionOptions:
-          type: object
-          additionalProperties:
-            type: string
+        color:
+          type: string
+    FieldDateOptionsDto:
+      type: object
+      properties:
+        dateFormat:
+          type: string
+          enum:
+          - locale
+          - standard
+          - friendly
+          - european
+          - iso
+        timeFormat:
+          type: string
+          enum:
+          - h12
+          - h24
     FieldNumberOptionsDto:
       type: object
       properties:
@@ -740,20 +776,79 @@ components:
           - ZAR
           - ZMK
           - ZWD
-    FieldFormulaOptionsDto:
+    FieldReferenceExternalOptionsDto:
       type: object
       properties:
-        formula:
+        connectionName:
           type: string
-    FieldOptionDto:
+        objectName:
+          type: string
+        connectionOptions:
+          type: object
+          additionalProperties:
+            type: string
+    RecordTypeDto:
       type: object
       properties:
-        name:
+        id:
+          type: string
+        createdBy:
+          type: string
+        createdAt:
+          type: string
+        updatedBy:
+          type: string
+        updatedAt:
+          type: string
+        customerId:
+          type: string
+        imsOrgId:
+          type: string
+        alias:
           type: string
         displayName:
           type: string
+        permission:
+          type: string
+          enum:
+          - manage
+          - edit
+          - view
+          - none
+        primaryFieldId:
+          type: string
+        icon:
+          type: string
+        description:
+          type: string
         color:
           type: string
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldDto'
+        isExternal:
+          type: boolean
+        externalOptions:
+          $ref: '#/components/schemas/RecordTypeExternalOptionsDto'
+    FieldReferenceLookupFieldDto:
+      type: object
+      properties:
+        fieldId:
+          type: string
+        rollup:
+          type: string
+    RecordTypeExternalOptionsDto:
+      type: object
+      properties:
+        connectionName:
+          type: string
+        objectName:
+          type: string
+        fields:
+          type: object
+          additionalProperties:
+            type: string
     FieldDto:
       type: object
       properties:
@@ -799,101 +894,6 @@ components:
           $ref: '#/components/schemas/FieldUserOptionsDto'
         hasError:
           type: boolean
-    FieldLookupOptionsDto:
-      type: object
-      properties:
-        referenceFieldId:
-          type: string
-        rollup:
-          type: string
-        sourceField:
-          $ref: '#/components/schemas/FieldDto'
-    RecordTypeDto:
-      type: object
-      properties:
-        id:
-          type: string
-        createdBy:
-          type: string
-        createdAt:
-          type: string
-        updatedBy:
-          type: string
-        updatedAt:
-          type: string
-        customerId:
-          type: string
-        imsOrgId:
-          type: string
-        alias:
-          type: string
-        displayName:
-          type: string
-        permission:
-          type: string
-          enum:
-          - manage
-          - edit
-          - view
-          - none
-        primaryFieldId:
-          type: string
-        icon:
-          type: string
-        description:
-          type: string
-        color:
-          type: string
-        fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldDto'
-        isExternal:
-          type: boolean
-        externalOptions:
-          $ref: '#/components/schemas/RecordTypeExternalOptionsDto'
-    FieldReferenceOptionsDto:
-      type: object
-      properties:
-        multiple:
-          type: boolean
-        recordTypeId:
-          type: string
-        isExternal:
-          type: boolean
-        externalOptions:
-          $ref: '#/components/schemas/FieldReferenceExternalOptionsDto'
-        filters:
-          type: object
-          additionalProperties:
-            type: object
-        lookupFields:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldReferenceLookupFieldDto'
-    FieldReferenceLookupFieldDto:
-      type: object
-      properties:
-        fieldId:
-          type: string
-        rollup:
-          type: string
-    FieldDateOptionsDto:
-      type: object
-      properties:
-        dateFormat:
-          type: string
-          enum:
-          - locale
-          - standard
-          - friendly
-          - european
-          - iso
-        timeFormat:
-          type: string
-          enum:
-          - h12
-          - h24
     V2ProblemDetail:
       type: object
       description: RFC 7807 Problem Details error response for V2 endpoints.
@@ -966,33 +966,38 @@ components:
           type: string
           description: ID of the authorization subject
           example: U123abc
-    PermissionSubjectDto:
+    RecordTypePermissionSettingsDto:
       type: object
-      description: A subject (user/group/team/role/company) granted explicit edit access in a RESTRICTED rule
+      description: Default record-level permission rule for a record type
+      properties:
+        mode:
+          type: string
+          description: OPEN (all workspace contributors can edit new records) or RESTRICTED (only the creator + selected subjects can edit; inheritance of edit access disabled)
+          enum:
+          - OPEN
+          - RESTRICTED
+          example: RESTRICTED
+        subjects:
+          type: array
+          description: Subjects with explicit edit access in RESTRICTED mode. Retained across mode toggles so a prior selection is restored when switching back to RESTRICTED.
+          items:
+            $ref: '#/components/schemas/PermissionSubjectDto'
+      required:
+      - mode
+    UserReferenceDto:
+      type: object
+      description: Reference to a user with identifier and display name
       properties:
         id:
           type: string
-          description: Identifier of the subject
-          example: 642f1c0a0e38f35f28c3ccee
-          minLength: 1
-        type:
+          description: Unique identifier of the user
+          example: 1C341E7B682505430A494138@0bd0200063c87f9749412b.e
+          readOnly: true
+        name:
           type: string
-          description: Type of the subject
-          enum:
-          - USER
-          - GROUP
-          - TEAM
-          - ROLE
-          - COMPANY
-          example: USER
-        displayName:
-          type: string
-          description: Display name of the subject, resolved from Redrock at read time
+          description: Display name of the user
           example: Jane Doe
           readOnly: true
-      required:
-      - id
-      - type
     V2FieldError:
       type: object
       description: Field-level error detail used in validation errors and per-item batch failures.
@@ -1021,20 +1026,17 @@ components:
         cursor:
           $ref: '#/components/schemas/CursorInfo'
           description: Cursor metadata for fetching subsequent pages
-    UserReferenceDto:
+    CursorInfo:
       type: object
-      description: Reference to a user with identifier and display name
+      description: Cursor pagination metadata
       properties:
-        id:
+        nextCursor:
           type: string
-          description: Unique identifier of the user
-          example: 1C341E7B682505430A494138@0bd0200063c87f9749412b.e
-          readOnly: true
-        name:
-          type: string
-          description: Display name of the user
-          example: Jane Doe
-          readOnly: true
+          description: Opaque cursor for fetching the next page. Absent when there are no more pages.
+          example: UnQ2OWIxNGY3ZTBlMzhmMzVmMjhjM2NjZWU=
+        hasMore:
+          type: boolean
+          description: Whether more items exist beyond this page
     RecordTypeDto_2:
       type: object
       description: Complete record type data including linkability settings and external options
@@ -1145,38 +1147,6 @@ components:
           readOnly: true
       required:
       - displayName
-    RecordTypeExternalOptionsDto_2:
-      type: object
-      description: External options for external record types
-      properties:
-        connection:
-          type: string
-          description: External connection type
-          enum:
-          - WORKFRONT
-          - BRAND
-          - AEM
-          - INTAKE
-          example: WORKFRONT
-        object:
-          type: string
-          description: External object type
-          enum:
-          - PROJECT
-          - PORTFOLIO
-          - PROGRAM
-          - COMPANY
-          - GROUP
-          - TEMPLATE
-          - ASSET
-          - BRAND
-          - ORIGINAL_REQUEST
-          example: PROJECT
-        fields:
-          type: object
-          additionalProperties:
-            type: string
-          description: Field mappings between external and internal fields
     RecordTypeBaseDto:
       type: object
       description: Base record type data containing common record type properties
@@ -1249,35 +1219,65 @@ components:
           description: Default record-level permission rule for this record type. On read, the resolved rule for the current workspace context (defaulted to OPEN when never configured); omitted when the default-record-permissions feature is disabled. On PATCH/PUT, set this to configure the rule — for global record types it applies to the workspace given by the scopeWorkspaceId query param (defaulting to the primary workspace).
       required:
       - displayName
-    RecordTypePermissionSettingsDto:
+    RecordTypeExternalOptionsDto_2:
       type: object
-      description: Default record-level permission rule for a record type
+      description: External options for external record types
       properties:
-        mode:
+        connection:
           type: string
-          description: OPEN (all workspace contributors can edit new records) or RESTRICTED (only the creator + selected subjects can edit; inheritance of edit access disabled)
+          description: External connection type
           enum:
-          - OPEN
-          - RESTRICTED
-          example: RESTRICTED
-        subjects:
-          type: array
-          description: Subjects with explicit edit access in RESTRICTED mode. Retained across mode toggles so a prior selection is restored when switching back to RESTRICTED.
-          items:
-            $ref: '#/components/schemas/PermissionSubjectDto'
-      required:
-      - mode
-    CursorInfo:
-      type: object
-      description: Cursor pagination metadata
-      properties:
-        nextCursor:
+          - WORKFRONT
+          - BRAND
+          - AEM
+          - INTAKE
+          example: WORKFRONT
+        object:
           type: string
-          description: Opaque cursor for fetching the next page. Absent when there are no more pages.
-          example: UnQ2OWIxNGY3ZTBlMzhmMzVmMjhjM2NjZWU=
-        hasMore:
-          type: boolean
-          description: Whether more items exist beyond this page
+          description: External object type
+          enum:
+          - PROJECT
+          - PORTFOLIO
+          - PROGRAM
+          - COMPANY
+          - GROUP
+          - TEMPLATE
+          - ASSET
+          - BRAND
+          - ORIGINAL_REQUEST
+          example: PROJECT
+        fields:
+          type: object
+          additionalProperties:
+            type: string
+          description: Field mappings between external and internal fields
+    PermissionSubjectDto:
+      type: object
+      description: A subject (user/group/team/role/company) granted explicit edit access in a RESTRICTED rule
+      properties:
+        id:
+          type: string
+          description: Identifier of the subject
+          example: 642f1c0a0e38f35f28c3ccee
+          minLength: 1
+        type:
+          type: string
+          description: Type of the subject
+          enum:
+          - USER
+          - GROUP
+          - TEAM
+          - ROLE
+          - COMPANY
+          example: USER
+        displayName:
+          type: string
+          description: Display name of the subject, resolved from Redrock at read time
+          example: Jane Doe
+          readOnly: true
+      required:
+      - id
+      - type
 x-refined-from:
 - workfront-planning-v1-openapi.json
 - workfront-planning-v2-openapi.json

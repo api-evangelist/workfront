@@ -375,6 +375,31 @@ paths:
                 $ref: '#/components/schemas/V2ProblemDetail'
 components:
   schemas:
+    PermissionDto:
+      type: object
+      description: Current user's effective permissions on a resource
+      properties:
+        canView:
+          type: boolean
+          description: Whether the user can view this resource
+        canEdit:
+          type: boolean
+          description: Whether the user can edit this resource
+        canDelete:
+          type: boolean
+          description: Whether the user can delete this resource
+        canAdd:
+          type: boolean
+          description: Whether the user can add items to this resource
+    CreateAccessRequestDto:
+      type: object
+      description: Request body for creating an access request
+      properties:
+        message:
+          type: string
+          description: Optional message to include with the access request
+          maxLength: 2000
+          minLength: 0
     V2ProblemDetail:
       type: object
       description: RFC 7807 Problem Details error response for V2 endpoints.
@@ -418,51 +443,6 @@ components:
       - requestId
       - status
       - title
-    InheritanceDto:
-      type: object
-      description: Workspace-member inheritance setting for a record type
-      properties:
-        inherited:
-          type: boolean
-          description: When true, workspace members inherit their workspace-level access on this record type. When false, workspace members are restricted to view-only.
-    AccessRequestDto:
-      type: object
-      description: A pending access request for a resource
-      properties:
-        id:
-          type: string
-          description: Unique identifier of the access request
-        message:
-          type: string
-          description: Optional message from the requester
-        requester:
-          $ref: '#/components/schemas/RequesterDto'
-          description: User who submitted the request
-    CreateAccessRequestDto:
-      type: object
-      description: Request body for creating an access request
-      properties:
-        message:
-          type: string
-          description: Optional message to include with the access request
-          maxLength: 2000
-          minLength: 0
-    V2FieldError:
-      type: object
-      description: Field-level error detail used in validation errors and per-item batch failures.
-      properties:
-        field:
-          type: string
-          description: Name of the field or path that caused the error.
-          example: name
-        message:
-          type: string
-          description: Human-readable explanation of the error for this field.
-          example: Workspace name can not be blank
-        code:
-          type: string
-          description: Machine-readable code identifying the validation rule that failed.
-          example: NotBlank
     MemberPermissionDto:
       type: object
       description: A subject (user, group, team, role, or company) with a role on a resource
@@ -492,6 +472,31 @@ components:
           - viewer
           - editor
           - manager
+    RequesterDto:
+      type: object
+      description: The user who submitted an access request
+      properties:
+        id:
+          type: string
+          description: User's external identifier
+        name:
+          type: string
+          description: User's display name
+        email:
+          type: string
+          description: User's email address
+    DeleteAccessRequestsDto:
+      type: object
+      description: Request body for dismissing access requests
+      properties:
+        requestIds:
+          type: array
+          description: IDs of access requests to dismiss
+          items:
+            type: string
+          minItems: 1
+      required:
+      - requestIds
     UpdateMembersRequestDto:
       type: object
       description: Bulk grant, update, and revoke operations for resource members
@@ -520,18 +525,6 @@ components:
           enum:
           - SELECTED_USERS_ONLY
           - EVERYONE_IN_WORKSPACE
-    DeleteAccessRequestsDto:
-      type: object
-      description: Request body for dismissing access requests
-      properties:
-        requestIds:
-          type: array
-          description: IDs of access requests to dismiss
-          items:
-            type: string
-          minItems: 1
-      required:
-      - requestIds
     MemberGrantDto:
       type: object
       description: A subject and role to grant or update on a resource
@@ -560,35 +553,22 @@ components:
       - role
       - subjectId
       - subjectType
-    RequesterDto:
+    V2FieldError:
       type: object
-      description: The user who submitted an access request
+      description: Field-level error detail used in validation errors and per-item batch failures.
       properties:
-        id:
+        field:
           type: string
-          description: User's external identifier
-        name:
+          description: Name of the field or path that caused the error.
+          example: name
+        message:
           type: string
-          description: User's display name
-        email:
+          description: Human-readable explanation of the error for this field.
+          example: Workspace name can not be blank
+        code:
           type: string
-          description: User's email address
-    PermissionDto:
-      type: object
-      description: Current user's effective permissions on a resource
-      properties:
-        canView:
-          type: boolean
-          description: Whether the user can view this resource
-        canEdit:
-          type: boolean
-          description: Whether the user can edit this resource
-        canDelete:
-          type: boolean
-          description: Whether the user can delete this resource
-        canAdd:
-          type: boolean
-          description: Whether the user can add items to this resource
+          description: Machine-readable code identifying the validation rule that failed.
+          example: NotBlank
     MemberRevokeDto:
       type: object
       description: A subject to revoke permissions from
@@ -609,3 +589,23 @@ components:
       required:
       - subjectId
       - subjectType
+    InheritanceDto:
+      type: object
+      description: Workspace-member inheritance setting for a record type
+      properties:
+        inherited:
+          type: boolean
+          description: When true, workspace members inherit their workspace-level access on this record type. When false, workspace members are restricted to view-only.
+    AccessRequestDto:
+      type: object
+      description: A pending access request for a resource
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the access request
+        message:
+          type: string
+          description: Optional message from the requester
+        requester:
+          $ref: '#/components/schemas/RequesterDto'
+          description: User who submitted the request
