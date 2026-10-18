@@ -52,5 +52,5 @@
     - connectors/applications/adobe-workfront
     vendor_link: https://business.adobe.com/products/workfront/main.html
     builder: Fivetran
-  status: pending-generation
+  status: not-a-workflow
   arazzo: null
