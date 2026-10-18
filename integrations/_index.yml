@@ -28,3 +28,29 @@
     builder: unknown (not in the directory record)
   status: not-a-workflow
   arazzo: null
+- slug: workfront-fivetran
+  label: Fivetran
+  partner: fivetran
+  partner_name: Fivetran
+  type: marketplace
+  marketplace: fivetran-connectors
+  channel: elt-connector
+  evidence: https://fivetran.com/docs/connectors/applications/adobe-workfront
+  source: edge
+  relationship: ipaas-bridge
+  contract_reference:
+    register: Fivetran connectors (fivetran.com/docs/connectors, docs-sitemap.xml + Partner-Built program)
+    spec_file: null
+    role: elt-connector:fivetran
+    registered_name: Adobe Workfront
+    matched_domain: adobe.com
+    matched_by: domain+name-among-holders
+    detected_by: sweep-data-integration.py
+    detected: '2026-10-18'
+    signal_note: one edge per (provider, platform); connectors, streams, packages and usage are context, never read
+    connector_paths:
+    - connectors/applications/adobe-workfront
+    vendor_link: https://business.adobe.com/products/workfront/main.html
+    builder: Fivetran
+  status: pending-generation
+  arazzo: null
