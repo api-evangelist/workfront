@@ -28,32 +28,6 @@
     builder: unknown (not in the directory record)
   status: not-a-workflow
   arazzo: null
-- slug: workfront-fivetran
-  label: Fivetran
-  partner: fivetran
-  partner_name: Fivetran
-  type: marketplace
-  marketplace: fivetran-connectors
-  channel: elt-connector
-  evidence: https://fivetran.com/docs/connectors/applications/adobe-workfront
-  source: edge
-  relationship: ipaas-bridge
-  contract_reference:
-    register: Fivetran connectors (fivetran.com/docs/connectors, docs-sitemap.xml + Partner-Built program)
-    spec_file: null
-    role: elt-connector:fivetran
-    registered_name: Adobe Workfront
-    matched_domain: adobe.com
-    matched_by: domain+name-among-holders
-    detected_by: sweep-data-integration.py
-    detected: '2026-10-18'
-    signal_note: one edge per (provider, platform); connectors, streams, packages and usage are context, never read
-    connector_paths:
-    - connectors/applications/adobe-workfront
-    vendor_link: https://business.adobe.com/products/workfront/main.html
-    builder: Fivetran
-  status: not-a-workflow
-  arazzo: null
 - slug: workfront-npm-registry
   label: npm registry
   partner: npm
@@ -101,5 +75,133 @@
       24 months'
     detected_by: sweep-official-sdks.py
     detected: '2026-10-18'
+  status: not-a-workflow
+  arazzo: null
+- slug: workfront-fivetran
+  label: Fivetran
+  partner: fivetran
+  partner_name: Fivetran
+  type: marketplace
+  marketplace: fivetran-connectors
+  channel: elt-connector
+  evidence: https://fivetran.com/docs/connectors/applications/adobe-workfront
+  source: edge
+  relationship: ipaas-bridge
+  contract_reference:
+    register: Fivetran connectors (fivetran.com/docs/connectors, docs-sitemap.xml + Partner-Built program)
+    spec_file: null
+    role: elt-connector:fivetran
+    registered_name: Adobe Workfront
+    matched_domain: adobe.com
+    matched_by: domain+name-among-holders
+    detected_by: sweep-data-integration.py
+    detected: '2026-10-18'
+    signal_note: one edge per (provider, platform); connectors, streams, packages and usage are context, never read
+    connector_paths:
+    - connectors/applications/adobe-workfront
+    vendor_link: https://business.adobe.com/products/workfront/main.html
+    builder: Fivetran
+  status: not-a-workflow
+  arazzo: null
+- slug: workfront-deloitte-consulting
+  label: Deloitte Consulting
+  partner_name: Deloitte Consulting
+  category: Adobe Exchange Experience Cloud listing (Analytics, Campaign, Customer Journey Analytics, Experience
+    Platform apps)
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://exchange.adobe.com/apps/ec/1200149
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: workfront-ernst-young-llp-u-s
+  label: Ernst & Young LLP U.S.
+  partner_name: Ernst & Young LLP U.S.
+  category: Adobe Exchange Experience Cloud listing (GenStudio, Marketo Engage, Target, Workfront)
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://exchange.adobe.com/apps/ec/1200022
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: workfront-infosys-limited
+  label: Infosys Limited
+  partner_name: Infosys Limited
+  category: Adobe Exchange Experience Cloud listing (Analytics, Customer Journey Analytics, Experience Platform,
+    Experience Platform apps)
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://exchange.adobe.com/apps/ec/1200256
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: workfront-merge
+  label: Merge
+  partner_name: Merge
+  category: Adobe Exchange Experience Cloud listing (Workfront)
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://exchange.adobe.com/apps/ec/108968
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: workfront-pricewaterhousecoopers-llp
+  label: PricewaterhouseCoopers LLP
+  partner_name: PricewaterhouseCoopers LLP
+  category: Adobe Exchange Experience Cloud listing (Customer Journey Analytics, Experience Platform apps, GenStudio,
+    Journey Optimizer)
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://exchange.adobe.com/apps/ec/1200064
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: workfront-smartling
+  label: Smartling
+  partner: smartling
+  partner_name: Smartling
+  category: Adobe Exchange Experience Cloud listing (Workfront)
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://exchange.adobe.com/apps/ec/600050
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: workfront-sprinklr
+  label: Sprinklr
+  partner: sprinklr
+  partner_name: Sprinklr
+  category: Adobe Exchange Experience Cloud listing (Workfront)
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://exchange.adobe.com/apps/ec/600238
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: workfront-workato-inc
+  label: WORKATO, INC.
+  partner: workato
+  partner_name: WORKATO, INC.
+  category: Adobe Exchange Experience Cloud listing (Workfront)
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://exchange.adobe.com/apps/ec/108083
+  source: edge
+  relationship: platform-app
   status: not-a-workflow
   arazzo: null

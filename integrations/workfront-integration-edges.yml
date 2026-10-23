@@ -99,6 +99,229 @@ edges:
     builder: Fivetran
   detected_by: sweep-data-integration.py
   first_seen: '2026-10-18'
+- partner_name: Deloitte Consulting
+  app: Deloitte Digital | Closed-Loop Marketing Solution
+  apps:
+  - Deloitte Digital | Closed-Loop Marketing Solution
+  listing_count: 1
+  partner: null
+  partner_match: null
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  relationship: platform-app
+  direction: partner-built
+  evidence: https://exchange.adobe.com/apps/ec/1200149
+  category: Adobe Exchange Experience Cloud listing (Analytics, Campaign, Customer Journey Analytics, Experience
+    Platform apps)
+  products:
+  - Analytics
+  - Campaign
+  - Customer Journey Analytics
+  - Experience Platform apps
+  - Experience Platform services
+  - Journey Optimizer
+  - Marketo Engage
+  - Target
+  - Workfront
+  partner_url: www.deloitte.com
+  signal_note: Adobe Exchange listing (publisher website from the listing JSON the public browse page loads); listing
+    count and app names are context, never counted
+  detected_by: sweep-adobe-exchange.py
+  detected: '2026-10-23'
+  partner_tier: Adobe Platinum partner
+  partner_held:
+    candidate: deloitte
+    why: systems integrator / consultancy (Adobe solution listing), not a publisher of its own product
+- partner_name: Ernst & Young LLP U.S.
+  app: EY | Scalable Content Production with Adobe GenStudio for Performance Marketing
+  apps:
+  - EY | Scalable Content Production with Adobe GenStudio for Performance Marketing
+  listing_count: 1
+  partner: null
+  partner_match: null
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  relationship: platform-app
+  direction: partner-built
+  evidence: https://exchange.adobe.com/apps/ec/1200022
+  category: Adobe Exchange Experience Cloud listing (GenStudio, Marketo Engage, Target, Workfront)
+  products:
+  - GenStudio
+  - Marketo Engage
+  - Target
+  - Workfront
+  partner_url: ey.com
+  signal_note: Adobe Exchange listing (publisher website from the listing JSON the public browse page loads); listing
+    count and app names are context, never counted
+  detected_by: sweep-adobe-exchange.py
+  detected: '2026-10-23'
+  partner_tier: Adobe Platinum partner
+  partner_held:
+    candidate: ey
+    why: systems integrator / consultancy (Adobe solution listing), not a publisher of its own product
+- partner_name: Infosys Limited
+  app: Infosys Aster | Product Launch Accelerator
+  apps:
+  - Infosys Aster | Product Launch Accelerator
+  listing_count: 1
+  partner: null
+  partner_match: null
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  relationship: platform-app
+  direction: partner-built
+  evidence: https://exchange.adobe.com/apps/ec/1200256
+  category: Adobe Exchange Experience Cloud listing (Analytics, Customer Journey Analytics, Experience Platform,
+    Experience Platform apps)
+  products:
+  - Analytics
+  - Customer Journey Analytics
+  - Experience Platform
+  - Experience Platform apps
+  - Experience Platform services
+  - Firefly
+  - GenStudio
+  - Journey Optimizer
+  - Real-Time CDP
+  - Workfront
+  partner_url: http://infosys.com
+  signal_note: Adobe Exchange listing (publisher website from the listing JSON the public browse page loads); listing
+    count and app names are context, never counted
+  detected_by: sweep-adobe-exchange.py
+  detected: '2026-10-23'
+  partner_tier: Adobe Platinum partner
+  partner_held:
+    candidate: infosys
+    why: 'market-fit gate: partner''s own tags carry no creative / media / marketing / analytics / content / commerce
+      / e-sign / work-management term'
+- partner_name: Merge
+  app: Merge for Adobe Workfront
+  apps:
+  - Merge for Adobe Workfront
+  listing_count: 1
+  partner: null
+  partner_match: null
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  relationship: platform-app
+  direction: partner-built
+  evidence: https://exchange.adobe.com/apps/ec/108968
+  category: Adobe Exchange Experience Cloud listing (Workfront)
+  products:
+  - Workfront
+  partner_url: https://merge.dev/
+  signal_note: Adobe Exchange listing (publisher website from the listing JSON the public browse page loads); listing
+    count and app names are context, never counted
+  detected_by: sweep-adobe-exchange.py
+  detected: '2026-10-23'
+  partner_tier: Adobe Silver partner
+  partner_held:
+    candidate: merge
+    why: 'market-fit gate: partner''s own tags carry no creative / media / marketing / analytics / content / commerce
+      / e-sign / work-management term'
+- partner_name: PricewaterhouseCoopers LLP
+  app: PwC | Market-Ready Content Powered by Adobe GenStudio
+  apps:
+  - PwC | Collaborative Work Management for Marketers
+  - PwC | Market-Ready Content Powered by Adobe GenStudio
+  - PwC | Process Intelligence for Adobe Workfront
+  listing_count: 3
+  partner: null
+  partner_match: null
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  relationship: platform-app
+  direction: partner-built
+  evidence: https://exchange.adobe.com/apps/ec/1200064
+  category: Adobe Exchange Experience Cloud listing (Customer Journey Analytics, Experience Platform apps, GenStudio,
+    Journey Optimizer)
+  products:
+  - Customer Journey Analytics
+  - Experience Platform apps
+  - GenStudio
+  - Journey Optimizer
+  - Real-Time CDP
+  - Workfront
+  partner_url: www.pwc.com
+  signal_note: Adobe Exchange listing (publisher website from the listing JSON the public browse page loads); listing
+    count and app names are context, never counted
+  detected_by: sweep-adobe-exchange.py
+  detected: '2026-10-23'
+  partner_tier: Adobe Platinum partner
+  partner_held:
+    candidate: pricewaterhousecoopers
+    why: systems integrator / consultancy (Adobe solution listing), not a publisher of its own product
+- partner_name: Smartling
+  app: Smartling Connector for Adobe Workfront
+  apps:
+  - Smartling Connector for Adobe Workfront
+  listing_count: 1
+  partner: smartling
+  partner_match: domain
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  relationship: platform-app
+  direction: partner-built
+  evidence: https://exchange.adobe.com/apps/ec/600050
+  category: Adobe Exchange Experience Cloud listing (Workfront)
+  products:
+  - Workfront
+  partner_url: https://www.smartling.com
+  signal_note: Adobe Exchange listing (publisher website from the listing JSON the public browse page loads); listing
+    count and app names are context, never counted
+  detected_by: sweep-adobe-exchange.py
+  detected: '2026-10-23'
+  partner_tier: Adobe Gold partner
+- partner_name: Sprinklr
+  app: Sprinklr Integration for Adobe Workfront
+  apps:
+  - Sprinklr Integration for Adobe Workfront
+  listing_count: 1
+  partner: sprinklr
+  partner_match: domain
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  relationship: platform-app
+  direction: partner-built
+  evidence: https://exchange.adobe.com/apps/ec/600238
+  category: Adobe Exchange Experience Cloud listing (Workfront)
+  products:
+  - Workfront
+  partner_url: https://www.sprinklr.com/
+  signal_note: Adobe Exchange listing (publisher website from the listing JSON the public browse page loads); listing
+    count and app names are context, never counted
+  detected_by: sweep-adobe-exchange.py
+  detected: '2026-10-23'
+  partner_tier: Adobe Gold partner
+- partner_name: WORKATO, INC.
+  app: Workato Automation for Adobe Workfront
+  apps:
+  - Workato Automation for Adobe Workfront
+  listing_count: 1
+  partner: workato
+  partner_match: domain
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  relationship: platform-app
+  direction: partner-built
+  evidence: https://exchange.adobe.com/apps/ec/108083
+  category: Adobe Exchange Experience Cloud listing (Workfront)
+  products:
+  - Workfront
+  partner_url: www.workato.com
+  signal_note: Adobe Exchange listing (publisher website from the listing JSON the public browse page loads); listing
+    count and app names are context, never counted
+  detected_by: sweep-adobe-exchange.py
+  detected: '2026-10-23'
+  partner_tier: Adobe Silver partner
 method: searched
 checked:
 - https://api.nuget.org/v3
@@ -111,5 +334,9 @@ checked:
 - https://repo1.maven.org/maven2
 - https://rubygems.org/api/v1
 - https://zapier.com/api/v4/apps/
+- https://exchange.adobe.com/apps
+- https://exchange.adobe.com/apps/browse/cc
+- https://exchange.adobe.com/apps/browse/ec
+- https://exchange.adobe.com/robots.txt
 source:
 - https://zapier.com/api/v4/apps/
